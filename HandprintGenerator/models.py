@@ -8,3 +8,29 @@ class User(models.Model):
     email = models.CharField(max_length=50)
     gender = models.CharField(max_length=7)
     birthday = models.DateField()
+
+class ActionItems(models.Model):
+    creator = models.ForeignKey(User)
+    name = models.CharField(max_length=150)
+    description = models.CharField(max_length=1000)
+    links = models.CharField(max_length=500)
+    images = models.CharField(max_length=500)
+    active = models.BooleanField(default=True)
+
+class ActionItemComments(models.Model)
+    action_item = models.ForeignKey(ActionItems)
+    name = models.CharField(max_length=50)
+    text = models.CharField(max_length=1000)
+
+class ActionItemTags(models.Model)
+    action_item = models.ForeignKey(ActionItems)
+    user = models.ForeignKey(User)
+
+class ActionItemVotes(models.Model)
+    action_item = models.ForeignKey(ActionItems)
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=150)
+
+class ActionItemInactive(models.Model)
+    action_item = models.ForeignKey(ActionItems)
+    reason = models.CharField(max_length=150)
