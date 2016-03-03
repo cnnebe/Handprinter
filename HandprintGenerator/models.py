@@ -6,8 +6,6 @@ class User(models.Model):
     last_name = models.CharField(max_length=50)
     password = models.CharField(max_length=20)
     email = models.CharField(max_length=50)
-    gender = models.CharField(max_length=7)
-    birthday = models.DateField()
 
 class ActionItems(models.Model):
     creator = models.ForeignKey(User)
@@ -17,20 +15,21 @@ class ActionItems(models.Model):
     images = models.CharField(max_length=500)
     active = models.BooleanField(default=True)
 
-class ActionItemComments(models.Model)
+class ActionItemComments(models.Model):
     action_item = models.ForeignKey(ActionItems)
     name = models.CharField(max_length=50)
     text = models.CharField(max_length=1000)
 
-class ActionItemTags(models.Model)
+class ActionItemTags(models.Model):
     action_item = models.ForeignKey(ActionItems)
     user = models.ForeignKey(User)
 
-class ActionItemVotes(models.Model)
+class ActionItemVotes(models.Model):
     action_item = models.ForeignKey(ActionItems)
     name = models.CharField(max_length=50)
-    description = models.CharField(max_length=150)
 
-class ActionItemInactive(models.Model)
+class ActionItemInactive(models.Model):
     action_item = models.ForeignKey(ActionItems)
     reason = models.CharField(max_length=150)
+
+#reason - should be drop down -> duplicate, other, 
