@@ -14,6 +14,7 @@ class ActionItem(models.Model):
     links = models.CharField(max_length=500)
     images = models.CharField(max_length=500)
     active = models.BooleanField(default=True)
+    #datecreated = models.DateTimeField(auto_now_add=True, blank=True)
 
 class ActionItemComment(models.Model):
     action_item = models.ForeignKey(ActionItem)
