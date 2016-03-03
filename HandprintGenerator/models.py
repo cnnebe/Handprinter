@@ -11,7 +11,7 @@ class ActionItem(models.Model):
     creator = models.ForeignKey(User)
     name = models.CharField(max_length=150)
     description = models.CharField(max_length=1000)
-    links = models.CharField(max_length=500)
+    links = models.CharField(max_length=500) #change to references
     images = models.CharField(max_length=500)
     active = models.BooleanField(default=True)
     #datecreated = models.DateTimeField(auto_now_add=True, blank=True)

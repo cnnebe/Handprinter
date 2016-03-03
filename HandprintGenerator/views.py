@@ -15,3 +15,9 @@ def index(request):
 def detail(request, actionitem_id):
     ai = get_object_or_404(ActionItem, pk=actionitem_id)
     return render(request, 'HandprintGenerator/detail.html', {'ai': ai})
+
+# def new_action_item(request):
+# 	if request.method == 'POST':
+#         new_ai_form = new_action_idea.html
+#         return render(request, 'HandprintGenerator/new.html', {'form1':rew_ai_form})
+
