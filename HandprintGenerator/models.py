@@ -6,20 +6,23 @@ class User(models.Model):
     last_name = models.CharField(max_length=50)
     password = models.CharField(max_length=20)
     email = models.CharField(max_length=50)
+    location = models.CharField(max_length=50, null=True, blank=True)
+#    date_created = models.DateTimeField(auto_now_add=True, blank=True)
 
 class ActionItem(models.Model):
     creator = models.ForeignKey(User)
     name = models.CharField(max_length=150)
     description = models.CharField(max_length=1000)
-    links = models.CharField(max_length=500) #change to references
+    references = models.CharField(max_length=500)
     images = models.CharField(max_length=500)
     active = models.BooleanField(default=True)
-    #datecreated = models.DateTimeField(auto_now_add=True, blank=True)
+ #   date_created = models.DateTimeField(auto_now_add=True, blank=True)
 
 class ActionItemComment(models.Model):
     action_item = models.ForeignKey(ActionItem)
     name = models.CharField(max_length=50)
     text = models.CharField(max_length=1000)
+#    date_created = models.DateTimeField(auto_now_add=True, blank=True)
 
 class ActionItemTag(models.Model):
     action_item = models.ForeignKey(ActionItem)
@@ -32,5 +35,6 @@ class ActionItemVote(models.Model):
 class ActionItemInactive(models.Model):
     action_item = models.ForeignKey(ActionItem)
     reason = models.CharField(max_length=150)
+#    date_created = models.DateTimeField(auto_now_add=True, blank=True)
 
 #reason - should be drop down -> duplicate, other, 

@@ -1,0 +1,9 @@
+{% if alpha_action_item_list %}
+    <ul>
+    {% for actionitem in alpha_action_item_list %}
+        <li><a href="{% url 'HandprintGenerator:detail' actionitem.id %}">{{ actionitem.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No action ideas are available.</p>
+{% endif %}
