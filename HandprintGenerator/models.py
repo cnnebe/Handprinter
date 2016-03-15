@@ -3,7 +3,14 @@ from django.db import models
 ROLE_CHOICES = (
     ('admin', 'Administrator'), 
     ('mod', 'Moderator'), 
-    ('member', 'Member')
+    ('member', 'Member'),
+    )
+
+CATEGORY_CHOICES = (
+    ('home', 'Home'), 
+    ('work', 'Work'), 
+    ('commute', 'Commute'),
+    ('other', 'Other')
     )
 
 
@@ -29,6 +36,10 @@ class ActionItem(models.Model):
     images = models.CharField(max_length=500)
     active = models.BooleanField(default=True)
     date_created = models.DateTimeField(auto_now_add=True, blank=True)
+    category = models.CharField(
+        max_length = 15, 
+        blank = False, 
+        choices = CATEGORY_CHOICES)
 
 class ActionItemComment(models.Model):
     action_item = models.ForeignKey(ActionItem)
