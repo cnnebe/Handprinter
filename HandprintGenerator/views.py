@@ -1,9 +1,9 @@
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader
 from django.shortcuts import get_object_or_404, render
 from django.db import transaction
 
-from .models import * #ActionItem
+from .models import * 
 from .forms import *
 
 def index(request):
@@ -19,17 +19,20 @@ def index(request):
 
 
 
-
+@transaction.atomic
 def detail(request, actionitem_id):
 	context = {}
 	context['ai'] = get_object_or_404(ActionItem, pk=actionitem_id)
-	#aicomments = []
 	aicomments = ActionItemComment.objects.all()
-	# for ai in ActionItem.objects.all():
-	# 	comments = ActionItemComment.objects.filter(action_item = ai).all()
-	# 	for singlecom in comments:
-	# 		aicomments += [singlecom]
 	context['aicomments'] = aicomments
+
+	form = CommentForm(request.POST)
+	context['comment_form'] = form
+	if form.is_valid():
+		new_comment = form.save(commit=False)
+		new_comment.action_item = ActionItem.objects.get(pk=actionitem_id)
+		new_comment.save()
+		return HttpResponseRedirect('.')
 
 	return render(request, 'HandprintGenerator/detail.html', context)
 

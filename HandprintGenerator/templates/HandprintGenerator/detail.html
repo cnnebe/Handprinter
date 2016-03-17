@@ -19,6 +19,21 @@
 		        </li>
 		    {% endif %}
 		{% endfor %}
+		<div id="post_comment">
+			<form action="/handprintgenerator/{{ ai.id }}/" method="post">
+				{% for field in comment_form.visible_fields %}
+			    	{{field.label_tag}}
+			    	{{field}}
+			    	<br>
+				{% endfor %}
+				<input type="submit" value="Submit">
+			  	{% for field in comment_form.hidden_fields %}
+			    	{{field}}
+			  	{% endfor %}
+			  	{% csrf_token %}
+			</form>
+
+		</div>
 	</div>
 </div>
 

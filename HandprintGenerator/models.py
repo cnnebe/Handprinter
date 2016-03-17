@@ -34,6 +34,9 @@ class User(models.Model):
         default = 'member')
     last_login = models.DateTimeField(auto_now_add=True, blank=True)
 
+    def __str__(self):
+        return self.username
+
 class ActionItem(models.Model):
     creator = models.ForeignKey(User)
     name = models.CharField(max_length=150)
@@ -45,6 +48,10 @@ class ActionItem(models.Model):
     category = models.CharField(
         max_length = 15, 
         choices = CATEGORY_CHOICES)
+
+    def __str__(self):
+        return self.name
+
 
 class ActionItemComment(models.Model):
     action_item = models.ForeignKey(ActionItem)

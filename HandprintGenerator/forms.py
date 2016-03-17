@@ -1,12 +1,21 @@
 from django import forms
 from .models import *
+from django.forms import ModelForm
+
 
 class ActionItemForm(forms.ModelForm):
     class Meta:
         model = ActionItem
         fields = ['name', 'description', 'references', 'images']
 
-
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = ActionItemComment
+        fields = ['text', 'user']
+        exclude = ['date_created', 'action_item']
+        widgets = {
+            'text': forms.Textarea(),
+        }
 
 class RegistrationForm(forms.Form):
     username = models.CharField(max_length=50)
