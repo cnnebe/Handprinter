@@ -51,7 +51,6 @@ class ActionItemComment(models.Model):
     user = models.ForeignKey(User)
     text = models.CharField(max_length=1000)
     date_created = models.DateTimeField(auto_now_add=True, blank=True)
-    #remove comment name
 
 class ActionItemTag(models.Model):
     action_item = models.ForeignKey(ActionItem)

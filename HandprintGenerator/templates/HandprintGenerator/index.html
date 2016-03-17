@@ -1,7 +1,7 @@
-{% if alpha_action_item_list %}
+{% if action_items %}
     <ul>
-    {% for actionitem in alpha_action_item_list %}
-        <li><a href="/handprintgenerator/{{ actionitem.id }}/">{{ actionitem.name }}</a></li>
+    {% for ai in action_items %}
+        <li><a href="/handprintgenerator/{{ ai.id }}/">{{ ai.name }}</a></li>
     {% endfor %}
     </ul>
 {% else %}

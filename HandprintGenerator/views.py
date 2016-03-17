@@ -7,16 +7,31 @@ from .models import * #ActionItem
 from .forms import *
 
 def index(request):
-    alpha_action_item_list = ActionItem.objects.order_by('-name')[:5]
-    context = {
-        'alpha_action_item_list': alpha_action_item_list,
-    }
-    return render(request, 'HandprintGenerator/index.html', context)
+	context = {}
+	context['action_items'] = ActionItem.objects.order_by('-date_created')#[:5]
+	aicomments = []
+	for ai in context['action_items']:
+		comments = ActionItemComment.objects.filter(action_item = ai).all()
+		for singlecom in comments:
+			aicomments += [singlecom]
+	context['aicomments'] = aicomments
+	return render(request, 'HandprintGenerator/index.html', context)
+
+
 
 
 def detail(request, actionitem_id):
-    ai = get_object_or_404(ActionItem, pk=actionitem_id)
-    return render(request, 'HandprintGenerator/detail.html', {'ai': ai})
+	context = {}
+	context['ai'] = get_object_or_404(ActionItem, pk=actionitem_id)
+	#aicomments = []
+	aicomments = ActionItemComment.objects.all()
+	# for ai in ActionItem.objects.all():
+	# 	comments = ActionItemComment.objects.filter(action_item = ai).all()
+	# 	for singlecom in comments:
+	# 		aicomments += [singlecom]
+	context['aicomments'] = aicomments
+
+	return render(request, 'HandprintGenerator/detail.html', context)
 
 
 # @transaction.atomic
