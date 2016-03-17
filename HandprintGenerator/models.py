@@ -10,7 +10,7 @@ CATEGORY_CHOICES = (
     ('home', 'Home'), 
     ('work', 'Work'), 
     ('community', 'Community'),
-    ('Food', 'Food'),
+    ('food', 'Food'),
     ('mobility', 'Mobility'),
     ('clothing', 'Clothing'),
     ('other', 'Other')
