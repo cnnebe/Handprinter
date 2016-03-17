@@ -1,6 +1,13 @@
 from django import forms
 from .models import *
 
+class ActionItemForm(forms.ModelForm):
+    class Meta:
+        model = ActionItem
+        fields = ['name', 'description', 'references', 'images']
+
+
+
 class RegistrationForm(forms.Form):
     username = models.CharField(max_length=50)
     first_name = models.CharField(max_length=50)

@@ -13,6 +13,11 @@ CATEGORY_CHOICES = (
     ('other', 'Other')
     )
 
+REASON_CHOICES = (
+    ('duplicate', 'Duplicate'),
+    ('other', 'Other'),
+    ('spam', 'Spam')
+    )
 
 class User(models.Model):
     username = models.CharField(max_length=50)
@@ -39,26 +44,26 @@ class ActionItem(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, blank=True)
     category = models.CharField(
         max_length = 15, 
-        blank = False, 
         choices = CATEGORY_CHOICES)
 
 class ActionItemComment(models.Model):
     action_item = models.ForeignKey(ActionItem)
-    name = models.CharField(max_length=50)
+    user = models.ForeignKey(User)
     text = models.CharField(max_length=1000)
     date_created = models.DateTimeField(auto_now_add=True, blank=True)
+    #remove comment name
 
 class ActionItemTag(models.Model):
     action_item = models.ForeignKey(ActionItem)
-    user = models.ForeignKey(User)
+    name = models.CharField(max_length=50)
 
 class ActionItemVote(models.Model):
     action_item = models.ForeignKey(ActionItem)
-    name = models.CharField(max_length=50)
+    user = models.ForeignKey(User)
 
 class ActionItemInactive(models.Model):
     action_item = models.ForeignKey(ActionItem)
-    reason = models.CharField(max_length=150)
+    reason = models.CharField(
+        max_length = 15, 
+        choices = REASON_CHOICES)
     date_created = models.DateTimeField(auto_now_add=True, blank=True)
-
-#reason - should be drop down -> duplicate, other, 

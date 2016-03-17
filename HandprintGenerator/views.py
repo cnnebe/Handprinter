@@ -21,9 +21,9 @@ def detail(request, actionitem_id):
 
 # @transaction.atomic
 # def new_action_item(request):
-#     form = NewActionItem()
+#     form = ActionItemForm()
 # 	if request.method == 'POST':
-#         form = NewActionItem(request.POST)
+#         form = NewActionItemForm(request.POST)
 #         if form.is_valid():
 #         	action_item = ActionItem.objects.create_action_item()
 #         return render(request, 'HandprintGenerator/new.html', context)
