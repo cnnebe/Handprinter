@@ -9,12 +9,6 @@ from .forms import *
 def index(request):
 	context = {}
 	context['action_items'] = ActionItem.objects.order_by('-date_created')#[:5]
-	aicomments = []
-	for ai in context['action_items']:
-		comments = ActionItemComment.objects.filter(action_item = ai).all()
-		for singlecom in comments:
-			aicomments += [singlecom]
-	context['aicomments'] = aicomments
 	return render(request, 'HandprintGenerator/index.html', context)
 
 

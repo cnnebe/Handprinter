@@ -1,9 +1,18 @@
+<h1> Action Items </h1>
+
+<table>
+<tr><th>Action Item</th><th>Category</th><th>Votes</th></tr>
 {% if action_items %}
-    <ul>
     {% for ai in action_items %}
-        <li><a href="/handprintgenerator/{{ ai.id }}/">{{ ai.name }}</a></li>
+    	<tr>
+    		<td><a href="/handprintgenerator/{{ ai.id }}/">{{ ai.name }}</a></td>
+    		<td> {{ ai.category }} </td>
+    		<td> 
+				 </td>
+    	</tr>
     {% endfor %}
-    </ul>
 {% else %}
     <p>No action ideas are available.</p>
 {% endif %}
+
+</table>
