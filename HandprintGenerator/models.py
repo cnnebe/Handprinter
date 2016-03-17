@@ -52,6 +52,12 @@ class ActionItem(models.Model):
     def __str__(self):
         return self.name
 
+    def numvotes(self):
+        return ActionItemVote.objects.filter(action_item=self.id).count()
+
+    def comments(self):
+        return ActionItemComment.objects.filter(action_item=self.id).all()
+
 
 class ActionItemComment(models.Model):
     action_item = models.ForeignKey(ActionItem)

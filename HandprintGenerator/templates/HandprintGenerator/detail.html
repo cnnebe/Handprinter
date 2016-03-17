@@ -10,15 +10,16 @@
 	</div>
 	<div id="comments">
 		<h4> Comments </h4>
-		{% for c in aicomments %}
-			{% if c.action_item == ai %}
-		        <li>
-					<p> {{ c.text }}</p>
-					<p> <b> {{ c.user.username}} </b> on {{c.date_created}}</p>
-					<p> {{ ai.images }}</p>
-		        </li>
-		    {% endif %}
+		{% for c in ai.comments %}
+	        <li>
+				<p> {{ c.text }}</p>
+				<p> <b> {{ c.user.username}} </b> on {{c.date_created}}</p>
+				<p> {{ ai.images }}</p>
+	        </li>
 		{% endfor %}
+
+
+
 		<div id="post_comment">
 			<form action="/handprintgenerator/{{ ai.id }}/" method="post">
 				{% for field in comment_form.visible_fields %}
