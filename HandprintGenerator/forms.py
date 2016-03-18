@@ -8,6 +8,10 @@ class NewActionItemForm(forms.ModelForm):
         model = ActionItem
         fields = ['creator', 'name', 'description', 'references', 'images', 'category']
         exclude = ['date_created', 'active']
+        widgets = {
+            'description': forms.Textarea(),
+            'references': forms.Textarea(),
+        }
         
 
 class CommentForm(forms.ModelForm):
@@ -19,22 +23,24 @@ class CommentForm(forms.ModelForm):
             'text': forms.Textarea(),
         }
 
-class RegistrationForm(forms.Form):
-    username = models.CharField(max_length=50)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    password = models.CharField(max_length=20)
-    email = models.CharField(max_length=50)
+class RegistrationForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'first_name', 'last_name', 'email']
+        exclude = ['date_created', 'location', 'role', 'last_login']
+        widgets = {
+            'password': forms.PasswordInput(),
+        }
 
-    def clean(self):
-        cleaned_data = super(RegistrationForm, self).clean()
+#    def clean(self):
+#        cleaned_data = super(RegistrationForm, self).clean()
 
-        # username = cleaned_data["username"]
-        # password = cleaned_data['password']
-        # if len(password) < 8:
-        #     raise forms.ValidationError('Password must be more than 8 characters in length')
+#        username = cleaned_data['username']
+#        password = cleaned_data['password']
+#        if len(password) < 8:
+#            raise forms.ValidationError('Password must be more than 8 characters in length')
+#        return cleaned_data
 
-        return cleaned_data
     # def clean_username(self):
     #     username = self.cleaned_data['username']
 
