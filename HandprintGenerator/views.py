@@ -39,21 +39,17 @@ def detail(request, actionitem_id):
 @transaction.atomic
 def new_action_item(request):
     context = {}
-    if request.method == 'POST':
-        form = NewActionItemForm(request.POST)
-        context['NewActionItemForm'] = form
-        if form.is_valid():
-            new_action_idea = form.save(commit=False)
-            new_action_idea.date_created = datetime.datetime
-            new_action_idea.active = True
-            new_action_idea.save()
-            #this is sending a user home after an action item is successfully created - we should probably send them to their new action idea instead?
-            return HttpResponseRedirect('HandprintGenerator/')
-        
-    else: #this is triggered when there isn't a POST request - aka arriving at the page for the first time, which is a GET request. In this case, we want to 
-        form = NewActionItemForm()
-        
-    return render(request, 'HandprintGenerator/new_action_idea.html', {'form': form}, context)
+    form = NewActionItemForm(request.POST)
+    context['NewActionItemForm'] = form
+    if form.is_valid():
+        new_action_idea = form.save(commit=False)
+        new_action_idea.date_created = datetime.datetime
+        #new_action_idea.active = True
+        new_action_idea.save()
+        #this is sending a user home after an action item is successfully created - we should probably send them to their new action idea instead?
+        return HttpResponseRedirect('.')
+
+    return render(request, 'HandprintGenerator/new_action_idea.html', context)
 
 #@transaction.atomic
 #def create_user(request):
