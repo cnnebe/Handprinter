@@ -1,18 +1,40 @@
-<h1> Action Items </h1>
+<!DOCTYPE HTML>
+<html>
+    
+    <head>
+        <title>Handprinter: All Action Items</title>
+    </head>
+    
+    <body>
+        <header>
+            <nav>
+                <table>
+                    <th><a href="index">Action Idea Index</a></th>
+                    <th><a href="new">New Action Idea Form</a></th>
+                    <th><a href="create_user">New User Form</a></th>
+                </table>
+            </nav>
+        </header>
+        
+        <section class="container">
+            <h1> Action Items </h1>
 
-<table>
-<tr><th>Action Item</th><th>Category</th><th>Votes</th></tr>
-{% if action_items %}
-    {% for ai in action_items %}
-    	<tr>
-    		<td><a href="/handprintgenerator/{{ ai.id }}/">{{ ai.name }}</a></td>
-    		<td> {{ ai.category }} </td>
-    		<td> {{ai.numvotes}}</td>
-    		<td> {{ai.date_created}} </td>
-    	</tr>
-    {% endfor %}
-{% else %}
-    <p>No action ideas are available.</p>
-{% endif %}
+            <table>
+            <tr><th>Action Item</th><th>Category</th><th>Votes</th></tr>
+            {% if action_items %}
+                {% for ai in action_items %}
+                    <tr>
+                        <td><a href="/handprintgenerator/{{ ai.id }}/">{{ ai.name }}</a></td>
+                        <td> {{ ai.category }} </td>
+                        <td> {{ai.numvotes}}</td>
+                        <td> {{ai.date_created}} </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <p>No action ideas are available.</p>
+            {% endif %}
 
-</table>
+            </table>
+        </section>
+    </body>
+</html>

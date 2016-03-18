@@ -1,13 +1,35 @@
-<h1> Create a new User </h1>
-
-<form action="#" method="post">
-    {% for field in registration_form %}
-        {{field.label_tag}}
-        {{field}}
-        <br>
-    {% endfor %}
-
-    <input type="submit" value="Submit">
-    {% csrf_token %}
+<!DOCTYPE HTML>
+<html>
     
-</form>
+    <head>
+        <title>Handprinter: All Action Items</title>
+    </head>
+    
+    <body>
+        <header>
+            <nav>
+                <table>
+                    <th><a href="index">Action Idea Index</a></th>
+                    <th><a href="new">New Action Idea Form</a></th>
+                    <th><a href="create_user">New User Form</a></th>
+                </table>
+            </nav>
+        </header>
+        
+        <section class="container">
+            <h1> Create a new User </h1>
+
+            <form action="#" method="post">
+                {% for field in registration_form %}
+                    {{field.label_tag}}
+                    {{field}}
+                    <br>
+                {% endfor %}
+
+                <input type="submit" value="Submit">
+                {% csrf_token %}
+                
+            </form>
+        </section>
+    </body>
+</html>
