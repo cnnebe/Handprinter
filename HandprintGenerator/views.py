@@ -51,6 +51,19 @@ def new_action_item(request):
 
     return render(request, 'HandprintGenerator/new_action_idea.html', context)
 
+@transaction.atomic
+def new_user(request):
+	context = {}
+	form = RegistrationForm(request.POST)
+	conext['register_form'] = form
+	if form.is_valid():
+		new_user = form.save(commit=False)
+		new_user.date_created = datetime.datetime
+		new_user.save()
+		return HttpResponseRedirect('.')
+		#new users get sent to action idea index? 
+	return render(request, 'HandprintGenerator/index.html', context)
+
 #@transaction.atomic
 #def create_user(request):
 #    context = {
