@@ -21,6 +21,12 @@ def index(request):
 #	context = {}
 #	context['action_items'] = ActionItem.objects.filter(category="home")
 
+def user_index(request):
+	context = {}
+	context['users'] = User.objects.order_by('-date_created')#[:5]
+    
+	return render(request, 'HandprintGenerator/user_index.html', context)
+
 @transaction.atomic
 def detail(request, actionitem_id):
 	context = {}
