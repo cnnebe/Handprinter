@@ -1,0 +1,13 @@
+<h1> Create a new User </h1>
+
+<form action="#" method="post">
+    {% for field in registration_form %}
+        {{field.label_tag}}
+        {{field}}
+        <br>
+    {% endfor %}
+
+    <input type="submit" value="Submit">
+    {% csrf_token %}
+    
+</form>

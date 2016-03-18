@@ -35,7 +35,7 @@ class User(models.Model):
         blank = False, 
         choices = ROLE_CHOICES,
         default = 'member')
-    last_login = models.DateTimeField(auto_now_add=True, blank=True)
+    last_login = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     def __str__(self):
         return self.username

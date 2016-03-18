@@ -44,31 +44,24 @@ def new_action_item(request):
     if form.is_valid():
         new_action_idea = form.save(commit=False)
         new_action_idea.date_created = datetime.datetime
-        #new_action_idea.active = True
         new_action_idea.save()
-        #this is sending a user home after an action item is successfully created - we should probably send them to their new action idea instead?
         return HttpResponseRedirect('.')
 
     return render(request, 'HandprintGenerator/new_action_idea.html', context)
 
-#@transaction.atomic
-#def create_user(request):
-#    context = {
-#        'users': User.objects.all(),
-#    }
-
-    # Creates a bound form from the request POST parameters and makes the 
-    # form available in the request context dictionary.
-#    form = RegistrationForm(request.POST)
-#    context['registration_form'] = form
-
+@transaction.atomic
+def new_user(request):
+    context = {
+        'users': User.objects.all(),
+    }
+    form = RegistrationForm(request.POST)
+    context['registration_form'] = form
     #Validates the form.
-#    if not form.is_valid():
-#        return render(request, 'index.html', context)
-
- #   if form.is_valid():
- #       new_user = User.objects.create_user(username=form.cleaned_data['username'], first_name=form.cleaned_data['first_name'], last_name=form.cleaned_data['last_name'], password=form.cleaned_data['password'], email=form.cleaned_data['email'])
-
-#    new_user.save()
-
-#    return render(request, 'user.html', context)
+    if form.is_valid():
+        user = form.save(commit=False)
+        user.date_created = datetime.datetime
+        #user.location = 
+        user.save()
+        return HttpResponseRedirect('.')
+        
+    return render(request, 'HandprintGenerator/new_user.html', context)
