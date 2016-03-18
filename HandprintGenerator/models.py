@@ -9,7 +9,10 @@ ROLE_CHOICES = (
 CATEGORY_CHOICES = (
     ('home', 'Home'), 
     ('work', 'Work'), 
-    ('commute', 'Commute'),
+    ('community', 'Community'),
+    ('food', 'Food'),
+    ('mobility', 'Mobility'),
+    ('clothing', 'Clothing'),
     ('other', 'Other')
     )
 

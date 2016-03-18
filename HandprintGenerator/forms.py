@@ -1,12 +1,12 @@
 from django import forms
 from .models import *
 
-class ActionItemForm(forms.ModelForm):
+class NewActionItemForm(forms.ModelForm):
     class Meta:
         model = ActionItem
-        fields = ['name', 'description', 'references', 'images']
-
-
+        fields = ['creator', 'name', 'description', 'references', 'images', 'category']
+        exclude = ['date_created', 'active']
+        
 
 class RegistrationForm(forms.Form):
     username = models.CharField(max_length=50)
