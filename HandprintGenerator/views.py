@@ -9,26 +9,20 @@ from .forms import *
 def index(request):
 	context = {}
 	context['action_items'] = ActionItem.objects.order_by('-date_created')#[:5]
+
+	#context['action_items']  = sorted(ActionItem.objects.all(), key=lambda ai: ai.numvotes)
+	#context['action_items'] = ActionItem.objects.order_by('-date_created')
+	#context['action_items'] = ActionItem.objects.order_by('-date_created')
 	return render(request, 'HandprintGenerator/index.html', context)
+
+#def index_by_cat(request):
+#	context = {}
+#	context['action_items'] = ActionItem.objects.filter(category="home")
 
 @transaction.atomic
 def detail(request, actionitem_id):
 	context = {}
 	context['ai'] = get_object_or_404(ActionItem, pk=actionitem_id)
-	aicomments = ActionItemComment.objects.all()
-	context['aicomments'] = aicomments
-
-	# coms = []
-	# for ai in ActionItem.objects.all():
-	# 	comments = ActionItemComment.objects.filter(action_item=ai).all()
-	# 	for c in comments:
-	# 		coms += [c]
-	# 		comsid = [c.action_item.id]
-	# context['coms'] = coms
-	# context['comsid'] = comsid
-
-
-
 	form = CommentForm(request.POST)
 	context['comment_form'] = form
 	if form.is_valid():
