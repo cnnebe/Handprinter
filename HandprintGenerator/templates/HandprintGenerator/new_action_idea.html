@@ -1,11 +1,18 @@
-<form action="/new/" method="post">
+<h1> Create a new Handprint action idea </h1>
+
+<form action="new" method="post">
     <label for="name">Action Idea: </label>
     <input id="name" type="text" name="name">
     <label for="description">Description: </label>
     <input id="description" type="text" name="description">
     <label for="references">References: </label>
     <input id="references" type="text" name="references">
-    <label for="images">References: </label>
+    <label for="images">Images: </label>
     <input id="images" type="text" name="images">
-    <input type="submit" value="OK">
+    <label for="category">Choose a category: </label>
+    <input id="category" type="text" name="category">
+    
+    <input type="submit" value="Submit">
+    {% csrf_token %}
+    
 </form>

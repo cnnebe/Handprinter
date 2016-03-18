@@ -3,7 +3,7 @@ from .models import *
 from django.forms import ModelForm
 
 
-class ActionItemForm(forms.ModelForm):
+class NewActionItemForm(forms.ModelForm):
     class Meta:
         model = ActionItem
         fields = ['name', 'description', 'references', 'images']
