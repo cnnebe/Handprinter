@@ -2,7 +2,7 @@
 <html>
     
     <head>
-        <title>Handprinter: New Action Item</title>
+        <title>Handprinter: Register</title>
     </head>
     
     <body>
@@ -18,10 +18,10 @@
         </header>
         
         <section class="container">
-            <h1> Create a new Handprint action idea </h1>
+            <h1> Create a new User </h1>
 
             <form action="#" method="post">
-                {% for field in NewActionItemForm %}
+                {% for field in registration_form %}
                     {{field.label_tag}}
                     {{field}}
                     <br>
