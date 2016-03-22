@@ -41,6 +41,7 @@ class User(models.Model):
     def __str__(self):
         return self.username
 
+
 class ActionItem(models.Model):
     creator = models.ForeignKey(User)
     name = models.CharField(max_length=150)

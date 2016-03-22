@@ -70,4 +70,10 @@ def new_user(request):
         user.save()
         return HttpResponseRedirect('.')
         
-    return render(request, 'HandprintGenerator/new_user.html', context)
+    return render(request, 'registration/new_user.html', context)
+    
+def login(request):
+    pass
+    
+def logout(request):
+    pass

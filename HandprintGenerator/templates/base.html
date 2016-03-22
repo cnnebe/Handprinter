@@ -1,11 +1,13 @@
+{% load staticfiles %}
 <!DOCTYPE HTML>
 <html>
     
     <head>
-        <title>Handprinter: Register</title>
+        <title>Handprinter</title>
     </head>
     
     <body>
+        
         <header>
             <nav>
                 <table>
@@ -17,20 +19,12 @@
             </nav>
         </header>
         
-        <section class="container">
-            <h1> Create a new User </h1>
-
-            <form action="#" method="post">
-                {% for field in registration_form %}
-                    {{field.label_tag}}
-                    {{field}}
-                    <br>
-                {% endfor %}
-
-                <input type="submit" value="Submit">
-                {% csrf_token %}
-                
-            </form>
-        </section>
+        {% block content %}
+        {% endblock %}
+        
+        <footer>
+            <!-- something -->
+        </footer>
+        
     </body>
 </html>

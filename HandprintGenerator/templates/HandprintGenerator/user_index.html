@@ -1,42 +1,27 @@
-<!DOCTYPE HTML>
-<html>
-    
-    <head>
-        <title>Handprinter: View All Users</title>
-    </head>
-    
-    <body>
-        <header>
-            <nav>
-                <table>
-                    <th><a href="/handprintgenerator/index">Action Idea Index</a></th>
-                    <th><a href="/handprintgenerator/users">View All Users</a></th>
-                    <th><a href="/handprintgenerator/new">New Action Idea Form</a></th>
-                    <th><a href="/handprintgenerator/create_user">New User Form</a></th>
-                </table>
-            </nav>
-        </header>
+{% extends "base.html" %}
+
+{% block content %}
         
-        <section class="container">
-            <h1> Users </h1>
+<section class="container">
+    <h1> Users </h1>
 
-            <table>
-            <tr><th>Username</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Role</th></tr>
-            {% if users %}
-                {% for u in users %}
-                    <tr>
-                        <td>{{ u.username }}</a></td>
-                        <td> {{ u.first_name }} </td>
-                        <td> {{ u.last_name }}</td>
-                        <td> {{ u.email }} </td>
-                        <td> {{ u.role }} </td>
-                    </tr>
-                {% endfor %}
-            {% else %}
-                <p>There are no registered users.</p>
-            {% endif %}
+    <table>
+    <tr><th>Username</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Role</th></tr>
+    {% if users %}
+        {% for u in users %}
+            <tr>
+                <td>{{ u.username }}</a></td>
+                <td> {{ u.first_name }} </td>
+                <td> {{ u.last_name }}</td>
+                <td> {{ u.email }} </td>
+                <td> {{ u.role }} </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <p>There are no registered users.</p>
+    {% endif %}
 
-            </table>
-        </section>
-    </body>
-</html>
+    </table>
+</section>
+
+{% endblock %}

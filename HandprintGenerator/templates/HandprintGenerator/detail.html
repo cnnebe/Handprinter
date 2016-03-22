@@ -1,62 +1,47 @@
-<!DOCTYPE HTML>
-<html>
-    
-    <head>
-        <title>Handprinter: Action Item Detail</title>
-    </head>
-    
-    <body>
-        <header>
-            <nav>
-                <table>
-                    <th><a href="/handprintgenerator/index">Action Idea Index</a></th>
-                    <th><a href="/handprintgenerator/users">View All Users</a></th>
-                    <th><a href="/handprintgenerator/new">New Action Idea Form</a></th>
-                    <th><a href="/handprintgenerator/create_user">New User Form</a></th>
-                </table>
-            </nav>
-        </header>
+{% extends "base.html" %}
+
+{% block content %}
         
-        <section class="container">
-            <div id="page-content">
-                <div id="action-idea">
-                    <h1>{{ ai.name }}</h1>
-                    <p> Description: {{ ai.description }}</p>
-                    <p> References: {{ ai.references }}</p>
-                    <p> Images: {{ ai.images }}</p>
-                    <p> Category: {{ ai.category }}</p>
-                    <p> Active: {{ ai.active }}</p>
-                    <p> Action Item Creator: {{ ai.creator.first_name }}</p>
-                </div>
-                <div id="comments">
-                    <h4> Comments </h4>
-                    {% for c in ai.comments %}
-                        <li>
-                            <p> {{ c.text }}</p>
-                            <p> <b> {{ c.user.username}} </b> on {{c.date_created}}</p>
-                            <p> {{ ai.images }}</p>
-                        </li>
+<section class="container">
+    <div id="page-content">
+        <div id="action-idea">
+            <h1>{{ ai.name }}</h1>
+            <p> Description: {{ ai.description }}</p>
+            <p> References: {{ ai.references }}</p>
+            <p> Images: {{ ai.images }}</p>
+            <p> Category: {{ ai.category }}</p>
+            <p> Active: {{ ai.active }}</p>
+            <p> Action Item Creator: {{ ai.creator.first_name }}</p>
+        </div>
+        <div id="comments">
+            <h4> Comments </h4>
+            {% for c in ai.comments %}
+                <li>
+                    <p> {{ c.text }}</p>
+                    <p> <b> {{ c.user.username}} </b> on {{c.date_created}}</p>
+                    <p> {{ ai.images }}</p>
+                </li>
+            {% endfor %}
+
+
+
+            <div id="post_comment">
+                <form action="/handprintgenerator/{{ ai.id }}/" method="post">
+                    {% for field in comment_form.visible_fields %}
+                        {{field.label_tag}}
+                        {{field}}
+                        <br>
                     {% endfor %}
+                    <input type="submit" value="Submit">
+                    {% for field in comment_form.hidden_fields %}
+                        {{field}}
+                    {% endfor %}
+                    {% csrf_token %}
+                </form>
 
-
-
-                    <div id="post_comment">
-                        <form action="/handprintgenerator/{{ ai.id }}/" method="post">
-                            {% for field in comment_form.visible_fields %}
-                                {{field.label_tag}}
-                                {{field}}
-                                <br>
-                            {% endfor %}
-                            <input type="submit" value="Submit">
-                            {% for field in comment_form.hidden_fields %}
-                                {{field}}
-                            {% endfor %}
-                            {% csrf_token %}
-                        </form>
-
-                    </div>
-                </div>
             </div>
-        </section>
-    </body>
-</html>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
