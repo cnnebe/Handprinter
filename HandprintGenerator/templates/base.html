@@ -1,0 +1,37 @@
+{% load staticfiles %}
+<!DOCTYPE HTML>
+<html>
+    
+    <head>
+        <title>Handprinter</title>
+    </head>
+    
+    <body>
+        
+        <header>
+            <nav>
+                <table>
+                    <th><a href="/index">Action Idea Index</a></th>
+                    <th><a href="/users">View All Users</a></th>
+                    <th><a href="/new">New Action Idea Form</a></th>
+                    <th><a href="/create_user">New User Form</a></th>
+                </table>
+            </nav>
+        </header>
+        
+        {% block content %}
+        {% endblock %}
+        
+        <footer>
+             <nav>
+                <table>
+                    <th><a href="/about_us">About Us</a></th>
+                    <th><a href="/contact_us">Contact Us</a></th>
+                    <th><a href="/privacy_policy">Privacy Policy</a></th>
+                    <th><a href="/terms_of_service">Terms of Service</a></th>
+                </table>
+            </nav>
+        </footer>
+        
+    </body>
+</html>

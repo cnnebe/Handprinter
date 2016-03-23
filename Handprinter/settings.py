@@ -56,7 +56,7 @@ ROOT_URLCONF = 'Handprinter.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['HandprintGenerator/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

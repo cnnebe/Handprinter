@@ -1,22 +1,6 @@
-<!DOCTYPE HTML>
-<html>
+{% extends "base.html" %}
 
-	<head>
-        <title>About us</title>
-    </head>
-
-	<body>
-
-		<header>
-            <nav>
-                <table>
-                    <th><a href="/handprintgenerator/index">Action Idea Index</a></th>
-                    <th><a href="/handprintgenerator/users">View All Users</a></th>
-                    <th><a href="/handprintgenerator/new">New Action Idea Form</a></th>
-                    <th><a href="/handprintgenerator/create_user">New User Form</a></th>
-                </table>
-            </nav>
-        </header>
+{% block content %}
 
 	<br><br><br>
 		<iframe src="http://www.handprinter.org/about/"
@@ -26,16 +10,4 @@
         Fallback link for browsers that don't support iframes</a> </p>
         </iframe>
 
-        <footer>
-        	 <nav>
-                <table>
-                    <th><a href="/handprintgenerator/contact_us">Contact Us</a></th>
-                    <th><a href="/handprintgenerator/privacy_policy">Privacy Policy</a></th>
-                    <th><a href="/handprintgenerator/terms_of_service">Terms of Service</a></th>
-                </table>
-            </nav>
-        </footer>
-
-	</body>
-
-</html>
+{% endblock %}

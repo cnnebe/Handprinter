@@ -27,7 +27,7 @@ class RegistrationForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'password', 'first_name', 'last_name', 'email']
-        exclude = ['date_created', 'location', 'role', 'last_login']
+        exclude = ['date_created', 'location', 'role', 'last_login', 'active']
         widgets = {
             'password': forms.PasswordInput(),
         }

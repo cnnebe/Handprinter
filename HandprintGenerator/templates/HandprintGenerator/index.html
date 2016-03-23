@@ -1,53 +1,26 @@
-<!DOCTYPE HTML>
-<html>
-    
-    <head>
-        <title>Handprinter: All Action Items</title>
-    </head>
-    
-    <body>
-        <header>
-            <nav>
-                <table>
-                    <th><a href="/handprintgenerator/index">Action Idea Index</a></th>
-                    <th><a href="/handprintgenerator/users">View All Users</a></th>
-                    <th><a href="/handprintgenerator/new">New Action Idea Form</a></th>
-                    <th><a href="/handprintgenerator/create_user">New User Form</a></th>
-                </table>
-            </nav>
-        </header>
+{% extends "base.html" %}
+
+{% block content %}
         
-        <section class="container">
-            <h1> Action Items </h1>
+<section class="container">
+    <h1> Action Items </h1>
 
-            <table>
-            <tr><th>Action Item</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>
-            {% if action_items %}
-                {% for ai in action_items %}
-                    <tr>
-                        <td><a href="/handprintgenerator/{{ ai.id }}/">{{ ai.name }}</a></td>
-                        <td> {{ ai.category }} </td>
-                        <td> {{ai.numvotes}}</td>
-                        <td> {{ai.date_created}} </td>
-                    </tr>
-                {% endfor %}
-            {% else %}
-                <p>No action ideas are available.</p>
-            {% endif %}
+    <table>
+    <tr><th>Action Item</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>
+    {% if action_items %}
+        {% for ai in action_items %}
+            <tr>
+                <td><a href="/handprintgenerator/{{ ai.id }}/">{{ ai.name }}</a></td>
+                <td> {{ ai.category }} </td>
+                <td> {{ai.numvotes}}</td>
+                <td> {{ai.date_created}} </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <p>No action ideas are available.</p>
+    {% endif %}
 
-            </table>
-        </section>
+    </table>
+</section>
 
-        <footer>
-             <nav>
-                <table>
-                    <th><a href="/handprintgenerator/about_us">About Us</a></th>
-                    <th><a href="/handprintgenerator/contact_us">Contact Us</a></th>
-                    <th><a href="/handprintgenerator/privacy_policy">Privacy Policy</a></th>
-                    <th><a href="/handprintgenerator/terms_of_service">Terms of Service</a></th>
-                </table>
-            </nav>
-        </footer>
-        
-    </body>
-</html>
+{% endblock %}

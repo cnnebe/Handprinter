@@ -30,6 +30,7 @@ class User(models.Model):
     email = models.CharField(max_length=50)
     location = models.CharField(max_length=50, null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True, blank=True)
+    active = models.BooleanField(default=True)
     role = models.CharField(
         max_length = 15, 
         blank = False, 
@@ -39,6 +40,7 @@ class User(models.Model):
 
     def __str__(self):
         return self.username
+
 
 class ActionItem(models.Model):
     creator = models.ForeignKey(User)
