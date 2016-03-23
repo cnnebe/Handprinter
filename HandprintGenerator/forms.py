@@ -1,6 +1,8 @@
 from django import forms
 from .models import *
 from django.forms import ModelForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib import auth
 
 
 class NewActionItemForm(forms.ModelForm):
@@ -12,7 +14,6 @@ class NewActionItemForm(forms.ModelForm):
             'description': forms.Textarea(),
             'references': forms.Textarea(),
         }
-        
 
 class CommentForm(forms.ModelForm):
     class Meta:
@@ -22,37 +23,38 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'text': forms.Textarea(),
         }
+        
+class PickyAuthenticationForm(AuthenticationForm):
+    def confirm_login_allowed(self, user):
+        if not user.is_active:
+            raise forms.ValidationError(
+                _("This account is inactive."),
+                code='inactive',
+            )
 
-class RegistrationForm(forms.ModelForm):
+class ProfileForm(forms.ModelForm):
     class Meta:
-        model = User
-        fields = ['username', 'password', 'first_name', 'last_name', 'email']
-        exclude = ['date_created', 'location', 'role', 'last_login', 'active']
+        model = Profile
+        fields = ['role']
+        exclude = ['location', 'user']
         widgets = {
-            'password': forms.PasswordInput(),
+            'role': forms.Select(),
         }
 
-#    def clean(self):
-#        cleaned_data = super(RegistrationForm, self).clean()
+#from: http://jessenoller.com/blog/2011/12/19/quick-example-of-extending-usercreationform-in-django
+class UserCreateForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2', 'first_name', 'last_name')
+        widgets = {
+            'email': forms.EmailInput(),
+        }
 
-#        username = cleaned_data['username']
-#        password = cleaned_data['password']
-#        if len(password) < 8:
-#            raise forms.ValidationError('Password must be more than 8 characters in length')
-#        return cleaned_data
-
-    # def clean_username(self):
-    #     username = self.cleaned_data['username']
-
-    #     if User.objects.filter(username=username).exists():
-    #         raise forms.ValidationError('Student already exists.')
-
-    #     return username
-
-    # def clean_password(self):
-    #     password = self.cleaned_data['password']
-
-    #     if len(password) < 8:
-    #         raise forms.ValidationError('Password must be more than 8 characters in length')
-
-    #     return password
+    def save(self, commit=True):
+        user = super(UserCreateForm, self).save(commit=False)
+        user.email = self.cleaned_data["email"]
+        user.first_name = self.cleaned_data["first_name"]
+        user.last_name = self.cleaned_data["last_name"]
+        if commit:
+            user.save()
+        return user

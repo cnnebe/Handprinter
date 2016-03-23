@@ -2,6 +2,9 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader
 from django.shortcuts import get_object_or_404, render
 from django.db import transaction
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import auth
 
 from .models import * 
 from .forms import *
@@ -23,7 +26,7 @@ def index(request):
 
 def user_index(request):
 	context = {}
-	context['users'] = User.objects.order_by('-date_created')#[:5]
+	context['users'] = User.objects.order_by('-date_joined')#[:5]
     
 	return render(request, 'HandprintGenerator/user_index.html', context)
 
@@ -60,23 +63,43 @@ def new_user(request):
     context = {
         'users': User.objects.all(),
     }
-    form = RegistrationForm(request.POST)
+    form = UserCreateForm(request.POST)
+    profile = ProfileForm(request.POST)
     context['registration_form'] = form
+    context['profile_form'] = profile
     #Validates the form.
-    if form.is_valid():
-        user = form.save(commit=False)
-        user.date_created = datetime.datetime
-        #user.location = 
-        user.save()
+    if form.is_valid() and profile.is_valid():
+        #create the objects and ties them together
+        new_user = form.save(commit=False)
+        new_profile = form.save(commit=False)
+        #new_profile.location =
+        new_user.save() 
+        new_profile.user = new_user.id
+        new_profile.save()
+        #*************************************it creates a new user, and a user can log in, I just can't get a profile to save!!
+        
         return HttpResponseRedirect('.')
         
     return render(request, 'registration/new_user.html', context)
     
 def login(request):
-    context = []
+    context = {}
+    form = PickyAuthenticationForm(request.POST)
+    context['form'] = form
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = auth.authenticate(username=username, password=password)
+        if user is not None and user.is_active:
+            # Correct password, and the user is marked "active"
+            auth.login(request, user)
+            # Redirect to a success page.
+            return HttpResponseRedirect('/index')
+
     return render(request, 'registration/login.html', context)
 
     
 def logout(request):
-    context = []
+    context = {}
+    auth.logout(request)
     return render(request, 'registration/logout.html', context)
