@@ -73,7 +73,10 @@ def new_user(request):
     return render(request, 'registration/new_user.html', context)
     
 def login(request):
-    pass
+    context = []
+    return render(request, 'registration/login.html', context)
+
     
 def logout(request):
-    pass
+    context = []
+    return render(request, 'registration/logout.html', context)
