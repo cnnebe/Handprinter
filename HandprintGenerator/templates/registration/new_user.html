@@ -1,9 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+{% if registration_form.errors %}
+    {{ registration_form.errors }}
+{% endif %}
         
 <section class="container">
-    <h1> Create a new User </h1>
+    <h1> Register As a New Action Idea Creator! </h1>
 
     <form action="#" method="post">
         {% for field in registration_form %}

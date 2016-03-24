@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 ROLE_CHOICES = (
     ('admin', 'Administrator'), 
@@ -22,25 +23,25 @@ REASON_CHOICES = (
     ('spam', 'Spam')
     )
 
-class User(models.Model):
-    username = models.CharField(max_length=50)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    password = models.CharField(max_length=20)
-    email = models.CharField(max_length=50)
+class Profile(models.Model):
+    #we are using from Django's User class, and it has the following fields:
+    #username
+    #first_name
+    #last_name
+    #email
+    #password
+    #is_staff
+    #is_active
+    #is_superuser
+    #last_login
+    #date_joined
+    user = models.ForeignKey(User)
     location = models.CharField(max_length=50, null=True, blank=True)
-    date_created = models.DateTimeField(auto_now_add=True, blank=True)
-    active = models.BooleanField(default=True)
     role = models.CharField(
         max_length = 15, 
         blank = False, 
         choices = ROLE_CHOICES,
         default = 'member')
-    last_login = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-
-    def __str__(self):
-        return self.username
-
 
 class ActionItem(models.Model):
     creator = models.ForeignKey(User)
@@ -73,6 +74,7 @@ class ActionItemComment(models.Model):
 class ActionItemTag(models.Model):
     action_item = models.ForeignKey(ActionItem)
     name = models.CharField(max_length=50)
+    user = models.ForeignKey(User)
 
 class ActionItemVote(models.Model):
     action_item = models.ForeignKey(ActionItem)
@@ -84,3 +86,4 @@ class ActionItemInactive(models.Model):
         max_length = 15, 
         choices = REASON_CHOICES)
     date_created = models.DateTimeField(auto_now_add=True, blank=True)
+    responsible = models.ForeignKey(User)
