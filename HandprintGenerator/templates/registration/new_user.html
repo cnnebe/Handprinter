@@ -2,24 +2,18 @@
 
 {% block content %}
 
-{% if registration_form.errors or profile_form.errors %}
-{{ registration_form.errors }}
-{{ profile_form.errors }}
+{% if registration_form.errors %}
+    {{ registration_form.errors }}
 {% endif %}
         
 <section class="container">
-    <h1> Register as a new user </h1>
+    <h1> Register As a New Action Idea Creator! </h1>
 
     <form action="#" method="post">
         {% for field in registration_form %}
             {{field.label_tag}}
             {{field}}
             <br>
-        {% endfor %}
-        
-        {% for field in profile_form %}
-            {{field.label_tag}}
-            {{field}}
         {% endfor %}
 
         <input type="submit" value="Submit">

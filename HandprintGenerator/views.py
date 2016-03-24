@@ -32,17 +32,18 @@ def user_index(request):
 
 @transaction.atomic
 def detail(request, actionitem_id):
-	context = {}
-	context['ai'] = get_object_or_404(ActionItem, pk=actionitem_id)
-	form = CommentForm(request.POST)
-	context['comment_form'] = form
-	if form.is_valid():
-		new_comment = form.save(commit=False)
-		new_comment.action_item = ActionItem.objects.get(pk=actionitem_id)
-		new_comment.save()
-		return HttpResponseRedirect('.')
+    context = {}
+    context['ai'] = get_object_or_404(ActionItem, pk=actionitem_id)
+    form = CommentForm(request.POST)
+    context['comment_form'] = form
+    if form.is_valid():
+        new_comment = form.save(commit=False)
+        new_comment.action_item = ActionItem.objects.get(pk=actionitem_id)
+        new_comment.user_id = request.user.id
+        new_comment.save()
+        return HttpResponseRedirect('.')
 
-	return render(request, 'HandprintGenerator/detail.html', context)
+    return render(request, 'HandprintGenerator/detail.html', context)
 
 
 @transaction.atomic
@@ -53,6 +54,7 @@ def new_action_item(request):
     if form.is_valid():
         new_action_idea = form.save(commit=False)
         new_action_idea.date_created = datetime.datetime
+        new_action_idea.creator_id = request.user.id
         new_action_idea.save()
         return HttpResponseRedirect('.')
 
@@ -64,21 +66,18 @@ def new_user(request):
         'users': User.objects.all(),
     }
     form = UserCreateForm(request.POST)
-    profile = ProfileForm(request.POST)
     context['registration_form'] = form
-    context['profile_form'] = profile
     #Validates the form.
-    if form.is_valid() and profile.is_valid():
+    if form.is_valid():
         #create the objects and ties them together
         new_user = form.save(commit=False)
-        new_profile = form.save(commit=False)
-        #new_profile.location =
         new_user.save() 
-        new_profile.user = new_user.id
-        new_profile.save()
-        #*************************************it creates a new user, and a user can log in, I just can't get a profile to save!!
         
-        return HttpResponseRedirect('.')
+        #creating an accompanying profile with role
+        user_profile = Profile(role='Member', user_id=new_user.id)
+        user_profile.save()
+        
+        return HttpResponseRedirect('/index')
         
     return render(request, 'registration/new_user.html', context)
     

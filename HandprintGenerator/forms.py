@@ -8,8 +8,8 @@ from django.contrib import auth
 class NewActionItemForm(forms.ModelForm):
     class Meta:
         model = ActionItem
-        fields = ['creator', 'name', 'description', 'references', 'images', 'category']
-        exclude = ['date_created', 'active']
+        fields = ['name', 'description', 'references', 'images', 'category']
+        exclude = ['creator', 'date_created', 'active']
         widgets = {
             'description': forms.Textarea(),
             'references': forms.Textarea(),
@@ -18,8 +18,8 @@ class NewActionItemForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = ActionItemComment
-        fields = ['text', 'user']
-        exclude = ['date_created', 'action_item']
+        fields = ['text']
+        exclude = ['date_created', 'action_item', 'user']
         widgets = {
             'text': forms.Textarea(),
         }
@@ -31,15 +31,6 @@ class PickyAuthenticationForm(AuthenticationForm):
                 _("This account is inactive."),
                 code='inactive',
             )
-
-class ProfileForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = ['role']
-        exclude = ['location', 'user']
-        widgets = {
-            'role': forms.Select(),
-        }
 
 #from: http://jessenoller.com/blog/2011/12/19/quick-example-of-extending-usercreationform-in-django
 class UserCreateForm(UserCreationForm):

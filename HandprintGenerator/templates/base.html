@@ -15,9 +15,16 @@
                     <th><a href="/index">Action Idea Index</a></th>
                     <th><a href="/new">New Action Idea Form</a></th>
                     <th><a href="/create_user">New User Form</a></th>
-                    <th><a href="/admin">Administration</a></th>
+                    <th>
+                        {% if user.is_authenticated %}
+                            <p>Welcome, {{ user.username }} <a href="/logout">Logout</a></p>
+                        {% else %}
+                            <p><a href="/login">Please Log In</a></p>
+                        {% endif %}
+                    </th>
                 </table>
             </nav>
+            <br>
         </header>
         
         {% block content %}
@@ -29,6 +36,7 @@
                     <th><a href="/contact">Contact Us</a></th>
                     <th><a href="/privacy">Privacy Policy</a></th>
                     <th><a href="/terms">Terms of Service</a></th>
+                    <th><a href="/admin">Administration</a></th>
                 </table>
             </nav>
         </footer>
