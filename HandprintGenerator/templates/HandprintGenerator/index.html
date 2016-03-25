@@ -5,8 +5,8 @@
     <h1> Action Ideas </h1>
 
     <table>
-    <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>
     {% if action_ideas %}
+    <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>
         {% for ai in action_ideas %}
             <tr>
                 <td><a href="/handprintgenerator/{{ ai.id }}/">{{ ai.name }}</a></td>
