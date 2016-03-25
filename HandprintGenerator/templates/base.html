@@ -7,7 +7,7 @@
         
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="{% static 'css/handprintgenerator.css' %}"> 
+        <link rel="stylesheet" href="{% static 'css/handprintgenerator.css' %}" type="text/css"> 
     </head>
     
     <body>
@@ -15,19 +15,40 @@
 
             <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
                 <div class="container-fluid">
-                    <div class="navbar-header"><a class="navbar-brand" href="#">Handprinter</a>
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="/">Handprinter</a>
                         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
                     </div>
                     <div class="collapse navbar-collapse navbar-menubuilder">
-                        <ul class="nav navbar-nav navbar-left"><li><a href="/about">About Handprinter</a></li><li><a href="/index">Action Idea Index</a></li><li><a href="/new">New Action Idea Form</a></li><li><a href="/create_user">New User Form</a></li></ul><ul class="nav navbar-nav navbar-right"><li>{% if user.is_authenticated %}Welcome, {{ user.username }} <a href="/logout">Logout</a>{% else %}<a href="/login">Log In</a>{% endif %}</li></ul>
+                        <ul class="nav navbar-nav navbar-left">
+                            <li><a href="/about">About Handprinter</a></li>
+                            <li><a href="/index">Action Idea Index</a></li>
+                            {% if user.is_authenticated %}
+                            <li><a href="/new">Create A New Action Idea</a></li>
+                            {% endif %}
+                            {% if not user.is_authenticated %}
+                            <li><a href="/create_user">Register</a></li>
+                            {% endif %}
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>{% if user.is_authenticated %}
+                                    Welcome, {{ user.username }} <a href="/logout">Logout</a>
+                                {% else %}
+                                    <a href="/login">Log In</a>
+                                {% endif %}
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
 
 
-        
+    <section class="container">
+
         {% block content %}
         {% endblock %}
+    </section>
+
         </div>
 
     <div class="panel panel-default">
@@ -37,7 +58,9 @@
             <th><a href="/contact">Contact Us</a></th>
             <th><a href="/privacy">Privacy Policy</a></th>
             <th><a href="/terms">Terms of Service</a></th> 
+            {% if user.is_staff %}
             <th><a href="/admin">Administration</a></th>
+            {% endif %}
             </table>
             </nav>
         </div>
