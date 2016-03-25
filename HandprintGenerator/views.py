@@ -28,12 +28,6 @@ def index(request):
 #	context = {}
 #	context['action_ideas'] = ActionIdea.objects.filter(category="home")
 
-def user_index(request):
-	context = {}
-	context['users'] = User.objects.order_by('-date_joined')#[:5]
-    
-	return render(request, 'HandprintGenerator/user_index.html', context)
-
 @transaction.atomic
 def detail(request, actionidea_id):
     context = {}
@@ -61,7 +55,7 @@ def new_action_idea(request):
             new_action_idea.date_created = datetime.datetime
             new_action_idea.creator_id = request.user.id
             new_action_idea.save()
-            return HttpResponseRedirect('.')
+            return HttpResponseRedirect('/index')
     else:
         form = NewActionIdeaForm()
         context['NewActionIdeaForm'] = form
@@ -86,7 +80,7 @@ def new_user(request):
             user_profile = Profile(role='Member', user_id=new_user.id)
             user_profile.save()
             
-            return HttpResponseRedirect('/index')
+            return HttpResponseRedirect('/login')
     else:
         form = UserCreateForm()
         context['registration_form'] = form
