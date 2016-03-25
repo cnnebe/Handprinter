@@ -11,6 +11,10 @@ from .forms import *
 
 import datetime
 
+def home(request):
+    context = {}
+    return render(request, 'HandprintGenerator/home.html', context)
+
 def index(request):
 	context = {}
 	context['action_ideas'] = ActionIdea.objects.order_by('-date_created')#[:5]

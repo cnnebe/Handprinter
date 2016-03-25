@@ -5,7 +5,7 @@ from django.views.generic import TemplateView
 
 app_name = 'HandprintGenerator'
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
+    url(r'^$', views.home, name='home'),
     url(r'^index$', views.index, name='index'),
     url(r'^handprintgenerator/(?P<actionidea_id>[0-9]+)/$', views.detail, name='detail'),
     url(r'^create_user$', views.new_user, name='new_user'),
