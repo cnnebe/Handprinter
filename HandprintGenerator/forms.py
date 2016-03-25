@@ -5,9 +5,9 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import auth
 
 
-class NewActionItemForm(forms.ModelForm):
+class NewActionIdeaForm(forms.ModelForm):
     class Meta:
-        model = ActionItem
+        model = ActionIdea
         fields = ['name', 'description', 'references', 'images', 'category']
         exclude = ['creator', 'date_created', 'active']
         widgets = {
@@ -17,9 +17,9 @@ class NewActionItemForm(forms.ModelForm):
 
 class CommentForm(forms.ModelForm):
     class Meta:
-        model = ActionItemComment
+        model = ActionIdeaComment
         fields = ['text']
-        exclude = ['date_created', 'action_item', 'user']
+        exclude = ['date_created', 'action_idea', 'user']
         widgets = {
             'text': forms.Textarea(),
         }

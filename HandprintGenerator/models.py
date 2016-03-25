@@ -43,12 +43,12 @@ class Profile(models.Model):
         choices = ROLE_CHOICES,
         default = 'member')
 
-class ActionItem(models.Model):
+class ActionIdea(models.Model):
     creator = models.ForeignKey(User)
     name = models.CharField(max_length=150)
     description = models.CharField(max_length=1000)
-    references = models.CharField(max_length=500)
-    images = models.CharField(max_length=500)
+    references = models.CharField(max_length=500, null=True, blank=True)
+    images = models.CharField(max_length=500, null=True, blank=True)
     active = models.BooleanField(default=True)
     date_created = models.DateTimeField(auto_now_add=True, blank=True)
     category = models.CharField(
@@ -59,29 +59,29 @@ class ActionItem(models.Model):
         return self.name
 
     def numvotes(self):
-        return ActionItemVote.objects.filter(action_item=self.id).count()
+        return ActionIdeaVote.objects.filter(action_idea=self.id).count()
 
     def comments(self):
-        return ActionItemComment.objects.filter(action_item=self.id).all()
+        return ActionIdeaComment.objects.filter(action_idea=self.id).all()
 
 
-class ActionItemComment(models.Model):
-    action_item = models.ForeignKey(ActionItem)
+class ActionIdeaComment(models.Model):
+    action_idea = models.ForeignKey(ActionIdea)
     user = models.ForeignKey(User)
     text = models.CharField(max_length=1000)
     date_created = models.DateTimeField(auto_now_add=True, blank=True)
 
-class ActionItemTag(models.Model):
-    action_item = models.ForeignKey(ActionItem)
+class ActionIdeaTag(models.Model):
+    action_idea = models.ForeignKey(ActionIdea)
     name = models.CharField(max_length=50)
     user = models.ForeignKey(User)
 
-class ActionItemVote(models.Model):
-    action_item = models.ForeignKey(ActionItem)
+class ActionIdeaVote(models.Model):
+    action_idea = models.ForeignKey(ActionIdea)
     user = models.ForeignKey(User)
 
-class ActionItemInactive(models.Model):
-    action_item = models.ForeignKey(ActionItem)
+class ActionIdeaInactive(models.Model):
+    action_idea = models.ForeignKey(ActionIdea)
     reason = models.CharField(
         max_length = 15, 
         choices = REASON_CHOICES)

@@ -3,12 +3,12 @@
 {% block content %}
         
 <section class="container">
-    <h1> Action Items </h1>
+    <h1> Action Ideas </h1>
 
     <table>
-    <tr><th>Action Item</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>
-    {% if action_items %}
-        {% for ai in action_items %}
+    <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>
+    {% if action_ideas %}
+        {% for ai in action_ideas %}
             <tr>
                 <td><a href="/handprintgenerator/{{ ai.id }}/">{{ ai.name }}</a></td>
                 <td> {{ ai.category }} </td>

@@ -13,16 +13,16 @@ import datetime
 
 def index(request):
 	context = {}
-	context['action_items'] = ActionItem.objects.order_by('-date_created')#[:5]
+	context['action_ideas'] = ActionIdea.objects.order_by('-date_created')#[:5]
 
-	#context['action_items']  = sorted(ActionItem.objects.all(), key=lambda ai: ai.numvotes)
-	#context['action_items'] = ActionItem.objects.order_by('-date_created')
-	#context['action_items'] = ActionItem.objects.order_by('-date_created')
+	#context['action_ideas']  = sorted(ActionIdea.objects.all(), key=lambda ai: ai.numvotes)
+	#context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
+	#context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
 	return render(request, 'HandprintGenerator/index.html', context)
 
 #def index_by_cat(request):
 #	context = {}
-#	context['action_items'] = ActionItem.objects.filter(category="home")
+#	context['action_ideas'] = ActionIdea.objects.filter(category="home")
 
 def user_index(request):
 	context = {}
@@ -31,14 +31,14 @@ def user_index(request):
 	return render(request, 'HandprintGenerator/user_index.html', context)
 
 @transaction.atomic
-def detail(request, actionitem_id):
+def detail(request, actionidea_id):
     context = {}
-    context['ai'] = get_object_or_404(ActionItem, pk=actionitem_id)
+    context['ai'] = get_object_or_404(ActionIdea, pk=actionidea_id)
     form = CommentForm(request.POST)
     context['comment_form'] = form
     if form.is_valid():
         new_comment = form.save(commit=False)
-        new_comment.action_item = ActionItem.objects.get(pk=actionitem_id)
+        new_comment.action_idea = ActionIdea.objects.get(pk=actionidea_id)
         new_comment.user_id = request.user.id
         new_comment.save()
         return HttpResponseRedirect('.')
@@ -47,11 +47,11 @@ def detail(request, actionitem_id):
 
 
 @transaction.atomic
-def new_action_item(request):
+def new_action_idea(request):
     context = {}
     if request.method == "POST":
-        form = NewActionItemForm(request.POST)
-        context['NewActionItemForm'] = form
+        form = NewActionIdeaForm(request.POST)
+        context['NewActionIdeaForm'] = form
         if form.is_valid():
             new_action_idea = form.save(commit=False)
             new_action_idea.date_created = datetime.datetime
@@ -59,8 +59,8 @@ def new_action_item(request):
             new_action_idea.save()
             return HttpResponseRedirect('.')
     else:
-        form = NewActionItemForm()
-        context['NewActionItemForm'] = form
+        form = NewActionIdeaForm()
+        context['NewActionIdeaForm'] = form
 
     return render(request, 'HandprintGenerator/new_action_idea.html', context)
 
