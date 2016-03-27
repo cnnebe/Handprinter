@@ -33,7 +33,7 @@ body {
 
 /* Special class on .container surrounding .navbar, used for positioning it into place. */
 .navbar-wrapper {
-  /*position: absolute; taking this out makes the navbar not interfer with the content*/
+  position: absolute; 
   top: 0;
   right: 0;
   left: 0;
