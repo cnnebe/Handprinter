@@ -2,22 +2,38 @@
 
 {% block content %}
 
+<br><br><br><br><br>
+
 {% if registration_form.errors %}
     {{ registration_form.errors }}
 {% endif %}
-        
-    <h1> Register As a New Action Idea Creator! </h1>
+ 
+<div class="container">
+        <div class="row centered-form">
+        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                        <h2 class="panel-title">Please Register to Become a new Action Idea Creator!</h2>
+                        </div>
+                        <div class="panel-body">
+                        <form action="#" method="post">
 
-    <form action="#" method="post">
-        {% for field in registration_form %}
-            {{field.label_tag}}
-            {{field}}
-            <br>
-        {% endfor %}
-
-        <input type="submit" value="Submit">
-        {% csrf_token %}
-        
+                            {% for field in registration_form %}
+                            {{field.label_tag}}
+                            {{field}}
+                            <br><br>
+                            {% endfor %}
+                            <input type="submit" value="Register" class="btn btn-info btn-block">
+                            {% csrf_token %}
+                        
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>       
+         
     </form>
 
 {% endblock %}
+

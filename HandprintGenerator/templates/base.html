@@ -8,63 +8,83 @@
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="{% static 'css/handprintgenerator.css' %}" type="text/css"> 
-    </head>
-    
-    <body>
-        <div id="wrap">
-            <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
-                <div class="container-fluid">
-                    
-                    <div class="navbar-header">
-                        <a class="navbar-brand" href="/">Handprinter</a>
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-                    </div>
-                    
-                    <div class="collapse navbar-collapse navbar-menubuilder">
-                        <ul class="nav navbar-nav navbar-left">
-                            <li><a href="/">Home</a></li>
-                            <li><a href="/about">About Handprinter</a></li>
-                            <li><a href="/index">Action Idea Index</a></li>
-                            {% if user.is_authenticated %}
-                            <li><a href="/new">Create A New Action Idea</a></li>
-                            {% endif %}
-                            {% if not user.is_authenticated %}
-                            <li><a href="/create_user">Register</a></li>
-                            {% endif %}
-                        </ul>
-                        <ul class="nav navbar-nav navbar-right">
-                            <li>{% if user.is_authenticated %} <a href="/profile">Welcome, {{ user.username }}</a></li><li><a href="/logout">Logout</a>
-                                {% else %}
-                                    <a href="/login">Log In</a>
-                                {% endif %}
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
 
-            <section class="container">
-                
-                {% block content %}
-                {% endblock %}
-                
-            </section>
-        </div>
-    </body>
-    <footer>
-        <div class="panel panel-default">
-            <div class="panel-footer">
-                <nav>
-                <table>
-                <th><a href="/contact">Contact Us</a></th>
-                <th><a href="/privacy">Privacy Policy</a></th>
-                <th><a href="/terms">Terms of Service</a></th> 
-                {% if user.is_staff %}
-                <th><a href="/admin">Administration</a></th>
-                {% endif %}
-                </table>
-                </nav>
+    </head>
+
+    <body>
+
+    <div class="navbar-wrapper">
+      <div class="container">
+
+        <nav class="navbar navbar-default navbar-static-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+
+              </button>
+              <a class="navbar-brand" href="#">Handprint Generator</a>
             </div>
-        </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About Handprinter</a></li>
+                <li><a href="/index">Action Idea Index</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="/new">Create A New Action Idea</a></li>
+                {% endif %}
+                {% if not user.is_authenticated %}
+                <li><a href="/create_user">Register</a></li>
+                {% endif %}
+                <li>{% if user.is_authenticated %} <a href="/profile">Welcome, {{ user.username }}</a></li><li><a href="/logout">Logout</a>{% else %}<a href="/login">Log In</a>{% endif %}</li>
+            </ul>
+            </div>
+          </div>
+        </nav>
+
+      </div>
+    </div>
+
+    <section class="body">
+      
+        {% block content %}
+        {% endblock %}
+                
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/contact">Contact Us</a></li>
+                <li><a href="/privacy">Privacy Policy</a></li>
+                <li><a href="/terms">Terms of Service</a></li> 
+                {% if user.is_staff %}
+                <li><a href="/admin">Administration</a></li>
+                {% endif %}
+            </ul>
+      </div>
     </footer>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+
+
+    <!-- jQuery -->
+    <script src="static/js/bootstrap.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="static/js/bootstrap.min.js"></script>
+
+    </body>
 </html>
