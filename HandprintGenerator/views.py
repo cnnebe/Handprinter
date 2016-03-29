@@ -44,23 +44,45 @@ def detail(request, actionidea_id):
     return render(request, 'HandprintGenerator/detail.html', context)
 
 
+# @transaction.atomic
+# def new_action_idea(request):
+#     context = {}
+#     if request.method == "POST":
+#         form = NewActionIdeaForm(request.POST)
+#         context['NewActionIdeaForm'] = form
+#         if form.is_valid():
+#             new_action_idea = form.save(commit=False)
+#             new_action_idea.date_created = datetime.datetime
+#             new_action_idea.creator_id = request.user.id
+#             new_action_idea.save()
+#             return HttpResponseRedirect('/index')
+#     else:
+#         form = NewActionIdeaForm()
+#         context['NewActionIdeaForm'] = form
+
+#     return render(request, 'HandprintGenerator/new_action_idea.html', context)
+
 @transaction.atomic
-def new_action_idea(request):
+#using this as edit and create action idea form
+def edit_action_idea(request, actionidea_id=None):
     context = {}
+    if actionidea_id: #ediing action idea
+        action_idea = get_object_or_404(ActionIdea, pk = actionidea_id)
+    else: #new action idea
+        action_idea = ActionIdea(date_created = datetime.datetime, creator_id = request.user.id)
+    
+    form = NewActionIdeaForm(request.POST or None, instance=action_idea)
     if request.method == "POST":
-        form = NewActionIdeaForm(request.POST)
         context['NewActionIdeaForm'] = form
         if form.is_valid():
-            new_action_idea = form.save(commit=False)
-            new_action_idea.date_created = datetime.datetime
-            new_action_idea.creator_id = request.user.id
-            new_action_idea.save()
+            form.save()
             return HttpResponseRedirect('/index')
     else:
-        form = NewActionIdeaForm()
         context['NewActionIdeaForm'] = form
 
     return render(request, 'HandprintGenerator/new_action_idea.html', context)
+
+
 
 @transaction.atomic
 def new_user(request):
