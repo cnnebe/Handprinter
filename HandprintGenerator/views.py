@@ -17,7 +17,7 @@ def home(request):
 
 def index(request):
 	context = {}
-	context['action_ideas'] = ActionIdea.objects.order_by('-date_created')#[:5]
+	context['action_ideas'] = ActionIdea.objects.filter(active=True).order_by('-date_created')#[:5] #@TODO make active 
 
 	#context['action_ideas']  = sorted(ActionIdea.objects.all(), key=lambda ai: ai.numvotes)
 	#context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
@@ -34,33 +34,15 @@ def detail(request, actionidea_id):
     context['ai'] = get_object_or_404(ActionIdea, pk=actionidea_id)
     form = CommentForm(request.POST)
     context['comment_form'] = form
-    if form.is_valid():
-        new_comment = form.save(commit=False)
-        new_comment.action_idea = ActionIdea.objects.get(pk=actionidea_id)
-        new_comment.user_id = request.user.id
-        new_comment.save()
-        return HttpResponseRedirect('.')
+    if request.method == "POST":
+        if form.is_valid():
+            new_comment = form.save(commit=False)
+            new_comment.action_idea = ActionIdea.objects.get(pk=actionidea_id)
+            new_comment.user_id = request.user.id
+            new_comment.save()
+            return HttpResponseRedirect('.')
 
     return render(request, 'HandprintGenerator/detail.html', context)
-
-
-# @transaction.atomic
-# def new_action_idea(request):
-#     context = {}
-#     if request.method == "POST":
-#         form = NewActionIdeaForm(request.POST)
-#         context['NewActionIdeaForm'] = form
-#         if form.is_valid():
-#             new_action_idea = form.save(commit=False)
-#             new_action_idea.date_created = datetime.datetime
-#             new_action_idea.creator_id = request.user.id
-#             new_action_idea.save()
-#             return HttpResponseRedirect('/index')
-#     else:
-#         form = NewActionIdeaForm()
-#         context['NewActionIdeaForm'] = form
-
-#     return render(request, 'HandprintGenerator/new_action_idea.html', context)
 
 @transaction.atomic
 #using this as edit and create action idea form
@@ -82,7 +64,28 @@ def edit_action_idea(request, actionidea_id=None):
 
     return render(request, 'HandprintGenerator/new_action_idea.html', context)
 
+@transaction.atomic
+def delete_action_idea(request, actionidea_id):
+    context = {}
+    form = DeleteActionIdeaForm(request.POST)
+    context['DeleteActionIdeaForm'] = form
+    if form.is_valid():
+        print("ehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+        delete_ai = form.save(commit=False)
+        delete_ai.date_created = datetime.datetime
+        delete_ai.responsible = request.user
+        delete_ai.action_idea = activetionIdea.objects.get(pk=actionidea_id)
+        delete_ai.save()
 
+        action_idea = get_object_or_404(ActionIdea, pk = actionidea_id)
+        action_idea.active = False
+        action_idea.save()
+        return HttpResponseRedirect('/index')
+    else:
+        form = DeleteActionIdeaForm()
+        context['DeleteActionIdeaForm'] = form
+
+    return render(request, 'HandprintGenerator/delete_action_idea.html', context)   
 
 @transaction.atomic
 def new_user(request):

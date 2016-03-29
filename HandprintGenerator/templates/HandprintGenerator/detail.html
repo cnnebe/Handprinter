@@ -10,9 +10,13 @@
             <p> Images: {{ ai.images }}</p>
             <p> Category: {{ ai.category }}</p>
             <p> Active: {{ ai.active }}</p>
+            {% if not ai.active %} 
+<!--                 <p> Reason for making inactive: {{ai.}}
+ -->        {% endif %}
             <p> Action Idea Creator: {{ ai.creator.first_name }} {{ ai.creator.last_name }}</p>
             {% if ai.creator == request.user or user.is_staff %}
                 <a href="/handprintgenerator/{{ ai.id }}/edit/">Edit Action Idea</a>
+                <a href="/handprintgenerator/{{ ai.id }}/delete/">Delete Action Idea</a> 
             {% endif %}
         </div>
         <div id="comments">
