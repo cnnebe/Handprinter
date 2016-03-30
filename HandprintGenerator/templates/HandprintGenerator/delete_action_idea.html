@@ -1,17 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!-- @todo - depending if it came from edit or new 
- -->    
- <h1> Create a new Handprint action idea </h1>
+  
+ <h1> Why are you deleting this action idea?</h1>
 
     <form action="#" method="post">
-   		{{ NewActionIdeaForm.errors }}
-        {% for field in NewActionIdeaForm %}
+	    {{ DeleteActionIdeaForm.errors }}
+
+        {% for field in DeleteActionIdeaForm %}
             {{field.label_tag}}
             {{field}}
             <br>
         {% endfor %}
+
         <input type="submit" value="Submit">
         {% csrf_token %}
         

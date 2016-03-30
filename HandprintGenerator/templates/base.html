@@ -27,20 +27,20 @@
                 <span class="icon-bar"></span>
 
               </button>
-              <a class="navbar-brand" href="#">Handprint Generator</a>
+              <a class="navbar-brand" href="{% url 'HandprintGenerator:home' %}">Handprint Generator</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
               <ul class="nav navbar-nav">
-                <li><a href="/">Home</a></li>
-                <li><a href="/about">About Handprinter</a></li>
-                <li><a href="/index">Action Idea Index</a></li>
+                <li><a href="{% url 'HandprintGenerator:home' %}">Home</a></li>
+                <li><a href="{% url 'HandprintGenerator:about_us' %}">About Handprinter</a></li>
+                <li><a href="{% url 'HandprintGenerator:index' %}">Action Idea Index</a></li>
                 {% if user.is_authenticated %}
-                <li><a href="/new">Create A New Action Idea</a></li>
+                <li><a href="{% url 'HandprintGenerator:new_action_idea' %}">Create A New Action Idea</a></li>
                 {% endif %}
                 {% if not user.is_authenticated %}
-                <li><a href="/create_user">Register</a></li>
+                <li><a href="{% url 'HandprintGenerator:new_user' %}">Register</a></li>
                 {% endif %}
-                <li>{% if user.is_authenticated %} <a href="/profile">Welcome, {{ user.username }}</a></li><li><a href="/logout">Logout</a>{% else %}<a href="/login">Log In</a>{% endif %}</li>
+                <li>{% if user.is_authenticated %} <a href="/profile">Welcome, {{ user.username }}</a></li><li><a href="{% url 'HandprintGenerator:logout' %}">Logout</a>{% else %}<a href="{% url 'HandprintGenerator:login' %}">Log In</a>{% endif %}</li>
             </ul>
             </div>
           </div>
@@ -59,9 +59,9 @@
     <footer class="footer">
       <div class="container">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/contact">Contact Us</a></li>
-                <li><a href="/privacy">Privacy Policy</a></li>
-                <li><a href="/terms">Terms of Service</a></li> 
+                <li><a href="{% url 'HandprintGenerator:contact_us' %}">Contact Us</a></li>
+                <li><a href="{% url 'HandprintGenerator:privacy_policy' %}">Privacy Policy</a></li>
+                <li><a href="{% url 'HandprintGenerator:terms_of_service' %}">Terms of Service</a></li> 
                 {% if user.is_staff %}
                 <li><a href="/admin">Administration</a></li>
                 {% endif %}

@@ -15,6 +15,13 @@ class NewActionIdeaForm(forms.ModelForm):
             'references': forms.Textarea(),
         }
 
+class DeleteActionIdeaForm(forms.ModelForm):
+    class Meta:
+        model = ActionIdeaInactive
+        fields = ['reason']
+        exclude = ['action_idea, date_create, responsible']
+
+
 class CommentForm(forms.ModelForm):
     class Meta:
         model = ActionIdeaComment

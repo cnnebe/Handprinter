@@ -4,15 +4,33 @@
         
     <h1> Action Ideas </h1>
 
+    <h2> Active </h2>
     <table>
-    {% if action_ideas %}
+    {% if action_ideas_active %}
     <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>
-        {% for ai in action_ideas %}
+        {% for ai in action_ideas_active %}
             <tr>
-                <td><a href="/handprintgenerator/{{ ai.id }}/">{{ ai.name }}</a></td>
+                <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
                 <td> {{ ai.category }} </td>
                 <td> {{ai.numvotes}}</td>
                 <td> {{ai.date_created}} </td>
+                {% if user.is_authenticated %}                
+                <td> 
+                    {% if ai.id in userVotes %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="unvote" value="Unvote">
+                            {% csrf_token %}
+                        </form>
+                    {% else %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="vote" value="Vote">
+                            {% csrf_token %}
+                        </form>
+                    {% endif %}
+                </td>
+                {% endif %}
             </tr>
         {% endfor %}
     {% else %}
@@ -20,5 +38,24 @@
     {% endif %}
 
     </table>
+    <br>
+    {% if user.profile.role == "Moderator" or user.is_staff %}
+        <h2> Inactive </h2>
+        <table>
+        {% if action_ideas_inactive %}
+        <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>
+            {% for ai in action_ideas_inactive %}
+                <tr>
+                    <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
+                    <td> {{ ai.category }} </td>
+                    <td> {{ai.numvotes}}</td>
+                    <td> {{ai.date_created}} </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <p>There are no inactive action ideas.</p>
+        {% endif %}
+    </table>
+    {% endif %}
 
 {% endblock %}

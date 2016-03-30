@@ -9,10 +9,30 @@
             <p> References: {{ ai.references }}</p>
             <p> Images: {{ ai.images }}</p>
             <p> Category: {{ ai.category }}</p>
+            <p> Votes: {{ai.numvotes}} </p>
             <p> Active: {{ ai.active }}</p>
+            {% if not ai.active %} 
+<!--                 <p> Reason for making inactive: {{ai.}}
+ -->        {% endif %}
             <p> Action Idea Creator: {{ ai.creator.first_name }} {{ ai.creator.last_name }}</p>
             {% if ai.creator == request.user or user.is_staff %}
-                <a href="/handprintgenerator/{{ ai.id }}/edit/">Edit Action Idea</a>
+                <a href="{% url 'HandprintGenerator:edit_action_idea' ai.id %}">Edit Action Idea</a>
+                {% if ai.active %}
+                    <a href="{% url 'HandprintGenerator:delete_action_idea' ai.id%}">Delete Action Idea</a> 
+                {% endif %}
+            {% endif %}
+            {% if user.is_authenticated %}                
+                {% if userVote %}
+                    <form action="/handprintgenerator/{{ ai.id }}/" method="post">
+                        <input type="submit" name="unvote" value="Unvote">
+                        {% csrf_token %}
+                    </form>
+                {% else %}
+                    <form action="/handprintgenerator/{{ ai.id }}/" method="post">
+                        <input type="submit" name="vote" value="Vote">
+                        {% csrf_token %}
+                    </form>
+                {% endif %}
             {% endif %}
         </div>
         <div id="comments">
