@@ -18,4 +18,5 @@ urlpatterns = [
     url(r'^terms$', TemplateView.as_view(template_name='terms_of_service.html'), name="terms_of_service"),
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
+    url(r'^forgot_password/$', views.forgot_password, name='forgot_password'),
 ]

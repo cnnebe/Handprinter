@@ -49,3 +49,6 @@ class UserCreateForm(UserCreationForm):
         if commit:
             user.save()
         return user
+        
+class ForgotPasswordForm(forms.ModelForm):
+    #email field and submit button

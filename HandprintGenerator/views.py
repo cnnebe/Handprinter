@@ -5,6 +5,7 @@ from django.db import transaction
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import auth
+from django.core.mail import send_mail
 
 from .models import * 
 from .forms import *
@@ -130,3 +131,17 @@ def logout(request):
     context = {}
     auth.logout(request)
     return render(request, 'registration/logout.html', context)
+    
+def forgot_password(request):
+    context = {
+        'users': User.objects.all(),
+    }
+    if request.method == "POST":
+        form = ForgotPasswordForm(request.Post)
+        context['form'] = form
+        #get email, then change password to random string, then send email with it
+    else:
+        form = ForgotPasswordForm()
+        context['form'] = form
+        
+    return render(request, 'registration/forgot_password.html', context)
