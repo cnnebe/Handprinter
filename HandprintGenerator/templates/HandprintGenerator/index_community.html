@@ -4,30 +4,16 @@
         
     <h1> Action Ideas </h1>
 
-
- <div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    Dropdown
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a href="#">Action</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#">Separated link</a></li>
-  </ul>
-</div>
  
 
     <h2> Active </h2>
     <table>
-    {% if action_ideas_active %}
+    {% if action_ideas_community_active %}
     <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>
-        {% for ai in action_ideas_active %}
+        {% for ai in action_ideas_community_active %}
             <tr>
                 <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
-                <td> {{ ai.category }} </td>
+                <td> {{ ai.category }}  </td>
                 <td> {{ai.numvotes}}</td>
                 <td> {{ai.date_created}} </td>
                 {% if user.is_authenticated %}                
@@ -58,9 +44,9 @@
     {% if user.profile.role == "Moderator" or user.is_staff %}
         <h2> Inactive </h2>
         <table>
-        {% if action_ideas_inactive %}
+        {% if action_ideas_community_inactive %}
         <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>
-            {% for ai in action_ideas_inactive %}
+            {% for ai in action_ideas_community_inactive %}
                 <tr>
                     <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
                     <td> {{ ai.category }} </td>
