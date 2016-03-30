@@ -35,7 +35,7 @@ class Profile(models.Model):
     #is_superuser
     #last_login
     #date_joined
-    user = models.ForeignKey(User)
+    user = models.OneToOneField(User)
     location = models.CharField(max_length=50, null=True, blank=True)
     role = models.CharField(
         max_length = 15, 
