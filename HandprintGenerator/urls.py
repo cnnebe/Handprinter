@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^index$', views.index, name='index'),
     url(r'^create_user$', views.new_user, name='new_user'),
+    url(r'^profile$', views.user_profile, name='user_profile'),
     url(r'^new$', views.edit_action_idea, name='new_action_idea'),
     url(r'^handprintgenerator/(?P<actionidea_id>[0-9]+)/$', views.detail, name='detail'),
     url(r'^handprintgenerator/(?P<actionidea_id>[0-9]+)/edit/$', views.edit_action_idea, name='edit_action_idea'),
