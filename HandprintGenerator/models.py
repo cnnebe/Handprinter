@@ -48,7 +48,7 @@ class ActionIdea(models.Model):
     name = models.CharField(max_length=150)
     description = models.CharField(max_length=1000)
     references = models.CharField(max_length=500, null=True, blank=True)
-    images = models.CharField(max_length=500, null=True, blank=True)
+    image = models.ImageField(upload_to='images/', null=True, blank=True)
     active = models.BooleanField(default=True)
     date_created = models.DateTimeField(auto_now_add=True, blank=True)
     category = models.CharField(

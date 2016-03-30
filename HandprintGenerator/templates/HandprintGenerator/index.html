@@ -3,8 +3,9 @@
 {% block content %}
         
     <h1> Action Ideas </h1>
-
+    {% if user.profile.role == "Moderator" or user.is_staff %}
     <h2> Active </h2>
+    {% endif %}
     <table>
     {% if action_ideas_active %}
     <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>

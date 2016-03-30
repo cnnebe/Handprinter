@@ -8,7 +8,7 @@ from django.contrib import auth
 class NewActionIdeaForm(forms.ModelForm):
     class Meta:
         model = ActionIdea
-        fields = ['name', 'description', 'references', 'images', 'category']
+        fields = ['name', 'description', 'references', 'image', 'category']
         exclude = ['creator', 'date_created', 'active']
         widgets = {
             'description': forms.Textarea(),
