@@ -6,11 +6,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 
 
 from .models import * 
 from .forms import *
-from django.db.models import Count
 
 import datetime
 
@@ -55,11 +55,6 @@ def index_work(request):
         v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
         v.save()
         return HttpResponseRedirect('/index_work')
-
-    #context['action_ideas_inactive'] = ActionIdea.objects.filter(active=True).order_by('-date_created')
-    #context['action_ideas']  = sorted(ActionIdea.objects.all(), key=lambda ai: ai.numvotes)
-    #context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
-    #context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
     return render(request, 'HandprintGenerator/index_work.html', context)
 
 def index_food(request):
@@ -77,11 +72,6 @@ def index_food(request):
         v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
         v.save()
         return HttpResponseRedirect('/index_food')
-
-    #context['action_ideas_inactive'] = ActionIdea.objects.filter(active=True).order_by('-date_created')
-    #context['action_ideas']  = sorted(ActionIdea.objects.all(), key=lambda ai: ai.numvotes)
-    #context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
-    #context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
     return render(request, 'HandprintGenerator/index_food.html', context)
 
 def index_home(request):
@@ -99,11 +89,6 @@ def index_home(request):
         v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
         v.save()
         return HttpResponseRedirect('/index_home')
-
-    #context['action_ideas_inactive'] = ActionIdea.objects.filter(active=True).order_by('-date_created')
-    #context['action_ideas']  = sorted(ActionIdea.objects.all(), key=lambda ai: ai.numvotes)
-    #context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
-    #context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
     return render(request, 'HandprintGenerator/index_home.html', context)
 
 def index_community(request):
@@ -121,11 +106,6 @@ def index_community(request):
         v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
         v.save()
         return HttpResponseRedirect('/index_community')
-
-    #context['action_ideas_inactive'] = ActionIdea.objects.filter(active=True).order_by('-date_created')
-    #context['action_ideas']  = sorted(ActionIdea.objects.all(), key=lambda ai: ai.numvotes)
-    #context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
-    #context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
     return render(request, 'HandprintGenerator/index_community.html', context)
 
 def index_mobility(request):
@@ -143,11 +123,6 @@ def index_mobility(request):
         v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
         v.save()
         return HttpResponseRedirect('/index_mobility')
-
-    #context['action_ideas_inactive'] = ActionIdea.objects.filter(active=True).order_by('-date_created')
-    #context['action_ideas']  = sorted(ActionIdea.objects.all(), key=lambda ai: ai.numvotes)
-    #context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
-    #context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
     return render(request, 'HandprintGenerator/index_mobility.html', context)
 
 def index_clothing(request):
@@ -165,11 +140,6 @@ def index_clothing(request):
         v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
         v.save()
         return HttpResponseRedirect('/index_clothing')
-
-    #context['action_ideas_inactive'] = ActionIdea.objects.filter(active=True).order_by('-date_created')
-    #context['action_ideas']  = sorted(ActionIdea.objects.all(), key=lambda ai: ai.numvotes)
-    #context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
-    #context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
     return render(request, 'HandprintGenerator/index_clothing.html', context)
 
 def index_other(request):
@@ -187,11 +157,6 @@ def index_other(request):
         v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
         v.save()
         return HttpResponseRedirect('/index_other')
-
-    #context['action_ideas_inactive'] = ActionIdea.objects.filter(active=True).order_by('-date_created')
-    #context['action_ideas']  = sorted(ActionIdea.objects.all(), key=lambda ai: ai.numvotes)
-    #context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
-    #context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
     return render(request, 'HandprintGenerator/index_other.html', context)
 
 def index_vote(request):
@@ -209,11 +174,6 @@ def index_vote(request):
         v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
         v.save()
         return HttpResponseRedirect('/index_vote')
-
-    #context['action_ideas_inactive'] = ActionIdea.objects.filter(active=True).order_by('-date_created')
-    #context['action_ideas']  = sorted(ActionIdea.objects.all(), key=lambda ai: ai.numvotes)
-    #context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
-    #context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
     return render(request, 'HandprintGenerator/index_vote.html', context)
 
 @transaction.atomic
@@ -240,7 +200,6 @@ def detail(request, actionidea_id):
             new_comment.user_id = request.user.id
             new_comment.save()
             return HttpResponseRedirect('.')
-
     return render(request, 'HandprintGenerator/detail.html', context)
 
 @login_required
