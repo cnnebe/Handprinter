@@ -154,7 +154,7 @@ def login(request):
             # Correct password, and the user is marked "active"
             auth.login(request, user)
             # Redirect to a success page.
-            return HttpResponseRedirect('/index/')
+            return HttpResponseRedirect('/index')
 
     return render(request, 'registration/login.html', context)
 
@@ -186,13 +186,15 @@ You recently requested to reset your password for your Handprint Generator accou
 
 If you did not request a password reset, please reply to let us know. We urge you to change your password upon logging in by going to user profile and editing your password.
 
+For your reference, your username is: %s
+
 Thanks,
 The Handprinter Team
 
 P.S. We also love hearing from you and assisting you with any concerns you may have. Please reply to this email if you want to ask a question or submit a comment.
-""" % (forgotten_user.first_name, new_password)
+""" % (forgotten_user.first_name, new_password, forgotten_user.username)
             #now send them an email with the new password
-            send_mail('Handprinter Password Reset', password_message, 'bcg06770@yahoo.com',
+            send_mail('Handprinter Password Reset', password_message, 'handprinterteam@yahoo.com',
     [user_email], fail_silently=False)
             
             return render(request, 'registration/forgot_password_success.html', context)
