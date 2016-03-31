@@ -10,8 +10,8 @@
             </div>
             <div class="user-info-block">
                 <div class="user-heading">
-                    <h3>Current User Account</h3>
-                    <span class="help-block">location?</span>
+                    <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+                    <span class="help-block">[location]</span>
                 </div>
                 <ul class="navigation">
                     <li class="active">
@@ -48,6 +48,23 @@
                         </div>
                         <div id="events" class="tab-pane">
                             <h4>Action Idea History</h4>
+                            <p>
+                                <table>
+                                    {% if ideas %}
+                                    {% for ai in ideas %}
+                                    <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th>
+                                                <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
+                                                <td> {{ ai.category }} </td>
+                                                <td> {{ai.numvotes}}</td>
+                                                <td> {{ai.date_created}} </td>
+                                            </tr>
+                                     {% endfor %}
+                                    {% else %}
+                                        <p>No action ideas are available.</p>
+                                    {% endif %}
+
+                                </table>
+                            </p>
                         </div>
                     </div>
                 </div>
