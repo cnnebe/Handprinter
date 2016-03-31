@@ -230,6 +230,25 @@ def edit_action_idea(request, actionidea_id=None):
 
     return render(request, 'HandprintGenerator/new_action_idea.html', context)
 
+@login_required    
+@transaction.atomic
+def new_action_idea(request):
+    context = {}
+    if request.method == "POST":
+        form = NewActionIdeaForm(request.POST)
+        context['NewActionIdeaForm'] = form
+        if form.is_valid():
+            new_action_idea = form.save(commit=False)
+            new_action_idea.date_created = datetime.datetime
+            new_action_idea.creator_id = request.user.id
+            new_action_idea.save()
+            return HttpResponseRedirect('/index')
+    else:
+        form = NewActionIdeaForm()
+        context['NewActionIdeaForm'] = form
+
+    return render(request, 'HandprintGenerator/new_action_idea.html', context)
+
 @login_required
 @transaction.atomic
 def delete_action_idea(request, actionidea_id):
