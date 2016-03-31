@@ -17,6 +17,10 @@ def home(request):
     context = {}
     return render(request, 'HandprintGenerator/home.html', context)
 
+def user_profile(request):
+    context = {}
+    return render(request, 'HandprintGenerator/user_profile.html', context)
+
 def index(request):
     context = {}
     context['action_ideas_inactive'] = ActionIdea.objects.filter(active=False).order_by('-date_created')
