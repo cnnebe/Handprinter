@@ -33,6 +33,15 @@ def index(request):
         v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
         v.save()
         return HttpResponseRedirect('/index')
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = SearchForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            search_term = form.cleaned_data['SearchTerm']
+            tags = ActionIdeaTag.objects.filter(name = search_term)      
+            context['action_ideas_search_active'] = ActionIdea.objects.filter(id__in=tags)
+            return HttpResponseRedirect('/HandprintGenerator/searchresults/')
 
     #context['action_ideas_inactive'] = ActionIdea.objects.filter(active=True).order_by('-date_created')
 	#context['action_ideas']  = sorted(ActionIdea.objects.all(), key=lambda ai: ai.numvotes)
@@ -201,6 +210,20 @@ def detail(request, actionidea_id):
             new_comment.save()
             return HttpResponseRedirect('.')
     return render(request, 'HandprintGenerator/detail.html', context)
+
+
+def search_results(request):
+    context = {}
+    form = SearchForm(request.POST)
+    if request.method == 'GET':
+         if form.is_valid():
+            for key, value in request.POST.items():
+                if key == "searchTerm":
+                    search_term = value
+            tags = ActionIdeaTag.objects.filter(name = search_term)      
+            context['action_ideas_search_active'] = ActionIdea.objects.filter(id__in=tags)
+            return HttpResponseRedirect('/HandprintGenerator/searchresults/')
+    return render(request, 'HandprintGenerator/searchresults.html', context)
 
 @login_required
 @transaction.atomic

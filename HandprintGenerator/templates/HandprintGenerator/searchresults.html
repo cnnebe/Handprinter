@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+        
+    <h1> Search Results </h1>
+ 
+
+    <h2> Action Ideas </h2>
+    <table>
+    {% if action_ideas_active %}
+    <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>
+        {% for ai in action_ideas_search_active %}
+            <tr>
+                <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
+                <td> {{ ai.category }} </td>
+                <td> {{ai.numvotes}}</td>
+                <td> {{ai.date_created}} </td>
+                {% if user.is_authenticated %}                
+                <td> 
+                    {% if ai.id in userVotes %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="unvote" value="Unvote">
+                            {% csrf_token %}
+                        </form>
+                    {% else %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="vote" value="Vote">
+                            {% csrf_token %}
+                        </form>
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    {% else %}
+        <p>No action ideas are available.</p>
+    {% endif %}
+
+    </table>
+    <br>
+
+{% endblock %}

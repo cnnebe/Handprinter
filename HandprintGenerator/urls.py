@@ -26,4 +26,5 @@ urlpatterns = [
     url(r'^index_clothing$', views.index_clothing, name='index_clothing'),
     url(r'^index_other$', views.index_other, name='index_other'),
     url(r'^index_vote$', views.index_vote, name='index_popularity'),
+    url(r'^searchresults$', views.search_results, name='searchresults'),
 ]
