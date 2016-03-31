@@ -26,7 +26,7 @@ DEBUG = False
 
 SECRET_KEY = "admin"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [".herokuapp.com", ".handprinter.org"]]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
