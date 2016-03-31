@@ -4,27 +4,21 @@
         
     <h1> Action Ideas </h1>
 
-
-
 <a href="/index_work">Work</a> 
-<a href="/index_home">Home</a>
 <a href="/index_community">Community</a>
 <a href="/index_vote">Most Popular</a>
 <a href="/index_mobility">Mobility
 <a href="/index_clothing">Clothing</a></a>
 <a href="/index_other">Other</a>
+<a href="/index">Most Recent</a>
  <a href="/index_food">Food</a>
  
- <br><br>
-
-
-    {% if user.profile.role == "Moderator" or user.is_staff %}
+<br><br>
     <h2> Active </h2>
-    {% endif %}
     <table>
-    {% if action_ideas_active %}
+    {% if action_ideas_home_active %}
     <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>
-        {% for ai in action_ideas_active %}
+        {% for ai in action_ideas_home_active %}
             <tr>
                 <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
                 <td> {{ ai.category }} </td>
@@ -58,9 +52,9 @@
     {% if user.profile.role == "Moderator" or user.is_staff %}
         <h2> Inactive </h2>
         <table>
-        {% if action_ideas_inactive %}
+        {% if action_ideas_home_inactive %}
         <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>
-            {% for ai in action_ideas_inactive %}
+            {% for ai in action_ideas_home_inactive %}
                 <tr>
                     <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
                     <td> {{ ai.category }} </td>
