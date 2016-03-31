@@ -12,6 +12,8 @@ from .models import *
 from .forms import *
 
 import datetime
+import string
+import random
 
 def home(request):
     context = {}
@@ -147,7 +149,7 @@ def login(request):
             # Correct password, and the user is marked "active"
             auth.login(request, user)
             # Redirect to a success page.
-            return HttpResponseRedirect('/index')
+            return HttpResponseRedirect('/index/')
 
     return render(request, 'registration/login.html', context)
 
@@ -158,15 +160,39 @@ def logout(request):
     return render(request, 'registration/logout.html', context)
     
 def forgot_password(request):
-    context = {
-        'users': User.objects.all(),
-    }
+    context = {}
     if request.method == "POST":
-        form = ForgotPasswordForm(request.Post)
-        context['form'] = form
-        #get email, then change password to random string, then send email with it
-    else:
-        form = ForgotPasswordForm()
-        context['form'] = form
-        
+        try:
+            user_email = request.POST.get('email')
+            #see if the person's email matches an actual user
+            forgotten_user = User.objects.get(email=user_email)
+            #now generate a random string to reset their password to
+            #from: http://stackoverflow.com/questions/2257441/random-string-generation-with-upper-case-letters-and-digits-in-python
+            new_password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
+            #now reset their password
+            forgotten_user.set_password(new_password)
+            forgotten_user.save()
+            #now put the password in an email message
+            password_message = """Hi %s,
+            
+You recently requested to reset your password for your Handprint Generator account. We have reset your password. Your new, temporary password is:
+
+%s
+
+If you did not request a password reset, please reply to let us know. We urge you to change your password upon logging in by going to user profile and editing your password.
+
+Thanks,
+The Handprinter Team
+
+P.S. We also love hearing from you and assisting you with any concerns you may have. Please reply to this email if you want to ask a question or submit a comment.
+""" % (forgotten_user.first_name, new_password)
+            #now send them an email with the new password
+            send_mail('Handprinter Password Reset', password_message, 'bcg06770@yahoo.com',
+    [user_email], fail_silently=False)
+            
+            return render(request, 'registration/forgot_password_success.html', context)
+        except:
+            #it didn't work, let the user know
+            return render(request, 'registration/forgot_password_failure.html', context)
+
     return render(request, 'registration/forgot_password.html', context)
