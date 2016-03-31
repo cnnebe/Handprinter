@@ -19,6 +19,10 @@ def home(request):
     context = {}
     return render(request, 'HandprintGenerator/home.html', context)
 
+def user_profile(request):
+    context = {}
+    return render(request, 'HandprintGenerator/user_profile.html', context)
+
 def index(request):
     context = {}
     context['action_ideas_inactive'] = ActionIdea.objects.filter(active=False).order_by('-date_created')
@@ -78,12 +82,13 @@ def edit_action_idea(request, actionidea_id=None):
     else: #new action idea
         action_idea = ActionIdea(date_created = datetime.datetime, creator_id = request.user.id)
     
-    form = NewActionIdeaForm(request.POST or None, instance=action_idea)
+    form = NewActionIdeaForm(request.POST or None, request.FILES or None, instance=action_idea)
     if request.method == "POST":
         context['NewActionIdeaForm'] = form
         if form.is_valid():
+            #form.image = request.FILES['image']
             form.save()
-            return HttpResponseRedirect('/index')
+            return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
     else:
         context['NewActionIdeaForm'] = form
 
