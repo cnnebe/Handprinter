@@ -24,6 +24,8 @@ MEDIA_URL ='HandprintGenerator/media/'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+SECRET_KEY = "admin"
+
 ALLOWED_HOSTS = []
 
 # Static files (CSS, JavaScript, Images)
