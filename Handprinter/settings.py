@@ -25,7 +25,7 @@ MEDIA_URL ='HandprintGenerator/media/'
 SECRET_KEY = 'admin'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -33,7 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'handprintgenerator.apps.HandprintGeneratorConfig',
+    'HandprintGenerator',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
