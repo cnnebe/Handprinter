@@ -1,1 +1,1 @@
-web: gunicorn handprinter.wsgi --log-file -
+web: gunicorn Handprinter.wsgi --log-file -
