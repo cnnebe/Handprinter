@@ -5,7 +5,7 @@
  -->    
  <h1> Create a new Handprint action idea </h1>
 
-    <form action="#" method="post">
+    <form enctype="multipart/form-data" action="#" method="post">
    		{{ NewActionIdeaForm.errors }}
         {% for field in NewActionIdeaForm %}
             {{field.label_tag}}

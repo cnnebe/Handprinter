@@ -7,7 +7,7 @@
             <h1>{{ ai.name }}</h1>
             <p> Description: {{ ai.description }}</p>
             <p> References: {{ ai.references }}</p>
-            <p> Images: {{ ai.images }}</p>
+            <p> Image: </p> <img style="height:300px;" src="../../media/{{ ai.image }}" alt="{{ ai.name }}" >
             <p> Category: {{ ai.category }}</p>
             <p> Votes: {{ai.numvotes}} </p>
             <p> Active: {{ ai.active }}</p>
@@ -21,7 +21,7 @@
                     <a href="{% url 'HandprintGenerator:delete_action_idea' ai.id%}">Delete Action Idea</a> 
                 {% endif %}
             {% endif %}
-            {% if user.is_authenticated %}                
+            {% if user.is_authenticated and ai.active %}                
                 {% if userVote %}
                     <form action="/handprintgenerator/{{ ai.id }}/" method="post">
                         <input type="submit" name="unvote" value="Unvote">
@@ -41,7 +41,6 @@
                 <li>
                     <p> {{ c.text }}</p>
                     <p> <b> {{ c.user.username}} </b> on {{c.date_created}}</p>
-                    <p> {{ ai.images }}</p>
                 </li>
             {% endfor %}
             {% if ai.comments.count == 0 %}

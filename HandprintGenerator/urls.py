@@ -1,4 +1,6 @@
 from django.conf.urls import url
+from django.conf import settings
+from django.views.static import serve
 
 from . import views
 from django.views.generic import TemplateView
@@ -19,4 +21,5 @@ urlpatterns = [
     url(r'^terms$', TemplateView.as_view(template_name='terms_of_service.html'), name="terms_of_service"),
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT, }),
 ]
