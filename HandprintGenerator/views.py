@@ -5,18 +5,24 @@ from django.db import transaction
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import auth
+from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-
 
 from .models import * 
 from .forms import *
 
 import datetime
+import string
+import random
 
 def home(request):
     context = {}
     return render(request, 'HandprintGenerator/home.html', context)
+
+def user_profile(request):
+    context = {}
+    return render(request, 'HandprintGenerator/user_profile.html', context)
 
 def index(request):
     context = {}
@@ -212,12 +218,13 @@ def edit_action_idea(request, actionidea_id=None):
     else: #new action idea
         action_idea = ActionIdea(date_created = datetime.datetime, creator_id = request.user.id)
     
-    form = NewActionIdeaForm(request.POST or None, instance=action_idea)
+    form = NewActionIdeaForm(request.POST or None, request.FILES or None, instance=action_idea)
     if request.method == "POST":
         context['NewActionIdeaForm'] = form
         if form.is_valid():
+            #form.image = request.FILES['image']
             form.save()
-            return HttpResponseRedirect('/index')
+            return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
     else:
         context['NewActionIdeaForm'] = form
 
@@ -292,3 +299,43 @@ def logout(request):
     context = {}
     auth.logout(request)
     return render(request, 'registration/logout.html', context)
+    
+def forgot_password(request):
+    context = {}
+    if request.method == "POST":
+        try:
+            user_email = request.POST.get('email')
+            #see if the person's email matches an actual user
+            forgotten_user = User.objects.get(email=user_email)
+            #now generate a random string to reset their password to
+            #from: http://stackoverflow.com/questions/2257441/random-string-generation-with-upper-case-letters-and-digits-in-python
+            new_password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
+            #now reset their password
+            forgotten_user.set_password(new_password)
+            forgotten_user.save()
+            #now put the password in an email message
+            password_message = """Hi %s,
+            
+You recently requested to reset your password for your Handprint Generator account. We have reset your password. Your new, temporary password is:
+
+%s
+
+If you did not request a password reset, please reply to let us know. We urge you to change your password upon logging in by going to user profile and editing your password.
+
+For your reference, your username is: %s
+
+Thanks,
+The Handprinter Team
+
+P.S. We also love hearing from you and assisting you with any concerns you may have. Please reply to this email if you want to ask a question or submit a comment.
+""" % (forgotten_user.first_name, new_password, forgotten_user.username)
+            #now send them an email with the new password
+            send_mail('Handprinter Password Reset', password_message, 'handprinterteam@yahoo.com',
+    [user_email], fail_silently=False)
+            
+            return render(request, 'registration/forgot_password_success.html', context)
+        except:
+            #it didn't work, let the user know
+            return render(request, 'registration/forgot_password_failure.html', context)
+
+    return render(request, 'registration/forgot_password.html', context)
