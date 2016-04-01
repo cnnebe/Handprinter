@@ -1,0 +1,5 @@
+{
+  "name": “Handprint Generator“,
+  "description": “An application for crowdsourcing handprint action ideas.“,
+  "addons": [ "heroku-postgresql" ]
+}
