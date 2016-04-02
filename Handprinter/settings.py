@@ -24,7 +24,9 @@ MEDIA_URL ='HandprintGenerator/media/'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+SECRET_KEY = "admin"
+
+ALLOWED_HOSTS = [".herokuapp.com", ".handprinter.org"]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
@@ -48,13 +50,13 @@ DATABASES = {
 # Application definition
 
 INSTALLED_APPS = [
-    'HandprintGenerator',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'HandprintGenerator',
 ]
 
 MIDDLEWARE_CLASSES = [
