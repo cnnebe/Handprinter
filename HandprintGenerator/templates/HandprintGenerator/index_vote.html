@@ -2,7 +2,7 @@
 
 {% block content %}
         
-    <h1> Action Ideas </h1>
+    <h1> Action Ideas by Popularity </h1>
 
 <a href="/index_work">Work</a> 
 <a href="/index_home">Home</a>
@@ -13,7 +13,9 @@
 <a href="/index">Most Recent</a>
  <a href="/index_food">Food</a>
 <br><br>
+    {% if user.profile.role == "Moderator" or user.is_staff %}
     <h2> Active </h2>
+    {% endif %}
     <table>
     {% if action_ideas_vote_active %}
     <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>
@@ -43,7 +45,7 @@
             </tr>
         {% endfor %}
     {% else %}
-        <p>No action ideas are available.</p>
+        <p>No action ideas are available, why don't you <a href=/new>add one.</a> </p>
     {% endif %}
 
     </table>
@@ -62,7 +64,7 @@
                 </tr>
             {% endfor %}
         {% else %}
-            <p>There are no inactive action ideas.</p>
+            <p>There are no inactive action ideas. To make an idea inactive, you must delete it.</p>
         {% endif %}
     </table>
     {% endif %}

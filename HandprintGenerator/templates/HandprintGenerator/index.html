@@ -50,13 +50,13 @@
             </tr>
         {% endfor %}
     {% else %}
-        <p>No action ideas are available.</p>
+        <p>No action ideas are available, why don't you <a href=/new>add one.</a> </p>
     {% endif %}
 
     </table>
     <br>
     {% if user.profile.role == "Moderator" or user.is_staff %}
-        <h2> Inactive </h2>
+        <h2> Inactive</h2>
         <table>
         {% if action_ideas_inactive %}
         <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>
@@ -69,7 +69,7 @@
                 </tr>
             {% endfor %}
         {% else %}
-            <p>There are no inactive action ideas.</p>
+            <p>There are no inactive action ideas. To make an idea inactive, you must delete it.</p>
         {% endif %}
     </table>
     {% endif %}

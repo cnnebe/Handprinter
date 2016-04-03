@@ -2,7 +2,7 @@
 
 {% block content %}
         
-    <h1> Action Ideas </h1>
+    <h1> Action Ideas Related to Community </h1>
 
  <a href="/index_work">Work</a> 
 <a href="/index_home">Home</a>
@@ -13,7 +13,9 @@
 <a href="/index_other">Other</a>
  <a href="/index_food">Food</a>
 <br><br>
+    {% if user.profile.role == "Moderator" or user.is_staff %}
     <h2> Active </h2>
+    {% endif %}
     <table>
     {% if action_ideas_community_active %}
     <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>
@@ -43,13 +45,13 @@
             </tr>
         {% endfor %}
     {% else %}
-        <p>No action ideas are available.</p>
+        <p>No action ideas are available in this category, why don't you <a href=/new>add one.</a> Try looking in another category or go back to the <a href=/index>main index.</a> </p>
     {% endif %}
 
     </table>
     <br>
     {% if user.profile.role == "Moderator" or user.is_staff %}
-        <h2> Inactive </h2>
+        <h2> Inactive Action Ideas Related to Community </h2>
         <table>
         {% if action_ideas_community_inactive %}
         <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>
@@ -62,7 +64,7 @@
                 </tr>
             {% endfor %}
         {% else %}
-            <p>There are no inactive action ideas.</p>
+            <p>There are no inactive action ideas in this category. To make an idea inactive, you must delete it. Try looking in another category or go back to the <a href=/index>main index.</a></p>
         {% endif %}
     </table>
     {% endif %}
