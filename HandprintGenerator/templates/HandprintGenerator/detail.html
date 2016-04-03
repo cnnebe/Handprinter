@@ -12,11 +12,15 @@
             <p> References: {{ ai.references }}</p>
             <p> Category: {{ ai.category }}</p>
             <p> Votes: {{ai.numvotes}} </p>
-            <p> Active: {{ ai.active }}</p>
-            {% if not ai.active %} 
-<!--                 <p> @TODO Reason for making inactive: {{ai.}}
- -->        {% endif %}
-            <p> Action Idea Creator: {{ ai.creator.first_name }} {{ ai.creator.last_name }}</p>
+            {% if user.profile.role == "Moderator" or user.is_staff %}
+                <p> Active: {{ ai.active }}</p>
+                {% if not ai.active %} 
+                <ul>
+                 <li> <b>Reason:</b> {{reason.reason}} </li>
+                 </ul>
+        {% endif %}
+            {% endif %}
+            <p> Submitted By: {{ ai.creator.first_name }} {{ ai.creator.last_name }}</p>
             {% if ai.creator == request.user or user.is_staff %}
                 <a href="{% url 'HandprintGenerator:edit_action_idea' ai.id %}">Edit Action Idea</a>
                 {% if ai.active %}

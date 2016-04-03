@@ -193,6 +193,10 @@ def detail(request, actionidea_id):
         context['userVote'] = ActionIdeaVote.objects.get(user=request.user, action_idea = ActionIdea.objects.get(pk=actionidea_id))
     except:
         context['userVote'] = False
+    try: 
+        context['reason'] = ActionIdeaInactive.objects.get(action_idea = ActionIdea.objects.get(pk=actionidea_id))
+    except: 
+        context['reason'] = False
     if request.POST.get('unvote'):
         ActionIdeaVote.objects.get(action_idea = ActionIdea.objects.get(pk=actionidea_id), user = request.user).delete()
         return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)

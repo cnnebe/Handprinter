@@ -2,29 +2,43 @@
 
 {% block content %}
         
-    <h1> Action Ideas </h1>
+    <h1> Action Ideas Related to Home </h1>
 
-<a href="/index_work">Work</a> 
-<a href="/index_community">Community</a>
-<a href="/index_vote">Most Popular</a>
-<a href="/index_mobility">Mobility
-<a href="/index_clothing">Clothing</a></a>
-<a href="/index_other">Other</a>
-<a href="/index">Most Recent</a>
- <a href="/index_food">Food</a>
+<div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    Filter By
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a href="/index">Most Recent</a></li>
+    <li><a href="/index_vote">Most Popular</a></li>
+    <li><a href="/index_work">Work</a></li>
+    <li><a href="/index_community">Community</a></li>
+    <li><a href="/index_mobility">Mobility</a></li>
+    <li><a href="/index_food">Food</a></li>
+    <li><a href="/index_other">Other</a></li>
+  </ul>
+</div>
  
 <br><br>
+    {% if user.profile.role == "Moderator" or user.is_staff %}
     <h2> Active </h2>
+    {% endif %}
     <table>
     {% if action_ideas_home_active %}
-    <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>
+   <tr>
+        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+    </tr>
         {% for ai in action_ideas_home_active %}
             <tr>
-                <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
+                <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }} </a> </td>                 
                 <td> {{ ai.category }} </td>
                 <td> {{ai.numvotes}}</td>
-                <td> {{ai.date_created}} </td>
-                {% if user.is_authenticated %}                
+                <td> {{ai.date_created}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+                {% if user.is_authenticated %}                    
                 <td> 
                     {% if ai.id in userVotes %}
                         <form action="" method="post">
@@ -44,16 +58,21 @@
             </tr>
         {% endfor %}
     {% else %}
-        <p>No action ideas are available.</p>
+        <p>No action ideas are available in this category, why don't you <a href=/new>add one.</a> Try looking in another category or go back to the <a href=/index>main index.</a> </p>
     {% endif %}
 
     </table>
     <br>
     {% if user.profile.role == "Moderator" or user.is_staff %}
-        <h2> Inactive </h2>
+        <h2> Inactive Action Ideas Related to Home </h2>
         <table>
         {% if action_ideas_home_inactive %}
-        <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>
+        <tr>
+        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+    </tr>
             {% for ai in action_ideas_home_inactive %}
                 <tr>
                     <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
@@ -63,7 +82,7 @@
                 </tr>
             {% endfor %}
         {% else %}
-            <p>There are no inactive action ideas.</p>
+            <p>There are no inactive action ideas in this category. To make an idea inactive, you must delete it. Try looking in another category or go back to the <a href=/index>main index.</a></p>
         {% endif %}
     </table>
     {% endif %}
