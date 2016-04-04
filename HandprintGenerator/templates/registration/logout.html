@@ -2,7 +2,10 @@
 
 {% block content %}
 
-Logged out!
+<h3>Logged out!</h3>
+
 {% csrf_token %}
+
+<script>window.location.href = "/login";</script>
 
 {% endblock %}

@@ -21,11 +21,14 @@ def home(request):
     return render(request, 'HandprintGenerator/home.html', context)
 
 def user_profile(request):
-    ideas = ActionIdea.objects.filter(creator=request.user, active=True).order_by('-date_created')
-    context = {
+    if request.user.is_anonymous:
+        return render(request, 'HandprintGenerator/user_profile.html')
+    else:
+        ideas = ActionIdea.objects.filter(creator=request.user, active=True).order_by('-date_created')
+        context = {
         'ideas': ideas
-    }
-    return render(request, 'HandprintGenerator/user_profile.html', context)
+        }
+        return render(request, 'HandprintGenerator/user_profile.html', context)
 
 def index(request):
     context = {}
@@ -262,6 +265,7 @@ def delete_action_idea(request, actionidea_id):
     context = {}
     form = DeleteActionIdeaForm(request.POST)
     context['DeleteActionIdeaForm'] = form
+    context['ActionIdea'] = ActionIdea.objects.get(pk=actionidea_id)
     if form.is_valid():
         delete_ai = form.save(commit=False)
         delete_ai.date_created = datetime.datetime

@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+{% if user.is_authenticated %}
+
 <br><br><br><br><br>
 <div class="container">
     <div class="row centered">
@@ -72,5 +75,11 @@
         </div>
 	</div>
 </div>
+
+{% else %}
+
+<h3> Please <a href=/login>login</a> or create a <a href=/create_user>new account</a> to view your profile. </h3>
+
+{% endif %}
 
 {% endblock %}

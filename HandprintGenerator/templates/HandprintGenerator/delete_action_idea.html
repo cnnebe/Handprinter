@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+{% if ActionIdea.active %}
+
   
  <h1> Why are you deleting this action idea?</h1>
 
@@ -17,4 +20,13 @@
         {% csrf_token %}
         
     </form>
+
+
+{% else %}
+
+<h3> This action idea has already been deleted! <a href=/index>View existing action ideas.</a></h3>
+
+{% endif %}
+
+
 {% endblock %}
