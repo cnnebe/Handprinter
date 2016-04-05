@@ -247,8 +247,8 @@ def new_action_idea(request):
         context['NewActionIdeaForm'] = form
         if form.is_valid():
             new_action_idea = form.save(commit=False)
-
             new_action_idea.save()
+            form.save_m2m()
             return HttpResponseRedirect('/index')
     else:
         form = NewActionIdeaForm()

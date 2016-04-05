@@ -13,6 +13,11 @@
             <p> Description: {{ ai.description }}</p>
             <p> References: {{ ai.references }}</p>
             <p> Category: {{ ai.category }}</p>
+            <p> Tags: 
+            {% for tag in ai.tags.names %}
+                    <a href=#>{{tag}}</a>,
+            {% endfor %}
+            </p>
             <p> Votes: {{ai.numvotes}} </p>
             {% if user.profile.role == "Moderator" or user.is_staff %}
                 <p> Active: {{ ai.active }}</p>

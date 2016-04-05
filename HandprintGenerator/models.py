@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from taggit.managers import TaggableManager
 
 ROLE_CHOICES = (
     ('admin', 'Administrator'), 
@@ -57,6 +58,7 @@ class ActionIdea(models.Model):
     category = models.CharField(
         max_length = 15, 
         choices = CATEGORY_CHOICES)
+    tags = TaggableManager()
 
     def __str__(self):
         return self.name
@@ -73,11 +75,6 @@ class ActionIdeaComment(models.Model):
     user = models.ForeignKey(User)
     text = models.CharField(max_length=1000)
     date_created = models.DateTimeField(auto_now_add=True, blank=True)
-
-class ActionIdeaTag(models.Model):
-    action_idea = models.ForeignKey(ActionIdea)
-    name = models.CharField(max_length=50)
-    user = models.ForeignKey(User)
 
 class ActionIdeaVote(models.Model):
     action_idea = models.ForeignKey(ActionIdea)
