@@ -19,8 +19,11 @@ CATEGORY_CHOICES = (
 
 REASON_CHOICES = (
     ('duplicate', 'Duplicate'),
-    ('other', 'Other'),
-    ('spam', 'Spam')
+    ('accident', 'Accident'),
+    ('spam', 'Spam'),
+    ('inappropriate', 'Inappropriate'),
+    ('inaccurate', 'Inaccurate'),
+    ('other', 'Other')
     )
 
 class Profile(models.Model):

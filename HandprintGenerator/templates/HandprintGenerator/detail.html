@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+{% if user.profile.role == "Moderator" or user.is_staff or ai.active %}
         
     <div id="page-content">
         <div id="action-idea">
@@ -82,5 +84,10 @@
             {% endif %}
         </div>
     </div>
+
+    {% else %}
+    <h3> You cannot view a deleted action idea! </h3>
+
+    {% endif %}
 
 {% endblock %}

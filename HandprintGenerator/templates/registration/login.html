@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+{% if user.is_authenticated %}
+
+<h3> You are already logged in! View your <a href=/profile>profile</a> or view some <a href=/index>action ideas.</a></h3>
+
+{% else %}
+
 <br><br>
     <div class="container"> 
         <div class="card card-container">
@@ -20,13 +27,14 @@
 		        <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
 		        {% csrf_token %}
             </form><!-- /form -->
+            <br>
             <a href="/forgot_password" class="forgot-password">
-                Forgot the password?
+                Forgot your login information?
             </a>
         </div><!-- /card-container -->
     </div><!-- /container -->
 
 
-
+{% endif %}
 
 {% endblock %}
