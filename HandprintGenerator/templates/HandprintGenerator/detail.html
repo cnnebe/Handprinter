@@ -13,6 +13,11 @@
             <p> Description: {{ ai.description }}</p>
             <p> References: {{ ai.references }}</p>
             <p> Category: {{ ai.category }}</p>
+            <p> Tags: 
+            {% for tag in ai.tags.names %}
+                    <a href=#>{{tag}}</a>,
+            {% endfor %}
+            </p>
             <p> Votes: {{ai.numvotes}} </p>
             {% if user.profile.role == "Moderator" or user.is_staff %}
                 <p> Active: {{ ai.active }}</p>
@@ -49,6 +54,15 @@
                 <li>
                     <p> {{ c.text }}</p>
                     <p> <b> {{ c.user.username}} </b> on {{c.date_created}}</p>
+                    {% if user.is_authenticated %}
+                        {% if c.user == request.user or user.profile.role == "Moderator" or user.is_staff %}
+                        <form action="/handprintgenerator/{{ ai.id }}/" method="post">
+                            <input type="hidden" name="comment" value="{{ c.id }}">
+                            <input type="submit" name="delete" value="Delete">
+                            {% csrf_token %}
+                        </form>
+                        {% endif %}
+                    {% endif %}
                 </li>
             {% endfor %}
             {% if ai.comments.count == 0 %}

@@ -45,11 +45,6 @@ def index(request):
         v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
         v.save()
         return HttpResponseRedirect('/index')
-
-    #context['action_ideas_inactive'] = ActionIdea.objects.filter(active=True).order_by('-date_created')
-	#context['action_ideas']  = sorted(ActionIdea.objects.all(), key=lambda ai: ai.numvotes)
-	#context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
-	#context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
     return render(request, 'HandprintGenerator/index.html', context)
 
 def index_work(request):
@@ -207,6 +202,9 @@ def detail(request, actionidea_id):
         v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=actionidea_id), user = request.user)
         v.save()
         return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
+    if request.POST.get('delete'):
+        c = get_object_or_404(ActionIdeaComment, pk = request.POST.get('comment')).delete()
+        return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
     form = CommentForm(request.POST)
     context['comment_form'] = form
     if request.method == "POST":
@@ -220,7 +218,6 @@ def detail(request, actionidea_id):
 
 @login_required
 @transaction.atomic
-#using this as edit and create action idea form
 def edit_action_idea(request, actionidea_id=None):
     context = {}
     if actionidea_id: #ediing action idea
@@ -250,8 +247,8 @@ def new_action_idea(request):
         context['NewActionIdeaForm'] = form
         if form.is_valid():
             new_action_idea = form.save(commit=False)
-
             new_action_idea.save()
+            form.save_m2m()
             return HttpResponseRedirect('/index')
     else:
         form = NewActionIdeaForm()
