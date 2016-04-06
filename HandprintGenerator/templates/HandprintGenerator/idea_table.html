@@ -1,6 +1,5 @@
 <!-- This template is rendered in index.html and creates the action idea table depending on the filter or tab selected. -->
 
-
 <!-- Differentiate Active and Inactive Ideas for Staff -->
 {% if user.profile.role == "Moderator" or user.is_staff %}
     <h2> Active </h2>
@@ -41,9 +40,11 @@
         </tr>
         {% endfor %}
     {% else %}
-        <!-- Different Prompts if regular index/popular vs category filtering -->
+        <!-- Different Prompts if regular index/popular, category filtering, and search-->
         {% if idea_list_active == action_ideas_active or idea_list_active == action_ideas_vote_active %}
             <h3>No action ideas are available, why don't you <a href=/new>add one.</a> </h3>
+        {% elif idea_list_active = ai_search_active %}
+            <h4>No results found during your search. Why don't you <a href=/new>add an action idea with the tag you searched for.</a> </h4>
         {% else %}
             <h5>No action ideas are available in this category, why don't you <a href=/new>add one.</a> Try looking in another category or go back to the <a href=/index>main index.</a> </h5>
         {% endif %}
@@ -71,9 +72,11 @@
                 </tr>
             {% endfor %}
         {% else %}
-            <!-- Different Prompts if regular index/popular vs category filtering -->
+            <!-- Different Prompts if regular index/popular, category filtering, and search -->
             {% if idea_list_inactive == action_ideas_inactive or idea_list_inactive == action_ideas_vote_inactive %}
                 <h3>There are no inactive action ideas. To make an idea inactive, you must delete it.</h3>
+            {% elif idea_list_active = ai_search_inactive %}
+                <h4>No inactive action ideas found during the search. You can search for deleted action ideas using a tag associated with it.</h4>
             {% else %}
                 <h5>There are no inactive action ideas in this category. To make an idea inactive, you must delete it. Try looking in another category or go back to the <a href=/index>main index.</a></h5>
             {% endif %}
