@@ -31,5 +31,8 @@ urlpatterns = [
     url(r'^index_vote$', views.index_vote, name='index_popularity'),
     url(r'^forgot_password/$', views.forgot_password, name='forgot_password'),
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT, }),
+    url(r'^searchresults$', views.search_results),
 ]
+
+    
 

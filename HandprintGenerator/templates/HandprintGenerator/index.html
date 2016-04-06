@@ -22,7 +22,15 @@
   </ul>
 </div>
 
- 
+<br>
+
+<form action="/searchresults" method="get">
+    {% csrf_token %}
+    <label for="search">Search for Ideas by Tags: </label>
+    <input id="search" type="text" name="searchTerm" value="{{ searchTerm }}">
+    <input type="submit" value="Search">
+</form>
+
  <br><br>
 
 
@@ -63,7 +71,7 @@
             </tr>
         {% endfor %}
     {% else %}
-        <p>No action ideas are available, why don't you <a href=/new>add one.</a> </p>
+        <h3>No action ideas are available, why don't you <a href=/new>add one.</a> </h3>
     {% endif %}
 
     </table>
@@ -87,7 +95,7 @@
                 </tr>
             {% endfor %}
         {% else %}
-            <p>There are no inactive action ideas. To make an idea inactive, you must delete it.</p>
+            <h3>There are no inactive action ideas. To make an idea inactive, you must delete it.</h3>
         {% endif %}
     </table>
     {% endif %}

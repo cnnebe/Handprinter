@@ -66,7 +66,7 @@
                 </li>
             {% endfor %}
             {% if ai.comments.count == 0 %}
-                <p> There are no comments yet. </p>
+                <p> There are no comments yet. Why don't you be the first to make one? </p>
             {% endif %}
 
 
@@ -91,7 +91,7 @@
     </div>
 
     {% else %}
-    <h3> You cannot view a deleted action idea! </h3>
+    <h3> You cannot view a deleted action idea! <a href=/index>View existing action ideas.</a></h3>
 
     {% endif %}
 
