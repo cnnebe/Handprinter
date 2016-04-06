@@ -45,6 +45,23 @@ def index(request):
         v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
         v.save()
         return HttpResponseRedirect('/index')
+
+
+    if request.method == 'GET':
+        # create a form instance and populate it with data from the request:
+        form = SearchForm(request.GET)
+        # check whether it's valid:
+        if form.is_valid():
+            search_term = form.cleaned_data['SearchTerm']
+            print(search_term)
+            print(ActionIdea.objects.filter(tags__name__in=[search_term]))    
+            context['action_ideas_search_active'] = ActionIdea.objects.filter(tags__name = search_term)
+            return HttpResponseRedirect('/HandprintGenerator/searchresults/')
+
+    #context['action_ideas_inactive'] = ActionIdea.objects.filter(active=True).order_by('-date_created')
+	#context['action_ideas']  = sorted(ActionIdea.objects.all(), key=lambda ai: ai.numvotes)
+	#context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
+	#context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
     return render(request, 'HandprintGenerator/index.html', context)
 
 def index_work(request):
@@ -215,6 +232,31 @@ def detail(request, actionidea_id):
             new_comment.save()
             return HttpResponseRedirect('.')
     return render(request, 'HandprintGenerator/detail.html', context)
+
+
+def search_results(request):
+    context = {}
+    form = SearchForm(request.GET)
+    try:
+        context['userVotes'] = ActionIdeaVote.objects.filter(user=request.user).values_list('action_idea', flat=True)
+    except:
+        context['userVote'] = False
+    if request.POST.get('unvote'):
+        ActionIdeaVote.objects.get(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user).delete()
+        return HttpResponseRedirect('/index')
+    if request.POST.get('vote'):
+        v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
+        v.save()
+        return HttpResponseRedirect('/index')
+    if request.method == 'GET':
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            search_term = form.cleaned_data['searchTerm']
+            context['search_term'] = search_term
+            context['ai_search_active'] = ActionIdea.objects.filter(active=True, tags__name__in=[search_term]).order_by('-date_created')
+            context['ai_search_inactive'] = ActionIdea.objects.filter(active=False, tags__name__in=[search_term]).order_by('-date_created')
+            return render(request, 'HandprintGenerator/searchresults.html', context)
+    return render(request, 'HandprintGenerator/searchresults.html', context)
 
 @login_required
 @transaction.atomic

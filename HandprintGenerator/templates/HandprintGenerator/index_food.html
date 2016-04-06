@@ -20,6 +20,15 @@
   </ul>
 </div>
 
+<br>
+
+<form action="/searchresults" method="get">
+    {% csrf_token %}
+    <label for="search">Search for Ideas by Tags: </label>
+    <input id="search" type="text" name="searchTerm" value="{{ searchTerm }}">
+    <input type="submit" value="Search">
+</form>
+
 <br><br>
 
     {% if user.profile.role == "Moderator" or user.is_staff %}
