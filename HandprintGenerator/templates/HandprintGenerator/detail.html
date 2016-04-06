@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 
 {% block content %}
@@ -13,11 +14,13 @@
             <p> Description: {{ ai.description }}</p>
             <p> References: {{ ai.references }}</p>
             <p> Category: {{ ai.category }}</p>
-            <p> Tags: 
-            {% for tag in ai.tags.names %}
-                    <a href=#>{{tag}}</a>,
+            Tags: {% for tag in ai.tags.names %}
+            <form id="tagForm" action="/searchresults" method="get">
+                {% csrf_token %}
+                <input id="search" type="hidden" name="searchTerm" value="{{ tag }}">
+                <input type="submit" class="tagLink" value="{{tag}}">
+            </form>{% if not forloop.last %}, {% endif %}
             {% endfor %}
-            </p>
             <p> Votes: {{ai.numvotes}} </p>
             {% if user.profile.role == "Moderator" or user.is_staff %}
                 <p> Active: {{ ai.active }}</p>
