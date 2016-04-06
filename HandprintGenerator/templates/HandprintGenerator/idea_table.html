@@ -1,0 +1,74 @@
+{% if user.profile.role == "Moderator" or user.is_staff %}
+    <h2> Active </h2>
+    {% endif %}
+    <table>
+    {% if idea_list_active %}
+    <tr>
+        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Date Created</th>
+        {% for ai in idea_list_active %}
+            <tr>
+                <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }} </a> </td>                 
+                <td> {{ ai.category }} </td>
+                <td> {{ai.numvotes}}</td>
+                <td> {{ai.date_created}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+                {% if user.is_authenticated %}                
+                <td> 
+                    {% if ai.id in userVotes %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="unvote" value="Unvote">
+                            {% csrf_token %}
+                        </form>
+                    {% else %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="vote" data-toggle="tooltip" title="The more votes an ideas has, the greater likelihood it will be selected for enviornmental impact modeling by researchers!" value="Vote">
+                            {% csrf_token %}
+                        </form>
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    {% else %}
+        {% if idea_list_active == action_ideas_active or idea_list_active == action_ideas_vote_active %}
+            <h3>No action ideas are available, why don't you <a href=/new>add one.</a> </h3>
+
+        {% else %}
+            <h5>No action ideas are available in this category, why don't you <a href=/new>add one.</a> Try looking in another category or go back to the <a href=/index>main index.</a> </h5>
+        {% endif %}
+    {% endif %}
+    </table>
+    <br>
+    {% if user.profile.role == "Moderator" or user.is_staff %}
+        <h2>Inactive</h2>
+        <table>
+        {% if idea_list_inactive %}
+       <tr>
+        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+    </tr>
+            {% for ai in idea_list_inactive %}
+                <tr>
+                    <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
+                    <td> {{ ai.category }} </td>
+                    <td> {{ai.numvotes}}</td>
+                    <td> {{ai.date_created}} </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            {% if idea_list_inactive == action_ideas_inactive or idea_list_inactive == action_ideas_vote_inactive %}
+                <h3>There are no inactive action ideas. To make an idea inactive, you must delete it.</h3>
+
+            {% else %}
+                <h5>There are no inactive action ideas in this category. To make an idea inactive, you must delete it. Try looking in another category or go back to the <a href=/index>main index.</a></h5>
+            {% endif %}
+        {% endif %}
+    </table>
+    {% endif %}
+

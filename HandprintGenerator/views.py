@@ -31,9 +31,10 @@ def user_profile(request):
         return render(request, 'HandprintGenerator/user_profile.html', context)
 
 def index(request):
+    print(request)
     context = {}
     context['action_ideas_inactive'] = ActionIdea.objects.filter(active=False).order_by('-date_created')
-    context['action_ideas_active'] = ActionIdea.objects.filter(active=True).order_by('-date_created')#[:5]
+    context['action_ideas_active'] = ActionIdea.objects.filter(active=True).order_by('-date_created')[:5]
     context['action_ideas_work_inactive'] = ActionIdea.objects.filter(active=False, category = 'work').order_by('-date_created')
     context['action_ideas_work_active'] = ActionIdea.objects.filter(active=True, category = 'work').order_by('-date_created')
     context['action_ideas_food_inactive'] = ActionIdea.objects.filter(active=False, category = 'food').order_by('-date_created')
