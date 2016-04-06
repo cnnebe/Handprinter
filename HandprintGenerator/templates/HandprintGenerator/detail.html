@@ -28,7 +28,7 @@
         {% endif %}
             {% endif %}
             <p> Submitted By: {{ ai.creator.first_name }} {{ ai.creator.last_name }}</p>
-            {% if ai.creator == request.user or user.is_staff %}
+            {% if ai.creator == request.user or user.is_staff or user.profile.role == "Moderator" %}
                 <a href="{% url 'HandprintGenerator:edit_action_idea' ai.id %}">Edit Action Idea</a>
                 {% if ai.active %}
                     <a href="{% url 'HandprintGenerator:delete_action_idea' ai.id%}">Delete Action Idea</a> 

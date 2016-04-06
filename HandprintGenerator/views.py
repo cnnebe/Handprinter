@@ -262,12 +262,14 @@ def search_results(request):
 @transaction.atomic
 def edit_action_idea(request, actionidea_id=None):
     context = {}
-    if actionidea_id: #ediing action idea
+    if actionidea_id: #editing action idea
         action_idea = get_object_or_404(ActionIdea, pk = actionidea_id)
     else: #new action idea
         action_idea = ActionIdea(date_created = datetime.datetime, creator_id = request.user.id)
     
     form = NewActionIdeaForm(request.POST or None, request.FILES or None, instance=action_idea)
+    context['creator'] = action_idea.creator_id
+    context['active'] = action_idea.active
     if request.method == "POST":
         context['NewActionIdeaForm'] = form
         if form.is_valid():
@@ -276,6 +278,7 @@ def edit_action_idea(request, actionidea_id=None):
             return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
     else:
         context['NewActionIdeaForm'] = form
+        context['action_id'] = actionidea_id
 
     return render(request, 'HandprintGenerator/new_action_idea.html', context)
 
