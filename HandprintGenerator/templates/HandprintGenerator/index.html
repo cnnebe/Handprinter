@@ -14,38 +14,29 @@
     <input type="submit" value="Search">
 </form>
 
- <br><br>
+<br><br>
 
 <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs"> 
+    <ul id="myTabs" class="nav nav-tabs" role="tablist"> 
+        <li role="presentation" class="active"><a href="#main" id="main-tab" role="tab" data-toggle="tab" aria-controls="main" aria-expanded="false">Most Recent</a></li> 
+        <li role="presentation"><a href="#popular" role="tab" id="popular-tab" data-toggle="tab" aria-controls="popular">Most Popular</a></li> 
+        <li role="presentation" class="dropdown"> <a aria-expanded="false" href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown" aria-controls="myTabDrop1-contents">Filter By
 
-<ul id="myTabs" class="nav nav-tabs" role="tablist"> 
+        <span class="caret"></span></a> 
 
-<li role="presentation" class="active"><a href="#main" id="main-tab" role="tab" data-toggle="tab" aria-controls="main" aria-expanded="false">Most Recent</a></li> 
-
-<li role="presentation"><a href="#popular" role="tab" id="popular-tab" data-toggle="tab" aria-controls="popular">Most Popular</a></li> 
-
-<li role="presentation" class="dropdown"> <a aria-expanded="false" href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown" aria-controls="myTabDrop1-contents">Filter By
-<span class="caret"></span></a> 
-<ul class="dropdown-menu" aria-labelledby="myTabDrop1" id="myTabDrop1-contents">
-
- <li class=""><a aria-expanded="false" href="#home" role="tab" id="home-tab" data-toggle="tab" aria-controls="home">Home</a></li> 
-
- <li class= ""><a aria-expanded="true" href="#work" role="tab" id="work-tab" data-toggle="tab" aria-controls="work">Work</a></li> 
-
- <li class= ""><a aria-expanded="true" href="#community" role="tab" id="community-tab" data-toggle="tab" aria-controls="community">Community</a></li> 
-
- <li class= ""><a aria-expanded="true" href="#mobility" role="tab" id="mobility-tab" data-toggle="tab" aria-controls="mobility">Mobility</a></li> 
-
- <li class= ""><a aria-expanded="true" href="#food" role="tab" id="food-tab" data-toggle="tab" aria-controls="food">Food</a></li> 
-
- <li class= ""><a aria-expanded="true" href="#clothing" role="tab" id="clothing-tab" data-toggle="tab" aria-controls="clothing">Clothing</a></li> 
-
- <li class= ""><a aria-expanded="true" href="#other" role="tab" id="other-tab" data-toggle="tab" aria-controls="other">Other</a></li> 
- 
- </ul> </li> </ul> 
+            <ul class="dropdown-menu" aria-labelledby="myTabDrop1" id="myTabDrop1-contents">
+                <li class=""><a aria-expanded="false" href="#home" role="tab" id="home-tab" data-toggle="tab" aria-controls="home">Home</a></li> 
+                <li class= ""><a aria-expanded="true" href="#work" role="tab" id="work-tab" data-toggle="tab" aria-controls="work">Work</a></li> 
+                <li class= ""><a aria-expanded="true" href="#community" role="tab" id="community-tab" data-toggle="tab" aria-controls="community">Community</a></li> 
+                <li class= ""><a aria-expanded="true" href="#mobility" role="tab" id="mobility-tab" data-toggle="tab" aria-controls="mobility">Mobility</a></li> 
+                <li class= ""><a aria-expanded="true" href="#food" role="tab" id="food-tab" data-toggle="tab" aria-controls="food">Food</a></li> 
+                <li class= ""><a aria-expanded="true" href="#clothing" role="tab" id="clothing-tab" data-toggle="tab" aria-controls="clothing">Clothing</a></li> 
+                <li class= ""><a aria-expanded="true" href="#other" role="tab" id="other-tab" data-toggle="tab" aria-controls="other">Other</a></li> 
+            </ul> 
+        </li> 
+    </ul> 
 
  <div id="myTabContent" class="tab-content"> 
-
  <div role="tabpanel" class="tab-pane fade active in" id="main" aria-labelledby="main-tab"> 
  <br>
     {% if user.profile.role == "Moderator" or user.is_staff %}
@@ -115,8 +106,7 @@
     {% endif %}
 </div> 
 
- <div role="tabpanel" class="tab-pane fade" id="popular" aria-labelledby="popular-tab"> 
-
+<div role="tabpanel" class="tab-pane fade" id="popular" aria-labelledby="popular-tab"> 
 <br><br>
     {% if user.profile.role == "Moderator" or user.is_staff %}
     <h2> Active </h2>
@@ -183,13 +173,10 @@
         {% endif %}
     </table>
     {% endif %}
-
 </div> 
 
  <div role="tabpanel" class="tab-pane fade" id="home" aria-labelledby="home-tab"> 
-
  <h4> Action Ideas Related to Home </h4>
- 
 <br>
     {% if user.profile.role == "Moderator" or user.is_staff %}
     <h2> Active </h2>
@@ -256,15 +243,11 @@
         {% endif %}
     </table>
     {% endif %} 
-
  </div>
 
 <div role="tabpanel" class="tab-pane fade" id="work" aria-labelledby="work-tab"> 
-
 <h4> Action Ideas Related to Work </h4>
-
 <br>
-
     {% if user.profile.role == "Moderator" or user.is_staff %}
     <h2> Active </h2>
     {% endif %}
@@ -330,13 +313,10 @@
         {% endif %}
     </table>
     {% endif %}
-
 </div> 
 
 <div role="tabpanel" class="tab-pane fade" id="community" aria-labelledby="community-tab">  
-
- <h4> Action Ideas Related to Community </h4>
-
+<h4> Action Ideas Related to Community </h4>
 <br>
     {% if user.profile.role == "Moderator" or user.is_staff %}
     <h2> Active </h2>
@@ -403,15 +383,10 @@
         {% endif %}
     </table>
     {% endif %}
-
-
 </div>
 
 <div role="tabpanel" class="tab-pane fade" id="mobility" aria-labelledby="mobility-tab"> 
-
-    
 <h4> Action Ideas Related to Mobility </h4>
-
 <br>
     {% if user.profile.role == "Moderator" or user.is_staff %}
     <h2> Active </h2>
@@ -478,15 +453,11 @@
         {% endif %}
     </table>
     {% endif %}
-
 </div> 
 
 <div role="tabpanel" class="tab-pane fade" id="food" aria-labelledby="food-tab">
-
 <h4> Action Ideas Related to Food </h4>
-
  <br>
-
     {% if user.profile.role == "Moderator" or user.is_staff %}
     <h2> Active </h2>
     {% endif %}
@@ -552,15 +523,11 @@
         {% endif %}
     </table>
     {% endif %}  
-
  </div>
 
 <div role="tabpanel" class="tab-pane fade" id="clothing" aria-labelledby="clothing-tab"> 
-
 <h4> Action Ideas Related to Clothing </h4>
-
 <br>
-
     {% if user.profile.role == "Moderator" or user.is_staff %}
     <h2> Active </h2>
     {% endif %}
@@ -621,13 +588,10 @@
         {% endif %}
     </table>
     {% endif %}
-
 </div> 
 
 <div role="tabpanel" class="tab-pane fade" id="other" aria-labelledby="other-tab"> 
-
 <h4> Action Ideas Related to "Other" </h4>
-
 <br>
     {% if user.profile.role == "Moderator" or user.is_staff %}
     <h2> Active </h2>
@@ -694,13 +658,7 @@
         {% endif %}
     </table>
     {% endif %}
-
 </div> 
-
 </div> 
-
 </div>
-
-
-
 {% endblock %}
