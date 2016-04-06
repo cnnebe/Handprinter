@@ -4,6 +4,9 @@
 
 {% if ActionIdea.active %}
 
+
+{% if ActionIdea.creator_id == request.user.id or user.is_staff or user.profile.role == "Moderator" %}
+
   
  <h1> Why are you deleting this action idea?</h1>
 
@@ -20,6 +23,12 @@
         {% csrf_token %}
         
     </form>
+
+{% else %}
+
+<h3> You cannot delete ideas that you do not own. <a href=/index>View existing action ideas.</a> </h3>
+
+{% endif %}
 
 
 {% else %}
