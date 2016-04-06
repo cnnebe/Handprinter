@@ -11,7 +11,7 @@ body {
   margin: 0;
   padding: 0;
   margin-bottom: 80px;
-  background-image: linear-gradient(rgb(252, 252, 252), rgb(240, 240, 240));
+  background-image: white;
   text-align: center; /* !!! */
 }
 
@@ -22,7 +22,7 @@ body {
   width: 100%;
   /* Set the fixed height of the footer here */
   height: 80px;
-  background-color: grey;
+  background-color: black;
 }
 
 
@@ -241,10 +241,8 @@ body {
   .user-body .tab-content > div {float: left; width: 100%;}
   .user-body .tab-content h4 {width: 100%; margin: 10px 0; color: #333;}
 
-<<<<<<< HEAD
 /* css for home panels */
 
-=======
 /* css to make button look like link */
 
 .tagLink {
@@ -272,4 +270,3 @@ body {
 #tagForm  input {
     font-size: 14px;
 }
->>>>>>> upstream/master

@@ -1,36 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<<<<<<< HEAD
-    <div class="login">
-        <div class="container"> 
-            <br><br><br><br><br>
-            <div class="row centered-form">
-                <div class="col-xs-12 col-sm-6 col-md-6 col-sm-offset-3 col-md-offset-3">
-                    <div class="panel panel-default">
-                        <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
-                        <p id="profile-name" class="profile-name-card"></p>
-                        {% if form.errors %}
-            				<p class="error">Sorry, that's not a valid username or password</p>
-            			{% endif %}	
-        		    <form action="#" method="post">
-            		        {% for field in form %}
-            		            {{field.label_tag}}
-            		            {{field}}
-            		            <br><br>
-            		        {% endfor %}
-            		        <input type="submit" value="Log In" class="btn btn-info btn-block">
-            		        {% csrf_token %}
-                        </form><!-- /form -->
-                        <br>
-                        <a href="/forgot_password" class="forgot-password">
-                            Forgot the password?
-                        </a>
-                    </div><!-- /card-container -->
-                </div>
-            </div>
-        </div>
-=======
+
 
 {% if user.is_authenticated %}
 
@@ -38,13 +9,11 @@
 
 {% else %}
 
-<br><br>
     <div class="container"> 
+        <br><br><br><br><br>
         <div class="card card-container">
             <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
             <p id="profile-name" class="profile-name-card"></p>
-
-
             {% if form.errors %}
 				<p class="error">Sorry, that's not a valid username or password</p>
 			{% endif %}	
@@ -62,15 +31,16 @@
                 Forgot your login information?
             </a>
         </div><!-- /card-container -->
->>>>>>> upstream/master
     </div><!-- /container -->
-{% endblock %}
 
-<<<<<<< HEAD
+
 <!-- <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button> -->
-=======
+
 
 {% endif %}
 
 {% endblock %}
->>>>>>> upstream/master
+
+<!--          <div class="row centered-form">
+                <div class="col-xs-12 col-sm-6 col-md-6 col-sm-offset-3 col-md-offset-3">
+                    <div class="panel panel-default"> -->
