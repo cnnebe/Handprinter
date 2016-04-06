@@ -1,6 +1,9 @@
+
 {% extends "base.html" %}
 
 {% block content %}
+
+{% if user.profile.role == "Moderator" or user.is_staff or ai.active %}
         
     <div id="page-content">
         <div id="action-idea">
@@ -11,6 +14,13 @@
             <p> Description: {{ ai.description }}</p>
             <p> References: {{ ai.references }}</p>
             <p> Category: {{ ai.category }}</p>
+            Tags: {% for tag in ai.tags.names %}
+            <form id="tagForm" action="/searchresults" method="get">
+                {% csrf_token %}
+                <input id="search" type="hidden" name="searchTerm" value="{{ tag }}">
+                <input type="submit" class="tagLink" value="{{tag}}">
+            </form>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
             <p> Votes: {{ai.numvotes}} </p>
             {% if user.profile.role == "Moderator" or user.is_staff %}
                 <p> Active: {{ ai.active }}</p>
@@ -21,7 +31,7 @@
         {% endif %}
             {% endif %}
             <p> Submitted By: {{ ai.creator.first_name }} {{ ai.creator.last_name }}</p>
-            {% if ai.creator == request.user or user.is_staff %}
+            {% if ai.creator == request.user or user.is_staff or user.profile.role == "Moderator" %}
                 <a href="{% url 'HandprintGenerator:edit_action_idea' ai.id %}">Edit Action Idea</a>
                 {% if ai.active %}
                     <a href="{% url 'HandprintGenerator:delete_action_idea' ai.id%}">Delete Action Idea</a> 
@@ -47,10 +57,19 @@
                 <li>
                     <p> {{ c.text }}</p>
                     <p> <b> {{ c.user.username}} </b> on {{c.date_created}}</p>
+                    {% if user.is_authenticated %}
+                        {% if c.user == request.user or user.profile.role == "Moderator" or user.is_staff %}
+                        <form action="/handprintgenerator/{{ ai.id }}/" method="post">
+                            <input type="hidden" name="comment" value="{{ c.id }}">
+                            <input type="submit" name="delete" value="Delete">
+                            {% csrf_token %}
+                        </form>
+                        {% endif %}
+                    {% endif %}
                 </li>
             {% endfor %}
             {% if ai.comments.count == 0 %}
-                <p> There are no comments yet. </p>
+                <p> There are no comments yet. Why don't you be the first to make one? </p>
             {% endif %}
 
 
@@ -73,5 +92,10 @@
             {% endif %}
         </div>
     </div>
+
+    {% else %}
+    <h3> You cannot view a deleted action idea! <a href=/index>View existing action ideas.</a></h3>
+
+    {% endif %}
 
 {% endblock %}

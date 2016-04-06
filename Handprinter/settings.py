@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'HandprintGenerator',
+    'taggit',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -127,6 +128,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# taggit settings
+TAGGIT_CASE_INSENSITIVE = True
 
 # Update database configuration with $DATABASE_URL.
 import dj_database_url

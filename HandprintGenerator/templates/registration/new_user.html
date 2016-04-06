@@ -2,6 +2,14 @@
 
 {% block content %}
 
+{% if user.is_authenticated %}
+
+<h3> You cannot create a new account if you're logged in!</h3>
+<br>
+<h4> View your <a href=/profile>profile</a> or view some <a href=/index>action ideas.</a></h4>
+
+{% else %}
+
 <br><br><br><br><br>
 
 {% if registration_form.errors %}
@@ -13,7 +21,7 @@
         <div class="col-xs-12 col-sm-8 col-md-8 col-sm-offset-2 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                        <h2 class="panel-title">Please Register to Become a new Action Idea Creator!</h2>
+                        <h2 class="panel-title">Come join us as a new Action Idea Contributor and grow your <a href=/about>Handprint!</a></h2>
                         </div>
                         <div class="panel-body">
                         <form action="#" method="post">
@@ -34,6 +42,8 @@
     </div>       
          
     </form>
+
+{% endif %}
 
 {% endblock %}
 

@@ -21,155 +21,33 @@ def home(request):
     return render(request, 'HandprintGenerator/home.html', context)
 
 def user_profile(request):
-    ideas = ActionIdea.objects.filter(creator=request.user, active=True).order_by('-date_created')
-    context = {
+    if request.user.is_anonymous:
+        return render(request, 'HandprintGenerator/user_profile.html')
+    else:
+        ideas = ActionIdea.objects.filter(creator=request.user, active=True).order_by('-date_created')
+        context = {
         'ideas': ideas
-    }
-    return render(request, 'HandprintGenerator/user_profile.html', context)
+        }
+        return render(request, 'HandprintGenerator/user_profile.html', context)
 
 def index(request):
     context = {}
     context['action_ideas_inactive'] = ActionIdea.objects.filter(active=False).order_by('-date_created')
     context['action_ideas_active'] = ActionIdea.objects.filter(active=True).order_by('-date_created')#[:5]
-    try:
-        context['userVotes'] = ActionIdeaVote.objects.filter(user=request.user).values_list('action_idea', flat=True)
-    except:
-        context['userVote'] = False
-    if request.POST.get('unvote'):
-        ActionIdeaVote.objects.get(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user).delete()
-        return HttpResponseRedirect('/index')
-    if request.POST.get('vote'):
-        v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
-        v.save()
-        return HttpResponseRedirect('/index')
-
-    #context['action_ideas_inactive'] = ActionIdea.objects.filter(active=True).order_by('-date_created')
-	#context['action_ideas']  = sorted(ActionIdea.objects.all(), key=lambda ai: ai.numvotes)
-	#context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
-	#context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
-    return render(request, 'HandprintGenerator/index.html', context)
-
-def index_work(request):
-    context = {}
     context['action_ideas_work_inactive'] = ActionIdea.objects.filter(active=False, category = 'work').order_by('-date_created')
-    context['action_ideas_work_active'] = ActionIdea.objects.filter(active=True, category = 'work').order_by('-date_created') #[:5]
-    try:
-        context['userVotes'] = ActionIdeaVote.objects.filter(user=request.user).values_list('action_idea', flat=True)
-    except:
-        context['userVote'] = False
-    if request.POST.get('unvote'):
-        ActionIdeaVote.objects.get(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user).delete()
-        return HttpResponseRedirect('/index_work')
-    if request.POST.get('vote'):
-        v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
-        v.save()
-        return HttpResponseRedirect('/index_work')
-    return render(request, 'HandprintGenerator/index_work.html', context)
-
-def index_food(request):
-    context = {}
+    context['action_ideas_work_active'] = ActionIdea.objects.filter(active=True, category = 'work').order_by('-date_created')
     context['action_ideas_food_inactive'] = ActionIdea.objects.filter(active=False, category = 'food').order_by('-date_created')
-    context['action_ideas_food_active'] = ActionIdea.objects.filter(active=True, category = 'food').order_by('-date_created') #[:5]
-    try:
-        context['userVotes'] = ActionIdeaVote.objects.filter(user=request.user).values_list('action_idea', flat=True)
-    except:
-        context['userVote'] = False
-    if request.POST.get('unvote'):
-        ActionIdeaVote.objects.get(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user).delete()
-        return HttpResponseRedirect('/index_food')
-    if request.POST.get('vote'):
-        v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
-        v.save()
-        return HttpResponseRedirect('/index_food')
-    return render(request, 'HandprintGenerator/index_food.html', context)
-
-def index_home(request):
-    context = {}
-    context['action_ideas_home_inactive'] = ActionIdea.objects.filter(active=False, category = 'home').order_by('-date_created')
-    context['action_ideas_home_active'] = ActionIdea.objects.filter(active=True, category = 'home').order_by('-date_created') #[:5]
-    try:
-        context['userVotes'] = ActionIdeaVote.objects.filter(user=request.user).values_list('action_idea', flat=True)
-    except:
-        context['userVote'] = False
-    if request.POST.get('unvote'):
-        ActionIdeaVote.objects.get(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user).delete()
-        return HttpResponseRedirect('/index_home')
-    if request.POST.get('vote'):
-        v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
-        v.save()
-        return HttpResponseRedirect('/index_home')
-    return render(request, 'HandprintGenerator/index_home.html', context)
-
-def index_community(request):
-    context = {}
+    context['action_ideas_food_active'] = ActionIdea.objects.filter(active=True, category = 'food').order_by('-date_created')
     context['action_ideas_community_inactive'] = ActionIdea.objects.filter(active=False, category = 'community').order_by('-date_created')
     context['action_ideas_community_active'] = ActionIdea.objects.filter(active=True, category = 'community').order_by('-date_created') #[:5]
-    try:
-        context['userVotes'] = ActionIdeaVote.objects.filter(user=request.user).values_list('action_idea', flat=True)
-    except:
-        context['userVote'] = False
-    if request.POST.get('unvote'):
-        ActionIdeaVote.objects.get(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user).delete()
-        return HttpResponseRedirect('/index_community')
-    if request.POST.get('vote'):
-        v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
-        v.save()
-        return HttpResponseRedirect('/index_community')
-    return render(request, 'HandprintGenerator/index_community.html', context)
-
-def index_mobility(request):
-    context = {}
-    context['action_ideas_mobility_inactive'] = ActionIdea.objects.filter(active=False, category = 'mobility').order_by('-date_created')
-    context['action_ideas_mobility_active'] = ActionIdea.objects.filter(active=True, category = 'mobility').order_by('-date_created') #[:5]
-    try:
-        context['userVotes'] = ActionIdeaVote.objects.filter(user=request.user).values_list('action_idea', flat=True)
-    except:
-        context['userVote'] = False
-    if request.POST.get('unvote'):
-        ActionIdeaVote.objects.get(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user).delete()
-        return HttpResponseRedirect('/index_mobility')
-    if request.POST.get('vote'):
-        v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
-        v.save()
-        return HttpResponseRedirect('/index_mobility')
-    return render(request, 'HandprintGenerator/index_mobility.html', context)
-
-def index_clothing(request):
-    context = {}
+    context['action_ideas_home_inactive'] = ActionIdea.objects.filter(active=False, category = 'home').order_by('-date_created')
+    context['action_ideas_home_active'] = ActionIdea.objects.filter(active=True, category = 'home').order_by('-date_created') #[:5]
     context['action_ideas_clothing_inactive'] = ActionIdea.objects.filter(active=False, category = 'clothing').order_by('-date_created')
     context['action_ideas_clothing_active'] = ActionIdea.objects.filter(active=True, category = 'clothing').order_by('-date_created') #[:5]
-    try:
-        context['userVotes'] = ActionIdeaVote.objects.filter(user=request.user).values_list('action_idea', flat=True)
-    except:
-        context['userVote'] = False
-    if request.POST.get('unvote'):
-        ActionIdeaVote.objects.get(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user).delete()
-        return HttpResponseRedirect('/index_clothing')
-    if request.POST.get('vote'):
-        v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
-        v.save()
-        return HttpResponseRedirect('/index_clothing')
-    return render(request, 'HandprintGenerator/index_clothing.html', context)
-
-def index_other(request):
-    context = {}
+    context['action_ideas_mobility_inactive'] = ActionIdea.objects.filter(active=False, category = 'mobility').order_by('-date_created')
+    context['action_ideas_mobility_active'] = ActionIdea.objects.filter(active=True, category = 'mobility').order_by('-date_created') #[:5]
     context['action_ideas_other_inactive'] = ActionIdea.objects.filter(active=False, category = 'other').order_by('-date_created')
     context['action_ideas_other_active'] = ActionIdea.objects.filter(active=True, category = 'other').order_by('-date_created') #[:5]
-    try:
-        context['userVotes'] = ActionIdeaVote.objects.filter(user=request.user).values_list('action_idea', flat=True)
-    except:
-        context['userVote'] = False
-    if request.POST.get('unvote'):
-        ActionIdeaVote.objects.get(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user).delete()
-        return HttpResponseRedirect('/index_other')
-    if request.POST.get('vote'):
-        v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
-        v.save()
-        return HttpResponseRedirect('/index_other')
-    return render(request, 'HandprintGenerator/index_other.html', context)
-
-def index_vote(request):
-    context = {}
     context['action_ideas_vote_inactive'] = ActionIdea.objects.filter(active=False).annotate(num_votes=Count('actionideavote')).order_by('-num_votes')
     context['action_ideas_vote_active'] = ActionIdea.objects.filter(active=True).annotate(num_votes=Count('actionideavote')).order_by('-num_votes') #[:5]
     try:
@@ -178,12 +56,29 @@ def index_vote(request):
         context['userVote'] = False
     if request.POST.get('unvote'):
         ActionIdeaVote.objects.get(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user).delete()
-        return HttpResponseRedirect('/index_vote')
+        return HttpResponseRedirect('/index')
     if request.POST.get('vote'):
         v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
         v.save()
-        return HttpResponseRedirect('/index_vote')
-    return render(request, 'HandprintGenerator/index_vote.html', context)
+        return HttpResponseRedirect('/index')
+
+
+    if request.method == 'GET':
+        # create a form instance and populate it with data from the request:
+        form = SearchForm(request.GET)
+        # check whether it's valid:
+        if form.is_valid():
+            search_term = form.cleaned_data['SearchTerm']
+            print(search_term)
+            print(ActionIdea.objects.filter(tags__name__in=[search_term]))    
+            context['action_ideas_search_active'] = ActionIdea.objects.filter(tags__name = search_term)
+            return HttpResponseRedirect('/HandprintGenerator/searchresults/')
+
+    #context['action_ideas_inactive'] = ActionIdea.objects.filter(active=True).order_by('-date_created')
+	#context['action_ideas']  = sorted(ActionIdea.objects.all(), key=lambda ai: ai.numvotes)
+	#context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
+	#context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
+    return render(request, 'HandprintGenerator/index.html', context)
 
 @transaction.atomic
 def detail(request, actionidea_id):
@@ -204,6 +99,9 @@ def detail(request, actionidea_id):
         v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=actionidea_id), user = request.user)
         v.save()
         return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
+    if request.POST.get('delete'):
+        c = get_object_or_404(ActionIdeaComment, pk = request.POST.get('comment')).delete()
+        return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
     form = CommentForm(request.POST)
     context['comment_form'] = form
     if request.method == "POST":
@@ -215,17 +113,43 @@ def detail(request, actionidea_id):
             return HttpResponseRedirect('.')
     return render(request, 'HandprintGenerator/detail.html', context)
 
+
+def search_results(request):
+    context = {}
+    form = SearchForm(request.GET)
+    try:
+        context['userVotes'] = ActionIdeaVote.objects.filter(user=request.user).values_list('action_idea', flat=True)
+    except:
+        context['userVote'] = False
+    if request.POST.get('unvote'):
+        ActionIdeaVote.objects.get(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user).delete()
+        return HttpResponseRedirect('/index')
+    if request.POST.get('vote'):
+        v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
+        v.save()
+        return HttpResponseRedirect('/index')
+    if request.method == 'GET':
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            search_term = form.cleaned_data['searchTerm']
+            context['search_term'] = search_term
+            context['ai_search_active'] = ActionIdea.objects.filter(active=True, tags__name__in=[search_term]).order_by('-date_created')
+            context['ai_search_inactive'] = ActionIdea.objects.filter(active=False, tags__name__in=[search_term]).order_by('-date_created')
+            return render(request, 'HandprintGenerator/searchresults.html', context)
+    return render(request, 'HandprintGenerator/searchresults.html', context)
+
 @login_required
 @transaction.atomic
-#using this as edit and create action idea form
 def edit_action_idea(request, actionidea_id=None):
     context = {}
-    if actionidea_id: #ediing action idea
+    if actionidea_id: #editing action idea
         action_idea = get_object_or_404(ActionIdea, pk = actionidea_id)
     else: #new action idea
         action_idea = ActionIdea(date_created = datetime.datetime, creator_id = request.user.id)
     
     form = NewActionIdeaForm(request.POST or None, request.FILES or None, instance=action_idea)
+    context['creator'] = action_idea.creator_id
+    context['active'] = action_idea.active
     if request.method == "POST":
         context['NewActionIdeaForm'] = form
         if form.is_valid():
@@ -234,6 +158,7 @@ def edit_action_idea(request, actionidea_id=None):
             return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
     else:
         context['NewActionIdeaForm'] = form
+        context['action_id'] = actionidea_id
 
     return render(request, 'HandprintGenerator/new_action_idea.html', context)
 
@@ -247,8 +172,8 @@ def new_action_idea(request):
         context['NewActionIdeaForm'] = form
         if form.is_valid():
             new_action_idea = form.save(commit=False)
-
             new_action_idea.save()
+            form.save_m2m()
             return HttpResponseRedirect('/index')
     else:
         form = NewActionIdeaForm()
@@ -262,6 +187,7 @@ def delete_action_idea(request, actionidea_id):
     context = {}
     form = DeleteActionIdeaForm(request.POST)
     context['DeleteActionIdeaForm'] = form
+    context['ActionIdea'] = ActionIdea.objects.get(pk=actionidea_id)
     if form.is_valid():
         delete_ai = form.save(commit=False)
         delete_ai.date_created = datetime.datetime
@@ -294,7 +220,7 @@ def new_user(request):
             new_user.save() 
             
             #creating an accompanying profile with role
-            user_profile = Profile(role='Member', user_id=new_user.id)
+            user_profile = Profile(role='member', user_id=new_user.id)
             user_profile.save()
             
             return HttpResponseRedirect('/login')

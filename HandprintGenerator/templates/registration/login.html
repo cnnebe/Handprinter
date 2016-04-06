@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+<<<<<<< HEAD
     <div class="login">
         <div class="container"> 
             <br><br><br><br><br>
@@ -29,7 +30,47 @@
                 </div>
             </div>
         </div>
+=======
+
+{% if user.is_authenticated %}
+
+<h3> You are already logged in! View your <a href=/profile>profile</a> or view some <a href=/index>action ideas.</a></h3>
+
+{% else %}
+
+<br><br>
+    <div class="container"> 
+        <div class="card card-container">
+            <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
+            <p id="profile-name" class="profile-name-card"></p>
+
+
+            {% if form.errors %}
+				<p class="error">Sorry, that's not a valid username or password</p>
+			{% endif %}	
+		    <form action="#" method="post">
+		        {% for field in form %}
+		            {{field.label_tag}}
+		            {{field}}
+		            <br><br>
+		        {% endfor %}
+		        <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+		        {% csrf_token %}
+            </form><!-- /form -->
+            <br>
+            <a href="/forgot_password" class="forgot-password">
+                Forgot your login information?
+            </a>
+        </div><!-- /card-container -->
+>>>>>>> upstream/master
     </div><!-- /container -->
 {% endblock %}
 
+<<<<<<< HEAD
 <!-- <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button> -->
+=======
+
+{% endif %}
+
+{% endblock %}
+>>>>>>> upstream/master

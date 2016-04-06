@@ -8,7 +8,7 @@ from django.contrib import auth
 class NewActionIdeaForm(forms.ModelForm):
     class Meta:
         model = ActionIdea
-        fields = ['name', 'description', 'references', 'image', 'category']
+        fields = ['name', 'description', 'references', 'image', 'category', 'tags']
         exclude = ['creator', 'date_created', 'active']
         widgets = {
             'description': forms.Textarea(),
@@ -21,6 +21,8 @@ class DeleteActionIdeaForm(forms.ModelForm):
         fields = ['reason']
         exclude = ['action_idea, date_create, responsible']
 
+class SearchForm(forms.Form):
+    searchTerm = forms.CharField(label='Search', max_length=100)
 
 class CommentForm(forms.ModelForm):
     class Meta:
@@ -38,6 +40,9 @@ class PickyAuthenticationForm(AuthenticationForm):
                 _("This account is inactive."),
                 code='inactive',
             )
+
+
+    
 
 #from: http://jessenoller.com/blog/2011/12/19/quick-example-of-extending-usercreationform-in-django
 class UserCreateForm(UserCreationForm):

@@ -1,4 +1,5 @@
 
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
@@ -240,5 +241,35 @@ body {
   .user-body .tab-content > div {float: left; width: 100%;}
   .user-body .tab-content h4 {width: 100%; margin: 10px 0; color: #333;}
 
+<<<<<<< HEAD
 /* css for home panels */
 
+=======
+/* css to make button look like link */
+
+.tagLink {
+  background-color: transparent;
+  border: none;
+  color: #3366BB;
+  cursor: pointer;
+  padding: 0px;
+  margin-bottom: 10px;
+}
+
+.tagLink:hover {
+  text-decoration: underline;
+}
+
+.tagLink:focus {
+  outline: none;
+}
+
+#tagForm {
+  display:inline;
+  font-size: 0;
+}
+
+#tagForm  input {
+    font-size: 14px;
+}
+>>>>>>> upstream/master
