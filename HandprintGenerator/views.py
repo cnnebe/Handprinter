@@ -295,7 +295,7 @@ def new_user(request):
             new_user.save() 
             
             #creating an accompanying profile with role
-            user_profile = Profile(role='Member', user_id=new_user.id)
+            user_profile = Profile(role='member', user_id=new_user.id)
             user_profile.save()
             
             return HttpResponseRedirect('/login')
