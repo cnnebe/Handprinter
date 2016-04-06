@@ -7,16 +7,21 @@ html {
 }
 body {
   /* Margin bottom by footer height */
-  margin-bottom: 99px;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 80px;
   background-image: linear-gradient(rgb(252, 252, 252), rgb(240, 240, 240));
+  text-align: center; /* !!! */
+}
 
-}.footer {
+
+.footer{
   position: absolute;
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
-  height: 60px;
-  background-color: black;
+  height: 80px;
+  background-color: grey;
 }
 
 
@@ -31,14 +36,14 @@ body {
   top: 0;
   right: 0;
   left: 0;
-  z-index: 20;
+  z-index: 0;
 }
 
 /* Flip around the padding for proper display in narrow viewports */
   .navbar-wrapper > .container {
-  padding-right: 5;
-  padding-left: 5;
-  margin-top: 10px;
+  padding-right: 0;
+  padding-left: 0;
+  margin-top: 0px;
 } 
 .navbar-wrapper .navbar {
   /*padding-right: 15px;
@@ -54,7 +59,7 @@ body {
 
 /* The navbar becomes detached from the top, so we round the corners */
 .navbar-wrapper .navbar {
-  border-radius: 15px;
+  border-radius: 0px;
 }
 
 .nav.navbar-nav li a {
@@ -116,37 +121,16 @@ body {
 
 /* css for the login page */
 
-.card-container.card {
-    max-width: 350px;
-    padding: 40px 40px;
-}
 
-.btn {
-    font-weight: 700;
-    height: 36px;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
-    cursor: default;
+.login .container{
+    margin: 10;
+    padding:10;
+    width: 90%;
 }
 
 /*
  * Card component
  */
-.card {
-    background-color: white;
-    /* just in case there no content*/
-    padding: 20px 25px 30px;
-    margin: 0 auto 25px;
-    margin-top: 50px;
-    /* shadows and rounded borders */
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.3);
-}
 
 .profile-img-card {
     width: 96px;
@@ -207,7 +191,7 @@ body {
 
 .btn.btn-signin {
     /*background-color: #4d90fe; */
-    background-color: rgb(104, 145, 162);
+    background-color: rgba(53, 154, 136, 1);
     /* background-color: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));*/
     padding: 0px;
     font-weight: 700;
@@ -255,4 +239,6 @@ body {
  .user-info-block .user-body {float: left; padding: 5%; width: 90%;}
   .user-body .tab-content > div {float: left; width: 100%;}
   .user-body .tab-content h4 {width: 100%; margin: 10px 0; color: #333;}
+
+/* css for home panels */
 
