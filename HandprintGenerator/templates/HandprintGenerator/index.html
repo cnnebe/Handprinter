@@ -40,7 +40,7 @@
 
 <!-- Tab Headers -->
 <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs"> 
-    <ul id="myTabs" class="nav nav-tabs" role="tablist"> 
+    <ul id="myTabs" class="nav nav-tabs" role="tablist" data-options="deep_linking: true"> 
         <li role="presentation" class="active"><a href="#main" id="main-tab" role="tab" data-toggle="tab" aria-controls="main" aria-expanded="false">Most Recent</a></li> 
         <li role="presentation"><a href="#popular" role="tab" id="popular-tab" data-toggle="tab" aria-controls="popular">Most Popular</a></li> 
         <li role="presentation" class="dropdown"> <a aria-expanded="false" href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown" aria-controls="myTabDrop1-contents">Filter By
@@ -63,53 +63,53 @@
     <div id="myTabContent" class="tab-content"> 
         <div role="tabpanel" class="tab-pane fade active in" id="main" aria-labelledby="main-tab"> 
             <br>
-            {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_active idea_list_inactive=action_ideas_inactive %}
+            {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_active idea_list_inactive=action_ideas_inactive page="main" %}
         </div> 
 
         <div role="tabpanel" class="tab-pane fade" id="popular" aria-labelledby="popular-tab"> 
-            {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_vote_active idea_list_inactive=action_ideas_vote_inactive %}
+            {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_vote_active idea_list_inactive=action_ideas_vote_inactive page="popular" %}
         </div> 
 
         <div role="tabpanel" class="tab-pane fade" id="home" aria-labelledby="home-tab"> 
             <h4> Action Ideas Related to Home </h4>
             <br>
-            {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_home_active idea_list_inactive=action_ideas_home_inactive %}
+            {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_home_active idea_list_inactive=action_ideas_home_inactive page="home" %}
         </div>
 
         <div role="tabpanel" class="tab-pane fade" id="work" aria-labelledby="work-tab"> 
             <h4> Action Ideas Related to Work </h4>
             <br>
-            {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_work_active idea_list_inactive=action_ideas_work_inactive %}
+            {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_work_active idea_list_inactive=action_ideas_work_inactive page="work" %}
         </div> 
 
         <div role="tabpanel" class="tab-pane fade" id="community" aria-labelledby="community-tab">  
             <h4> Action Ideas Related to Community </h4>
             <br>
-            {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_community_active idea_list_inactive=action_ideas_community_inactive %}
+            {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_community_active idea_list_inactive=action_ideas_community_inactive page="community" %}
         </div>
 
         <div role="tabpanel" class="tab-pane fade" id="mobility" aria-labelledby="mobility-tab"> 
             <h4> Action Ideas Related to Mobility </h4>
             <br>
-            {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_mobility_active idea_list_inactive=action_ideas_mobility_inactive %}
+            {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_mobility_active idea_list_inactive=action_ideas_mobility_inactive page="mobility" %}
         </div> 
 
         <div role="tabpanel" class="tab-pane fade" id="food" aria-labelledby="food-tab">
             <h4> Action Ideas Related to Food </h4>
             <br>
-            {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_food_active idea_list_inactive=action_ideas_food_inactive %}
+            {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_food_active idea_list_inactive=action_ideas_food_inactive page="food" %}
         </div>
 
         <div role="tabpanel" class="tab-pane fade" id="clothing" aria-labelledby="clothing-tab"> 
             <h4> Action Ideas Related to Clothing </h4>
             <br>
-            {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_clothing_active idea_list_inactive=action_ideas_clothing_inactive %}
+            {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_clothing_active idea_list_inactive=action_ideas_clothing_inactive page="clothing" %}
         </div> 
 
         <div role="tabpanel" class="tab-pane fade" id="other" aria-labelledby="other-tab"> 
             <h4> Action Ideas Related to "Other" </h4>
             <br>
-            {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_other_active idea_list_inactive=action_ideas_other_inactive %}
+            {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_other_active idea_list_inactive=action_ideas_other_inactive page="other" %}
         </div> 
     </div> 
 </div>
@@ -121,3 +121,4 @@
         })
 </script>
 {% endblock %}
+

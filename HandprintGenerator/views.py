@@ -31,26 +31,28 @@ def user_profile(request):
         return render(request, 'HandprintGenerator/user_profile.html', context)
 
 def index(request):
-    print(request)
+    # Action Idea Objects divided by activity and sorted by category, popularity and most recent. 
     context = {}
     context['action_ideas_inactive'] = ActionIdea.objects.filter(active=False).order_by('-date_created')
-    context['action_ideas_active'] = ActionIdea.objects.filter(active=True).order_by('-date_created')[:5]
+    context['action_ideas_active'] = ActionIdea.objects.filter(active=True).order_by('-date_created')
     context['action_ideas_work_inactive'] = ActionIdea.objects.filter(active=False, category = 'work').order_by('-date_created')
     context['action_ideas_work_active'] = ActionIdea.objects.filter(active=True, category = 'work').order_by('-date_created')
     context['action_ideas_food_inactive'] = ActionIdea.objects.filter(active=False, category = 'food').order_by('-date_created')
     context['action_ideas_food_active'] = ActionIdea.objects.filter(active=True, category = 'food').order_by('-date_created')
     context['action_ideas_community_inactive'] = ActionIdea.objects.filter(active=False, category = 'community').order_by('-date_created')
-    context['action_ideas_community_active'] = ActionIdea.objects.filter(active=True, category = 'community').order_by('-date_created') #[:5]
+    context['action_ideas_community_active'] = ActionIdea.objects.filter(active=True, category = 'community').order_by('-date_created') 
     context['action_ideas_home_inactive'] = ActionIdea.objects.filter(active=False, category = 'home').order_by('-date_created')
-    context['action_ideas_home_active'] = ActionIdea.objects.filter(active=True, category = 'home').order_by('-date_created') #[:5]
+    context['action_ideas_home_active'] = ActionIdea.objects.filter(active=True, category = 'home').order_by('-date_created') 
     context['action_ideas_clothing_inactive'] = ActionIdea.objects.filter(active=False, category = 'clothing').order_by('-date_created')
-    context['action_ideas_clothing_active'] = ActionIdea.objects.filter(active=True, category = 'clothing').order_by('-date_created') #[:5]
+    context['action_ideas_clothing_active'] = ActionIdea.objects.filter(active=True, category = 'clothing').order_by('-date_created') 
     context['action_ideas_mobility_inactive'] = ActionIdea.objects.filter(active=False, category = 'mobility').order_by('-date_created')
-    context['action_ideas_mobility_active'] = ActionIdea.objects.filter(active=True, category = 'mobility').order_by('-date_created') #[:5]
+    context['action_ideas_mobility_active'] = ActionIdea.objects.filter(active=True, category = 'mobility').order_by('-date_created') 
     context['action_ideas_other_inactive'] = ActionIdea.objects.filter(active=False, category = 'other').order_by('-date_created')
-    context['action_ideas_other_active'] = ActionIdea.objects.filter(active=True, category = 'other').order_by('-date_created') #[:5]
+    context['action_ideas_other_active'] = ActionIdea.objects.filter(active=True, category = 'other').order_by('-date_created') 
     context['action_ideas_vote_inactive'] = ActionIdea.objects.filter(active=False).annotate(num_votes=Count('actionideavote')).order_by('-num_votes')
-    context['action_ideas_vote_active'] = ActionIdea.objects.filter(active=True).annotate(num_votes=Count('actionideavote')).order_by('-num_votes') #[:5]
+    context['action_ideas_vote_active'] = ActionIdea.objects.filter(active=True).annotate(num_votes=Count('actionideavote')).order_by('-num_votes') 
+    
+    #Voting Functionality
     try:
         context['userVotes'] = ActionIdeaVote.objects.filter(user=request.user).values_list('action_idea', flat=True)
     except:
@@ -63,11 +65,10 @@ def index(request):
         v.save()
         return HttpResponseRedirect('/index')
 
-
+    #Search Functionality
     if request.method == 'GET':
         # create a form instance and populate it with data from the request:
         form = SearchForm(request.GET)
-        # check whether it's valid:
         if form.is_valid():
             search_term = form.cleaned_data['SearchTerm']
             print(search_term)
@@ -75,10 +76,6 @@ def index(request):
             context['action_ideas_search_active'] = ActionIdea.objects.filter(tags__name = search_term)
             return HttpResponseRedirect('/HandprintGenerator/searchresults/')
 
-    #context['action_ideas_inactive'] = ActionIdea.objects.filter(active=True).order_by('-date_created')
-	#context['action_ideas']  = sorted(ActionIdea.objects.all(), key=lambda ai: ai.numvotes)
-	#context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
-	#context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
     return render(request, 'HandprintGenerator/index.html', context)
 
 @transaction.atomic

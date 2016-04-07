@@ -1,4 +1,6 @@
 <!-- This template is rendered in index.html and creates the action idea table depending on the filter or tab selected. -->
+{% load staticfiles %}
+{% load el_pagination_tags %}
 
 <!-- Differentiate Active and Inactive Ideas for Staff -->
 {% if user.profile.role == "Moderator" or user.is_staff %}
@@ -14,6 +16,7 @@
             <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
             <th>Date Created</th>
         <tr>
+        {% paginate idea_list_active using page %}
         {% for ai in idea_list_active %}
             <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }} </a> </td>                 
             <td> {{ ai.category }} </td>
@@ -39,6 +42,7 @@
             {% endif %}
         </tr>
         {% endfor %}
+        {% show_pages %}
     {% else %}
         <!-- Different Prompts if regular index/popular, category filtering, and search-->
         {% if idea_list_active == action_ideas_active or idea_list_active == action_ideas_vote_active %}
