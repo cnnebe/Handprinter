@@ -16,6 +16,7 @@
 </form>
 <br><br>
 
-{% include "HandprintGenerator/idea_table.html" with idea_list_active=ai_search_active idea_list_inactive=ai_search_inactive %}
+<!-- One variable for active, one for inactive, and page allows for independent pagination.-->
+{% include "HandprintGenerator/idea_table.html" with idea_list_active=ai_search_active idea_list_inactive=ai_search_inactive page="search" %}
     
 {% endblock %}

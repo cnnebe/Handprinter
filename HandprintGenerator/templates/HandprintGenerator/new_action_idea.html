@@ -2,9 +2,45 @@
 
 {% block content %}
 
- {% if action_id == None %}
- <h1> Create a new Handprint action idea </h1>
+<!-- If no existing ID, then create a new action idea. -->
+{% if action_id == None %}
+    <h1> Create a new Handprint action idea </h1>
 
+        <!-- Button trigger modal -->
+        <button type="button" class="btn-group btn-group-xs" data-toggle="modal" data-target="#myModal">
+            <i> What is an Action Idea?</i>
+        </button>
+        <br>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">An Idea That Shows Earth is Better Off With Us Than Without Us</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p> An Action Idea is any positive contribution humans can do to benefit the Earth. <br><br> Create a <b>title</b> for your idea and add a detailed <b>description</b> of what the idea is and how to achieve it. <br><br> If you'd like, include any <b>references</b> such as websites or articles that you got inspiration from. <br><br> You may also select an <b>image</b> that is relevant to your idea, or upload your own. <br><br> Select a <b>category</b> where your idea can best be realized. If an idea can be in multiple, select the one you think best fits. <br><br> Finally, include any <b>tags</b>. Tags can include location, any context not mentioned in a category, or just about any word you think is relevant to the idea. Users can find your idea through a search if their search term matches a tag. <br><br> <p>
+                        <b> Examples: </b>
+                            <ul>
+                                <li> Proper Tire Inflation </li>
+                                <li> Install a water heater blanket </li>
+                                <li> Cold Wash/Line Dry Laundry</li>
+                                <li> Carpool </li>
+                                <li> Optimize Errand Driving </li>
+                            </ul> <br><br>
+                        <p> You can also view <b><a href=/index>current action ideas</a></b> and click on them to view how they were created! </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Got it!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+
+    <!-- Action Idea Creation Form -->
     <form enctype="multipart/form-data" action="#" method="post">
    		{{ NewActionIdeaForm.errors }}
         {% for field in NewActionIdeaForm %}
@@ -13,40 +49,35 @@
             <br><br>
         {% endfor %}
         <input type="submit" value="Submit">
-        {% csrf_token %}
-        
+        {% csrf_token %}  
     </form>
 
+ <!-- If there is an ID and the user is a mod, staff, or existing idea owner, an ACTIVE idea can be edited-->
 {% elif creator == request.user.id or user.is_staff or user.profile.role == "Moderator" %} 
-
-{% if active == True %}
-
-<h1> Edit Existing Action Idea </h1>
-
-    <form enctype="multipart/form-data" action="#" method="post">
-        {{ NewActionIdeaForm.errors }}
-        {% for field in NewActionIdeaForm %}
-            {{field.label_tag}}  
-            {{field}}
-            <br><br>
-        {% endfor %}
+    {% if active == True %}
+    <h1> Edit Existing Action Idea </h1>
+        <form enctype="multipart/form-data" action="#" method="post">
+            {{ NewActionIdeaForm.errors }}
+            {% for field in NewActionIdeaForm %}
+                {{field.label_tag}}  
+                {{field}}
+                <br><br>
+            {% endfor %}
         <input type="submit" value="Submit">
         {% csrf_token %}
-        
-    </form>
+        </form>
+    {% else %}  <!-- Idea is inactive and can't be edited. -->
+    <h3> You cannot edit action ideas that have been deleted. <br> <br> You can view action ideas <a href="/index">here.</a> </h3>
+    {% endif %}
 
-{% else %}
-
-<h3> You cannot edit action ideas that have been deleted. <br> <br> You can view action ideas <a href="/index">here.</a> </h3>
-
+{% else %}  <!-- User attempting to edit is not staff or the owner. -->
+    <h3> You cannot edit action ideas that you did not submit. <br> <br> You can view action ideas <a href="/index">here.</a> </h3>
 {% endif %}
 
-
-{% else %}
-
-<h3> You cannot edit action ideas that you did not submit. <br> <br> You can view action ideas <a href="/index">here.</a> </h3>
-
-
-{% endif %}
-
+<!-- Modal Javascript -->
+<script>
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').focus()
+        })
+</script>
 {% endblock %}

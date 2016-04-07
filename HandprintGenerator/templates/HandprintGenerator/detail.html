@@ -5,16 +5,20 @@
         
     <div id="page-content">
         <div id="action-idea">
-            <h1>{{ ai.name }}</h1>
+            <h1 data-toggle="tooltip" title="The title of the action idea.">{{ ai.name }}</h1>
             {% if ai.image != "" %} 
             <img style="max-height:300px;" src="../../media/{{ ai.image }}" alt="{{ ai.name }}" >
             {% endif%}
-            <p> Description: {{ ai.description }}</p>
-            <p> References: {{ ai.references }}</p>
-            <p> Category: {{ ai.category }}</p>
-            <p> Tags: 
+            <p data-toggle="tooltip" title="What the idea is and how to adopt it."> Description: {{ ai.description }}</p>
+            <p data-toggle="tooltip" title="Sources of inspiration or further reading."> References: {{ ai.references }}</p>
+            <p data-toggle="tooltip" title="Context this idea is applicable in."> Category: {{ ai.category }}</p>
+            <p data-toggle="tooltip" title="Relevant keywords about the idea. Tags are used for search, so having lots of tags increases search visibility!"> Tags: 
             {% for tag in ai.tags.names %}
-                    <a href=#>{{tag}}</a>,
+             <form id="tagForm" action="/searchresults" method="get">
+                {% csrf_token %}
+                <input id="search" type="hidden" name="searchTerm" value="{{ tag }}">
+                <input type="submit" class="tagLink" value="{{tag}}">
+            </form>{% if not forloop.last %}, {% endif %}
             {% endfor %}
             </p>
             <p> Votes: {{ai.numvotes}} </p>
@@ -41,7 +45,7 @@
                     </form>
                 {% else %}
                     <form action="/handprintgenerator/{{ ai.id }}/" method="post">
-                        <input type="submit" name="vote" value="Vote">
+                        <input type="submit" name="vote" data-toggle="tooltip" title="The more votes an ideas has, the greater likelihood it will be selected for enviornmental impact modeling by researchers!" value="Vote">
                         {% csrf_token %}
                     </form>
                 {% endif %}
@@ -49,6 +53,7 @@
         </div>
         <div id="comments">
             <h4> Comments </h4>
+            <p> <i> Have a suggestion, question, or concern about this idea? Post a comment! </i> </p> <hr>
             {% for c in ai.comments %}
                 <li>
                     <p> {{ c.text }}</p>
@@ -57,15 +62,17 @@
                         {% if c.user == request.user or user.profile.role == "Moderator" or user.is_staff %}
                         <form action="/handprintgenerator/{{ ai.id }}/" method="post">
                             <input type="hidden" name="comment" value="{{ c.id }}">
-                            <input type="submit" name="delete" value="Delete">
+                            <input type="submit" name="delete" value="Delete Comment">
                             {% csrf_token %}
                         </form>
                         {% endif %}
                     {% endif %}
                 </li>
             {% endfor %}
-            {% if ai.comments.count == 0 %}
+            {% if ai.comments.count == 0 and user.is_authenticated %}
                 <p> There are no comments yet. Why don't you be the first to make one? </p>
+            {% elif ai.comments.count == 0 %}
+                <p> There are no comments yet. <a href=/create_user>Create an Account</a> or <a href=/login>Login</a> and be the first to make one! </p>
             {% endif %}
 
 
@@ -77,7 +84,7 @@
                         {{field}}
                         <br>
                     {% endfor %}
-                    <input type="submit" value="Submit">
+                    <input type="submit" value="Submit Comment">
                     {% for field in comment_form.hidden_fields %}
                         {{field}}
                     {% endfor %}
