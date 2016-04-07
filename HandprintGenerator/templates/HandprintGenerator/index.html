@@ -5,27 +5,49 @@
 
 <h1> Action Ideas </h1>
 
-  <div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    Filter By
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a href="/index_vote">Most Popular</a></li>
-    <li><a href="/index_home">Home</a></li>
-    <li><a href="/index_work">Work</a></li>
-    <li><a href="/index_community">Community</a></li>
-    <li><a href="/index_mobility">Mobility</a></li>
-    <li><a href="/index_clothing">Clothing</a></li>
-    <li><a href="/index_food">Food</a></li>
-    <li><a href="/index_other">Other</a></li>
-  </ul>
-</div>
+<br>
 
- 
+<form action="/searchresults" method="get">
+    {% csrf_token %}
+    <label for="search">Search for Ideas by Tags: </label>
+    <input id="search" type="text" name="searchTerm" value="{{ searchTerm }}">
+    <input type="submit" value="Search">
+</form>
+
  <br><br>
 
+<div class="bs-example bs-example-tabs" data-example-id="togglable-tabs"> 
 
+<ul id="myTabs" class="nav nav-tabs" role="tablist"> 
+
+<li role="presentation" class="active"><a href="#main" id="main-tab" role="tab" data-toggle="tab" aria-controls="main" aria-expanded="false">Most Recent</a></li> 
+
+<li role="presentation"><a href="#popular" role="tab" id="popular-tab" data-toggle="tab" aria-controls="popular">Most Popular</a></li> 
+
+<li role="presentation" class="dropdown"> <a aria-expanded="false" href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown" aria-controls="myTabDrop1-contents">Filter By
+<span class="caret"></span></a> 
+<ul class="dropdown-menu" aria-labelledby="myTabDrop1" id="myTabDrop1-contents">
+
+ <li class=""><a aria-expanded="false" href="#home" role="tab" id="home-tab" data-toggle="tab" aria-controls="home">Home</a></li> 
+
+ <li class= ""><a aria-expanded="true" href="#work" role="tab" id="work-tab" data-toggle="tab" aria-controls="work">Work</a></li> 
+
+ <li class= ""><a aria-expanded="true" href="#community" role="tab" id="community-tab" data-toggle="tab" aria-controls="community">Community</a></li> 
+
+ <li class= ""><a aria-expanded="true" href="#mobility" role="tab" id="mobility-tab" data-toggle="tab" aria-controls="mobility">Mobility</a></li> 
+
+ <li class= ""><a aria-expanded="true" href="#food" role="tab" id="food-tab" data-toggle="tab" aria-controls="food">Food</a></li> 
+
+ <li class= ""><a aria-expanded="true" href="#clothing" role="tab" id="clothing-tab" data-toggle="tab" aria-controls="clothing">Clothing</a></li> 
+
+ <li class= ""><a aria-expanded="true" href="#other" role="tab" id="other-tab" data-toggle="tab" aria-controls="other">Other</a></li> 
+ 
+ </ul> </li> </ul> 
+
+ <div id="myTabContent" class="tab-content"> 
+
+ <div role="tabpanel" class="tab-pane fade active in" id="main" aria-labelledby="main-tab"> 
+ <br>
     {% if user.profile.role == "Moderator" or user.is_staff %}
     <h2> Active </h2>
     {% endif %}
@@ -63,7 +85,7 @@
             </tr>
         {% endfor %}
     {% else %}
-        <p>No action ideas are available, why don't you <a href=/new>add one.</a> </p>
+        <h3>No action ideas are available, why don't you <a href=/new>add one.</a> </h3>
     {% endif %}
 
     </table>
@@ -87,9 +109,598 @@
                 </tr>
             {% endfor %}
         {% else %}
+            <h3>There are no inactive action ideas. To make an idea inactive, you must delete it.</h3>
+        {% endif %}
+    </table>
+    {% endif %}
+</div> 
+
+ <div role="tabpanel" class="tab-pane fade" id="popular" aria-labelledby="popular-tab"> 
+
+<br><br>
+    {% if user.profile.role == "Moderator" or user.is_staff %}
+    <h2> Active </h2>
+    {% endif %}
+    <table>
+    {% if action_ideas_vote_active %}
+    <tr>
+        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+    </tr>
+        {% for ai in action_ideas_vote_active %}
+            <tr>
+                <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }} </a> </td>                 
+                <td> {{ ai.category }} </td>
+                <td> {{ai.numvotes}}</td>
+                <td> {{ai.date_created}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+                {% if user.is_authenticated %}                   
+                <td> 
+                    {% if ai.id in userVotes %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="unvote" value="Unvote">
+                            {% csrf_token %}
+                        </form>
+                    {% else %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="vote" value="Vote">
+                            {% csrf_token %}
+                        </form>
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    {% else %}
+        <p>No action ideas are available, why don't you <a href=/new>add one.</a> </p>
+    {% endif %}
+
+    </table>
+    <br>
+    {% if user.profile.role == "Moderator" or user.is_staff %}
+        <h2> Inactive </h2>
+        <table>
+        {% if action_ideas_vote_inactive %}
+        <tr>
+        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+    </tr>
+            {% for ai in action_ideas_vote_inactive %}
+                <tr>
+                    <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
+                    <td> {{ ai.category }} </td>
+                    <td> {{ai.numvotes}}</td>
+                    <td> {{ai.date_created}} </td>
+                </tr>
+            {% endfor %}
+        {% else %}
             <p>There are no inactive action ideas. To make an idea inactive, you must delete it.</p>
         {% endif %}
     </table>
     {% endif %}
+
+</div> 
+
+ <div role="tabpanel" class="tab-pane fade" id="home" aria-labelledby="home-tab"> 
+
+ <h4> Action Ideas Related to Home </h4>
+ 
+<br>
+    {% if user.profile.role == "Moderator" or user.is_staff %}
+    <h2> Active </h2>
+    {% endif %}
+    <table>
+    {% if action_ideas_home_active %}
+   <tr>
+        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+    </tr>
+        {% for ai in action_ideas_home_active %}
+            <tr>
+                <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }} </a> </td>                 
+                <td> {{ ai.category }} </td>
+                <td> {{ai.numvotes}}</td>
+                <td> {{ai.date_created}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+                {% if user.is_authenticated %}                    
+                <td> 
+                    {% if ai.id in userVotes %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="unvote" value="Unvote">
+                            {% csrf_token %}
+                        </form>
+                    {% else %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="vote" value="Vote">
+                            {% csrf_token %}
+                        </form>
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    {% else %}
+        <p>No action ideas are available in this category, why don't you <a href=/new>add one.</a> Try looking in another category or go back to the <a href=/index>main index.</a> </p>
+    {% endif %}
+
+    </table>
+    <br>
+    {% if user.profile.role == "Moderator" or user.is_staff %}
+        <h2> Inactive Action Ideas Related to Home </h2>
+        <table>
+        {% if action_ideas_home_inactive %}
+        <tr>
+        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+    </tr>
+            {% for ai in action_ideas_home_inactive %}
+                <tr>
+                    <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
+                    <td> {{ ai.category }} </td>
+                    <td> {{ai.numvotes}}</td>
+                    <td> {{ai.date_created}} </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <p>There are no inactive action ideas in this category. To make an idea inactive, you must delete it. Try looking in another category or go back to the <a href=/index>main index.</a></p>
+        {% endif %}
+    </table>
+    {% endif %} 
+
+ </div>
+
+<div role="tabpanel" class="tab-pane fade" id="work" aria-labelledby="work-tab"> 
+
+<h4> Action Ideas Related to Work </h4>
+
+<br>
+
+    {% if user.profile.role == "Moderator" or user.is_staff %}
+    <h2> Active </h2>
+    {% endif %}
+    <table>
+    {% if action_ideas_work_active %}
+    <tr>
+        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+    </tr>
+        {% for ai in action_ideas_work_active %}
+            <tr>
+                <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }} </a> </td>                 
+                <td> {{ ai.category }} </td>
+                <td> {{ai.numvotes}}</td>
+                <td> {{ai.date_created}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+                {% if user.is_authenticated %}                  
+                <td> 
+                    {% if ai.id in userVotes %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="unvote" value="Unvote">
+                            {% csrf_token %}
+                        </form>
+                    {% else %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="vote" value="Vote">
+                            {% csrf_token %}
+                        </form>
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    {% else %}
+        <p>No action ideas are available in this category, why don't you <a href=/new>add one.</a> Try looking in another category or go back to the <a href=/index>main index.</a> </p>
+    {% endif %}
+
+    </table>
+    <br>
+    {% if user.profile.role == "Moderator" or user.is_staff %}
+        <h2> Inactive Action Ideas Related to Work </h2>
+        <table> 
+        {% if action_ideas_work_inactive %}
+        <tr>
+        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+    </tr>
+            {% for ai in action_ideas_work_inactive %}
+                <tr>
+                    <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
+                    <td> {{ ai.category }} </td>
+                    <td> {{ai.numvotes}}</td>
+                    <td> {{ai.date_created}} </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <p>There are no inactive action ideas in this category. To make an idea inactive, you must delete it. Try looking in another category or go back to the <a href=/index>main index.</a></p>
+        {% endif %}
+    </table>
+    {% endif %}
+
+</div> 
+
+<div role="tabpanel" class="tab-pane fade" id="community" aria-labelledby="community-tab">  
+
+ <h4> Action Ideas Related to Community </h4>
+
+<br>
+    {% if user.profile.role == "Moderator" or user.is_staff %}
+    <h2> Active </h2>
+    {% endif %}
+    <table>
+    {% if action_ideas_community_active %}
+    <tr>
+        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+    </tr>
+        {% for ai in action_ideas_community_active %}
+            <tr>
+                <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }} </a> </td>                 
+                <td> {{ ai.category }} </td>
+                <td> {{ai.numvotes}}</td>
+                <td> {{ai.date_created}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+                {% if user.is_authenticated %}               
+                <td> 
+                    {% if ai.id in userVotes %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="unvote" value="Unvote">
+                            {% csrf_token %}
+                        </form>
+                    {% else %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="vote" value="Vote">
+                            {% csrf_token %}
+                        </form>
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    {% else %}
+        <p>No action ideas are available in this category, why don't you <a href=/new>add one.</a> Try looking in another category or go back to the <a href=/index>main index.</a> </p>
+    {% endif %}
+
+    </table>
+    <br>
+    {% if user.profile.role == "Moderator" or user.is_staff %}
+        <h2> Inactive Action Ideas Related to Community </h2>
+        <table>
+        {% if action_ideas_community_inactive %}
+        <tr>
+        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+    </tr>
+            {% for ai in action_ideas_community_inactive %}
+                <tr>
+                    <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
+                    <td> {{ ai.category }} </td>
+                    <td> {{ai.numvotes}}</td>
+                    <td> {{ai.date_created}} </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <p>There are no inactive action ideas in this category. To make an idea inactive, you must delete it. Try looking in another category or go back to the <a href=/index>main index.</a></p>
+        {% endif %}
+    </table>
+    {% endif %}
+
+
+</div>
+
+<div role="tabpanel" class="tab-pane fade" id="mobility" aria-labelledby="mobility-tab"> 
+
+    
+<h4> Action Ideas Related to Mobility </h4>
+
+<br>
+    {% if user.profile.role == "Moderator" or user.is_staff %}
+    <h2> Active </h2>
+    {% endif %}
+    <table>
+    {% if action_ideas_mobility_active %}
+    <tr>
+        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+    </tr>
+        {% for ai in action_ideas_mobility_active %}
+            <tr>
+                <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }} </a> </td>                 
+                <td> {{ ai.category }} </td>
+                <td> {{ai.numvotes}}</td>
+                <td> {{ai.date_created}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+                {% if user.is_authenticated %}                    
+                <td> 
+                    {% if ai.id in userVotes %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="unvote" value="Unvote">
+                            {% csrf_token %}
+                        </form>
+                    {% else %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="vote" value="Vote">
+                            {% csrf_token %}
+                        </form>
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    {% else %}
+        <p>No action ideas are available in this category, why don't you <a href=/new>add one.</a> Try looking in another category or go back to the <a href=/index>main index.</a> </p>
+    {% endif %}
+
+    </table>
+    <br>
+    {% if user.profile.role == "Moderator" or user.is_staff %}
+        <h2> Inactive Action Ideas Related to Mobility </h2>
+        <table>
+        {% if action_ideas_mobility_inactive %}
+        <tr>
+        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+    </tr>
+            {% for ai in action_ideas_mobility_inactive %}
+                <tr>
+                    <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
+                    <td> {{ ai.category }} </td>
+                    <td> {{ai.numvotes}}</td>
+                    <td> {{ai.date_created}} </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <p>There are no inactive action ideas in this category. To make an idea inactive, you must delete it. Try looking in another category or go back to the <a href=/index>main index.</a></p>
+        {% endif %}
+    </table>
+    {% endif %}
+
+</div> 
+
+<div role="tabpanel" class="tab-pane fade" id="food" aria-labelledby="food-tab">
+
+<h4> Action Ideas Related to Food </h4>
+
+ <br>
+
+    {% if user.profile.role == "Moderator" or user.is_staff %}
+    <h2> Active </h2>
+    {% endif %}
+    <table>
+    {% if action_ideas_food_active %}
+    <tr>
+        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+    </tr>
+        {% for ai in action_ideas_food_active %}
+            <tr>
+                <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }} </a> </td>                 
+                <td> {{ ai.category }} </td>
+                <td> {{ai.numvotes}}</td>
+                <td> {{ai.date_created}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+                {% if user.is_authenticated %}                  
+                <td> 
+                    {% if ai.id in userVotes %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="unvote" value="Unvote">
+                            {% csrf_token %}
+                        </form>
+                    {% else %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="vote" value="Vote">
+                            {% csrf_token %}
+                        </form>
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    {% else %}
+        <p>No action ideas are available in this category, why don't you <a href=/new>add one.</a> Try looking in another category or go back to the <a href=/index>main index.</a> </p>
+    {% endif %}
+
+    </table>
+    <br>
+    {% if user.profile.role == "Moderator" or user.is_staff %}
+        <h2> Inactive Action Ideas Related to Food </h2>
+        <table>
+        {% if action_ideas_food_inactive %}
+        <tr>
+        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+    </tr>
+            {% for ai in action_ideas_food_inactive %}
+                <tr>
+                    <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
+                    <td> {{ ai.category }} </td>
+                    <td> {{ai.numvotes}}</td>
+                    <td> {{ai.date_created}} </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <p>There are no inactive action ideas in this category. To make an idea inactive, you must delete it. Try looking in another category or go back to the <a href=/index>main index.</a></p>
+        {% endif %}
+    </table>
+    {% endif %}  
+
+ </div>
+
+<div role="tabpanel" class="tab-pane fade" id="clothing" aria-labelledby="clothing-tab"> 
+
+<h4> Action Ideas Related to Clothing </h4>
+
+<br>
+
+    {% if user.profile.role == "Moderator" or user.is_staff %}
+    <h2> Active </h2>
+    {% endif %}
+    <table>
+    {% if action_ideas_clothing_active %}
+    <tr>
+        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+    </tr>
+        {% for ai in action_ideas_clothing_active %}
+            <tr>
+                <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }} </a> </td>                 
+                <td> {{ ai.category }} </td>
+                <td> {{ai.numvotes}}</td>
+                <td> {{ai.date_created}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+                {% if user.is_authenticated %}                  
+                <td> 
+                    {% if ai.id in userVotes %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="unvote" value="Unvote">
+                            {% csrf_token %}
+                        </form>
+                    {% else %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="vote" value="Vote">
+                            {% csrf_token %}
+                        </form>
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    {% else %}
+        <p>No action ideas are available in this category, why don't you <a href=/new>add one.</a> Try looking in another category or go back to the <a href=/index>main index.</a> </p>
+    {% endif %}
+
+    </table>
+    <br>
+    {% if user.profile.role == "Moderator" or user.is_staff %}
+        <h2> Inactive Action Ideas Related to Clothing </h2>
+        <table>
+        {% if action_ideas_clothing_inactive %}
+        <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th></tr>
+            {% for ai in action_ideas_clothing_inactive %}
+                <tr>
+                    <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
+                    <td> {{ ai.category }} </td>
+                    <td> {{ai.numvotes}}</td>
+                    <td> {{ai.date_created}} </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <p>There are no inactive action ideas in this category. To make an idea inactive, you must delete it. Try looking in another category or go back to the <a href=/index>main index.</a></p>
+        {% endif %}
+    </table>
+    {% endif %}
+
+</div> 
+
+<div role="tabpanel" class="tab-pane fade" id="other" aria-labelledby="other-tab"> 
+
+<h4> Action Ideas Related to "Other" </h4>
+
+<br>
+    {% if user.profile.role == "Moderator" or user.is_staff %}
+    <h2> Active </h2>
+    {% endif %}
+    <table>
+    {% if action_ideas_other_active %}
+   <tr>
+        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+    </tr>
+        {% for ai in action_ideas_other_active %}
+            <tr>
+                <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }} </a> </td>                 
+                <td> {{ ai.category }} </td>
+                <td> {{ai.numvotes}}</td>
+                <td> {{ai.date_created}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+                {% if user.is_authenticated %}                    
+                <td> 
+                    {% if ai.id in userVotes %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="unvote" value="Unvote">
+                            {% csrf_token %}
+                        </form>
+                    {% else %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="vote" value="Vote">
+                            {% csrf_token %}
+                        </form>
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    {% else %}
+        <p>No action ideas are available in this category, why don't you <a href=/new>add one.</a> Try looking in another category or go back to the <a href=/index>main index.</a> </p>
+    {% endif %}
+
+    </table>
+    <br>
+    {% if user.profile.role == "Moderator" or user.is_staff %}
+        <h2> Inactive Action Ideas Related to "Other"</h2>
+        <table>
+        {% if action_ideas_other_inactive %}
+        <tr>
+        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+        <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+    </tr>
+            {% for ai in action_ideas_other_inactive %}
+                <tr>
+                    <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
+                    <td> {{ ai.category }} </td>
+                    <td> {{ai.numvotes}}</td>
+                    <td> {{ai.date_created}} </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <p>There are no inactive action ideas in this category. To make an idea inactive, you must delete it. Try looking in another category or go back to the <a href=/index>main index.</a></p>
+        {% endif %}
+    </table>
+    {% endif %}
+
+</div> 
+
+</div> 
+
+</div>
+
+
 
 {% endblock %}

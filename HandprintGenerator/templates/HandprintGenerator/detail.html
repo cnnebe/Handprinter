@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 
 {% block content %}
@@ -13,11 +14,13 @@
             <p> Description: {{ ai.description }}</p>
             <p> References: {{ ai.references }}</p>
             <p> Category: {{ ai.category }}</p>
-            <p> Tags: 
-            {% for tag in ai.tags.names %}
-                    <a href=#>{{tag}}</a>,
+            Tags: {% for tag in ai.tags.names %}
+            <form id="tagForm" action="/searchresults" method="get">
+                {% csrf_token %}
+                <input id="search" type="hidden" name="searchTerm" value="{{ tag }}">
+                <input type="submit" class="tagLink" value="{{tag}}">
+            </form>{% if not forloop.last %}, {% endif %}
             {% endfor %}
-            </p>
             <p> Votes: {{ai.numvotes}} </p>
             {% if user.profile.role == "Moderator" or user.is_staff %}
                 <p> Active: {{ ai.active }}</p>
@@ -28,7 +31,7 @@
         {% endif %}
             {% endif %}
             <p> Submitted By: {{ ai.creator.first_name }} {{ ai.creator.last_name }}</p>
-            {% if ai.creator == request.user or user.is_staff %}
+            {% if ai.creator == request.user or user.is_staff or user.profile.role == "Moderator" %}
                 <a href="{% url 'HandprintGenerator:edit_action_idea' ai.id %}">Edit Action Idea</a>
                 {% if ai.active %}
                     <a href="{% url 'HandprintGenerator:delete_action_idea' ai.id%}">Delete Action Idea</a> 
@@ -66,7 +69,7 @@
                 </li>
             {% endfor %}
             {% if ai.comments.count == 0 %}
-                <p> There are no comments yet. </p>
+                <p> There are no comments yet. Why don't you be the first to make one? </p>
             {% endif %}
 
 
@@ -91,7 +94,7 @@
     </div>
 
     {% else %}
-    <h3> You cannot view a deleted action idea! </h3>
+    <h3> You cannot view a deleted action idea! <a href=/index>View existing action ideas.</a></h3>
 
     {% endif %}
 

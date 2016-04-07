@@ -1,19 +1,52 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!-- @todo - depending if it came from edit or new 
- -->    
+
+ {% if action_id == None %}
  <h1> Create a new Handprint action idea </h1>
 
     <form enctype="multipart/form-data" action="#" method="post">
    		{{ NewActionIdeaForm.errors }}
         {% for field in NewActionIdeaForm %}
-            {{field.label_tag}}
+            {{field.label_tag}}  
             {{field}}
-            <br>
+            <br><br>
         {% endfor %}
         <input type="submit" value="Submit">
         {% csrf_token %}
         
     </form>
+
+{% elif creator == request.user.id or user.is_staff or user.profile.role == "Moderator" %} 
+
+{% if active == True %}
+
+<h1> Edit Existing Action Idea </h1>
+
+    <form enctype="multipart/form-data" action="#" method="post">
+        {{ NewActionIdeaForm.errors }}
+        {% for field in NewActionIdeaForm %}
+            {{field.label_tag}}  
+            {{field}}
+            <br><br>
+        {% endfor %}
+        <input type="submit" value="Submit">
+        {% csrf_token %}
+        
+    </form>
+
+{% else %}
+
+<h3> You cannot edit action ideas that have been deleted. <br> <br> You can view action ideas <a href="/index">here.</a> </h3>
+
+{% endif %}
+
+
+{% else %}
+
+<h3> You cannot edit action ideas that you did not submit. <br> <br> You can view action ideas <a href="/index">here.</a> </h3>
+
+
+{% endif %}
+
 {% endblock %}
