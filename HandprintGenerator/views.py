@@ -1,5 +1,5 @@
 from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.template import loader
+from django.template import loader, RequestContext
 from django.shortcuts import get_object_or_404, render
 from django.db import transaction
 from django.contrib.auth import authenticate, login, logout
@@ -8,6 +8,8 @@ from django.contrib import auth
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
+from django.contrib.gis import geoip2
+from django.contrib.gis.geoip2 import GeoIP2
 
 from .models import * 
 from .forms import *
@@ -217,8 +219,19 @@ def new_user(request):
             new_user = form.save(commit=False)
             new_user.save() 
             
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+            if x_forwarded_for:
+                ip = x_forwarded_for.split(',')[0]
+            else:
+                ip = request.META.get('REMOTE_ADDR')
+            if ip == '127.0.0.1':
+                ip = '72.14.207.99'
+            g = GeoIP2()
+            g = g.city(ip)
+            loc = g['city'] + ', ' + g['region'] + ', ' + g['country_name']
+            
             #creating an accompanying profile with role
-            user_profile = Profile(role='Member', user_id=new_user.id)
+            user_profile = Profile(role='member', location=loc, user_id=new_user.id)
             user_profile.save()
             
             return HttpResponseRedirect('/login')
