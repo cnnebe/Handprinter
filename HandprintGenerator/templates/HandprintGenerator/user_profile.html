@@ -7,7 +7,7 @@
 <br><br><br><br><br>
 <div class="container">
     <div class="row centered">
-        <div class="col-sm-9 col-md-9 user-details">
+        <div class="col-xs-12 col-md-12 user-details">
             <div class="user-image">
             <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
             </div>
@@ -42,12 +42,39 @@
                     <div class="tab-content">
                         <div id="information" class="tab-pane active">
                             <h4>Account Information</h4>
+                            <table>
+                                <tr>Name: {{ user.first_name }} {{ user.last_name }}</tr>
+                                <br>
+                                <tr>Username: {{ user.username }}</tr>
+                                <br>
+                                <tr>Email: {{ user.email }}</tr> 
+                                <br>
+                                <tr>Date Joined: {{ user.date_joined}}</tr> 
+                                <br>
+                                <tr>Last Login Was: {{ user.last_login }}</tr>
+                                <br>
+                            </table>
                         </div>
                         <div id="settings" class="tab-pane">
                             <h4>Settings</h4>
                         </div>
                         <div id="email" class="tab-pane">
-                            <h4>Send Message</h4>
+                            <h4>My Action Ideas</h4>
+                            {% if ideas %}
+                                    {% for ai in ideas %}
+                                    <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th>
+                                        {% if ai.user == user.username %}
+                                                <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td> 
+                                                <td> {{ ai.category }} </td>
+                                                <td> {{ai.numvotes}}</td>
+                                                <td> {{ai.date_created}} </td>
+                                        {% endif %}
+                                            </tr>
+                                     {% endfor %}
+                                    {% else %}
+                                        <p>No action ideas are available.</p>
+                            {% endif %}
+
                         </div>
                         <div id="events" class="tab-pane">
                             <h4>Action Idea History</h4>
@@ -81,5 +108,7 @@
 <h3> Please <a href=/login>login</a> or create a <a href=/create_user>new account</a> to view your profile. </h3>
 
 {% endif %}
+
+<br><br><br><br>
 
 {% endblock %}
