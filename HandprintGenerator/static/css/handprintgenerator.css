@@ -280,9 +280,9 @@ body {
 .user-details .user-image {position: relative;  z-index: 1; width: 100%; text-align: center;}
  .user-image img { clear: both; margin: auto; position: relative;}
 
-.user-details .user-info-block {width: 100%; position: absolute; top: 75px; background: rgb(255, 255, 255); z-index: 0; padding-top: 35px;}
+.user-details .user-info-block {width: 100%; position: absolute; top: 75px; background: rgb(232, 245, 211); z-index: 0; padding-top: 35px;}
  .user-info-block .user-heading {width: 100%; text-align: center; margin: 20px 0 0;}
- .user-info-block .navigation {float: left; width: 100%; margin: 0; padding: 0; list-style: none; border-bottom: 2px solid rgba(53, 154, 136, 1); border-top: 2px solid rgba(53, 154, 136, 1);}
+ .user-info-block .navigation {background-color: white; float: left; width: 100%; margin: 0; padding: 0; list-style: none; border-bottom: 2px solid rgba(53, 154, 136, 1); border-top: 2px solid rgba(53, 154, 136, 1);}
   .navigation li {float: left; margin: 0; padding: 0;}
    .navigation li a {padding: 20px 30px; float: left;}
    .navigation li.active a {background: rgba(53, 154, 136, 1); color: #fff;}
