@@ -16,6 +16,9 @@
 {% endif %}
  
 <div class="container">
+    {% if error%}
+        <p> This email is already associated with an account. If you forgot your password, reset your password <a href="/forgot_password" class="forgot-password"> here</a>. <p>
+    {% endif %}
         <div class="row centered-form">
         <div class="col-xs-12 col-sm-8 col-md-8 col-sm-offset-2 col-md-offset-2">
             <div class="panel panel-default">
@@ -24,7 +27,6 @@
                         </div>
                         <div class="panel-body">
                         <form action="#" method="post">
-
                             {% for field in registration_form %}
                             {{field.label_tag}}
                             {{field}}

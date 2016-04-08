@@ -28,6 +28,20 @@ def user_profile(request):
         context['myideas'] = ActionIdea.objects.filter(creator=request.user, active=True).order_by('-date_created')
         context['mycomments'] = ActionIdeaComment.objects.filter(user = request.user)
         context['myvotes'] = ActionIdeaVote.objects.filter(user = request.user)
+        if request.method == "POST":
+            if request.POST.get('change_email') and request.POST.get('change_email') != '':
+                u = User.objects.get(id=request.user.id)
+                u.email = request.POST.get('change_email')
+                u.save()
+                return HttpResponseRedirect('/logout')
+        if request.method == "POST":
+            if request.POST.get('change_password') and request.POST.get('change_password') != '':
+                if request.POST.get('change_password') != request.POST.get('change_password_confirmation'):
+                    return HttpResponseRedirect('/profile')
+                u = User.objects.get(id=request.user.id)
+                u.set_password(request.POST.get('change_password'))
+                u.save()
+                return HttpResponseRedirect('/logout')
     except:
         pass
     return render(request, 'HandprintGenerator/user_profile.html', context)
@@ -92,6 +106,12 @@ def detail(request, actionidea_id):
         context['reason'] = ActionIdeaInactive.objects.get(action_idea = ActionIdea.objects.get(pk=actionidea_id))
     except: 
         context['reason'] = False
+    if request.POST.get('restore'):
+        ai = ActionIdea.objects.get(pk=actionidea_id)
+        ai.active = True
+        ai.save()
+        ActionIdeaInactive.objects.get(action_idea = ai).delete()
+        return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
     if request.POST.get('unvote'):
         ActionIdeaVote.objects.get(action_idea = ActionIdea.objects.get(pk=actionidea_id), user = request.user).delete()
         return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
@@ -102,6 +122,47 @@ def detail(request, actionidea_id):
     if request.POST.get('delete'):
         c = get_object_or_404(ActionIdeaComment, pk = request.POST.get('comment')).delete()
         return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
+    if request.POST.get('report'):
+        action_idea = context['ai']
+        report_message = """Hi Handprinter Admin Team,
+            
+There has been an action idea reported as inappropriate.
+
+Action Idea ID: %d
+Action Idea Title: %s
+Action Idea Description: %s
+Action Idea References: %s
+
+For your reference, the user who reported this is: %s
+
+Thanks,
+The Handprinter Team
+""" % (action_idea.id, action_idea.name, action_idea.description, action_idea.references, request.user.username)
+        send_mail('Reported Action Idea', report_message, 'handprinterteam@yahoo.com',
+    ['handprinterteam@yahoo.com'], fail_silently=False)
+        return HttpResponseRedirect('/index')
+    if request.POST.get('report_comment'):
+        action_idea = context['ai']
+        c = request.POST.get('comment_reported')
+        comment = ActionIdeaComment.objects.get(id = c)
+        report_message = """Hi Handprinter Admin Team,
+            
+There has been a comment reported as inappropriate.
+
+Comment ID: %d
+Comment Text: %s
+Comment Creator: %s
+Action Idea ID: %d
+Action Idea Name: %s
+
+For your reference, the user who reported this is: %s
+
+Thanks,
+The Handprinter Team
+""" % (comment.id, comment.text, User.objects.get(id = comment.user_id).username, action_idea.id, action_idea.name, request.user.username)
+        send_mail('Reported Action Idea Comment', report_message, 'handprinterteam@yahoo.com',
+    ['handprinterteam@yahoo.com'], fail_silently=False)
+        return HttpResponseRedirect('/index')
     form = CommentForm(request.POST)
     context['comment_form'] = form
     if request.method == "POST":
@@ -217,8 +278,10 @@ def new_user(request):
         if form.is_valid():
             #create the objects and ties them together
             new_user = form.save(commit=False)
+            if User.objects.filter(email = new_user.email ).exists():
+                context["error"] = "error"
+                return render(request, 'registration/new_user.html', context)
             new_user.save() 
-            
             x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
             if x_forwarded_for:
                 ip = x_forwarded_for.split(',')[0]
