@@ -61,18 +61,24 @@
                         <div id="email" class="tab-pane">
                             <h4>My Action Ideas</h4>
                             {% if ideas %}
+                            <table>
+                                <tr>
+                                    <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                    <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+                                    <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+                                    <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+                                </tr>
                                     {% for ai in ideas %}
-                                    <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th>
-                                        {% if ai.user == user.username %}
-                                                <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td> 
-                                                <td> {{ ai.category }} </td>
-                                                <td> {{ai.numvotes}}</td>
-                                                <td> {{ai.date_created}} </td>
-                                        {% endif %}
-                                            </tr>
+                                        <tr>
+                                            <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td> 
+                                            <td> {{ ai.category }} </td>
+                                            <td> {{ai.numvotes}}</td>
+                                            <td> {{ai.date_created}} </td>
+                                        </tr>
                                      {% endfor %}
-                                    {% else %}
-                                        <p>No action ideas are available.</p>
+                            </table>     
+                            {% else %}
+                                <p>No action ideas are available.</p>
                             {% endif %}
 
                         </div>
