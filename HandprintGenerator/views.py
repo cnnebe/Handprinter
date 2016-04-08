@@ -92,6 +92,12 @@ def detail(request, actionidea_id):
         context['reason'] = ActionIdeaInactive.objects.get(action_idea = ActionIdea.objects.get(pk=actionidea_id))
     except: 
         context['reason'] = False
+    if request.POST.get('restore'):
+        ai = ActionIdea.objects.get(pk=actionidea_id)
+        ai.active = True
+        ai.save()
+        ActionIdeaInactive.objects.get(action_idea = ai).delete()
+        return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
     if request.POST.get('unvote'):
         ActionIdeaVote.objects.get(action_idea = ActionIdea.objects.get(pk=actionidea_id), user = request.user).delete()
         return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
@@ -217,8 +223,10 @@ def new_user(request):
         if form.is_valid():
             #create the objects and ties them together
             new_user = form.save(commit=False)
+            if User.objects.filter(email = new_user.email ).exists():
+                context["error"] = "error"
+                return render(request, 'registration/new_user.html', context)
             new_user.save() 
-            
             x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
             if x_forwarded_for:
                 ip = x_forwarded_for.split(',')[0]

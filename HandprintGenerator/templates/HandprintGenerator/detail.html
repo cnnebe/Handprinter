@@ -30,15 +30,23 @@
                 <ul>
                  <li> <b>Reason:</b> {{reason.reason}} </li>
                  </ul>
-        {% endif %}
+                {% endif %}
             {% endif %}
-            <p> Submitted By: {{ ai.creator.first_name }} {{ ai.creator.last_name }}</p>
+            <p> Submitted By: {{ ai.creator.username}}</p>
             {% if ai.creator == request.user or user.is_staff or user.profile.role == "Moderator" %}
                 <a href="{% url 'HandprintGenerator:edit_action_idea' ai.id %}">Edit Action Idea</a>
                 {% if ai.active %}
                     <a href="{% url 'HandprintGenerator:delete_action_idea' ai.id%}">Delete Action Idea</a> 
+                {% elif not ai.active %}
+                    {% if user.is_staff or user.profile.role == "Moderator" %}
+                        <form action="/handprintgenerator/{{ ai.id }}/" method="post">
+                            <input type="submit" name="restore" value="Restore Action Item">
+                            {% csrf_token %}
+                        </form>
+                    {% endif %}
                 {% endif %}
             {% endif %}
+
             {% if user.is_authenticated and ai.active %}                
                 {% if userVote %}
                     <form action="/handprintgenerator/{{ ai.id }}/" method="post">
