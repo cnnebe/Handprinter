@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('HandprintGenerator', '0004_auto_20160331_0327'),
+        ('HandprintGenerator', '0001_initial'),
     ]
 
     operations = [
