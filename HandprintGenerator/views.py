@@ -21,14 +21,11 @@ def home(request):
     return render(request, 'HandprintGenerator/home.html', context)
 
 def user_profile(request):
-    if request.user.is_anonymous:
-        return render(request, 'HandprintGenerator/user_profile.html')
-    else:
-        ideas = ActionIdea.objects.filter(creator=request.user, active=True).order_by('-date_created')
-        context = {
-        'ideas': ideas
-        }
-        return render(request, 'HandprintGenerator/user_profile.html', context)
+    ideas = ActionIdea.objects.filter(creator=request.user, active=True).order_by('-date_created')
+    context = {
+    'ideas': ideas
+    }
+    return render(request, 'HandprintGenerator/user_profile.html', context)
 
 def index(request):
     context = {}
