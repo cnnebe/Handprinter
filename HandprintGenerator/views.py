@@ -23,10 +23,13 @@ def home(request):
     return render(request, 'HandprintGenerator/home.html', context)
 
 def user_profile(request):
-    ideas = ActionIdea.objects.filter(creator=request.user, active=True).order_by('-date_created')
-    context = {
-    'ideas': ideas
-    }
+    try:
+        context = {}
+        context['myideas'] = ActionIdea.objects.filter(creator=request.user, active=True).order_by('-date_created')
+        context['mycomments'] = ActionIdeaComment.objects.filter(user = request.user)
+        context['myvotes'] = ActionIdeaVote.objects.filter(user = request.user)
+    except:
+        pass
     return render(request, 'HandprintGenerator/user_profile.html', context)
 
 def index(request):
