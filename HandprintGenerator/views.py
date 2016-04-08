@@ -33,13 +33,15 @@ def user_profile(request):
                 u = User.objects.get(id=request.user.id)
                 u.email = request.POST.get('change_email')
                 u.save()
-                return HttpResponseRedirect('/profile')
+                return HttpResponseRedirect('/logout')
         if request.method == "POST":
             if request.POST.get('change_password') and request.POST.get('change_password') != '':
+                if request.POST.get('change_password') != request.POST.get('change_password_confirmation'):
+                    return HttpResponseRedirect('/profile')
                 u = User.objects.get(id=request.user.id)
                 u.set_password(request.POST.get('change_password'))
                 u.save()
-                return HttpResponseRedirect('/profile')
+                return HttpResponseRedirect('/logout')
     except:
         pass
     return render(request, 'HandprintGenerator/user_profile.html', context)
