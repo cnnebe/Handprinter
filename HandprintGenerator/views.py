@@ -1,5 +1,5 @@
 from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.template import loader
+from django.template import loader, RequestContext
 from django.shortcuts import get_object_or_404, render
 from django.db import transaction
 from django.contrib.auth import authenticate, login, logout
@@ -8,6 +8,8 @@ from django.contrib import auth
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
+from django.contrib.gis import geoip2
+from django.contrib.gis.geoip2 import GeoIP2
 
 from .models import * 
 from .forms import *
@@ -21,35 +23,38 @@ def home(request):
     return render(request, 'HandprintGenerator/home.html', context)
 
 def user_profile(request):
-    if request.user.is_anonymous:
-        return render(request, 'HandprintGenerator/user_profile.html')
-    else:
-        ideas = ActionIdea.objects.filter(creator=request.user, active=True).order_by('-date_created')
-        context = {
-        'ideas': ideas
-        }
-        return render(request, 'HandprintGenerator/user_profile.html', context)
+    try:
+        context = {}
+        context['myideas'] = ActionIdea.objects.filter(creator=request.user, active=True).order_by('-date_created')
+        context['mycomments'] = ActionIdeaComment.objects.filter(user = request.user)
+        context['myvotes'] = ActionIdeaVote.objects.filter(user = request.user)
+    except:
+        pass
+    return render(request, 'HandprintGenerator/user_profile.html', context)
 
 def index(request):
+    # Action Idea Objects divided by activity and sorted by category, popularity and most recent. 
     context = {}
     context['action_ideas_inactive'] = ActionIdea.objects.filter(active=False).order_by('-date_created')
-    context['action_ideas_active'] = ActionIdea.objects.filter(active=True).order_by('-date_created')#[:5]
+    context['action_ideas_active'] = ActionIdea.objects.filter(active=True).order_by('-date_created')
     context['action_ideas_work_inactive'] = ActionIdea.objects.filter(active=False, category = 'work').order_by('-date_created')
     context['action_ideas_work_active'] = ActionIdea.objects.filter(active=True, category = 'work').order_by('-date_created')
     context['action_ideas_food_inactive'] = ActionIdea.objects.filter(active=False, category = 'food').order_by('-date_created')
     context['action_ideas_food_active'] = ActionIdea.objects.filter(active=True, category = 'food').order_by('-date_created')
     context['action_ideas_community_inactive'] = ActionIdea.objects.filter(active=False, category = 'community').order_by('-date_created')
-    context['action_ideas_community_active'] = ActionIdea.objects.filter(active=True, category = 'community').order_by('-date_created') #[:5]
+    context['action_ideas_community_active'] = ActionIdea.objects.filter(active=True, category = 'community').order_by('-date_created') 
     context['action_ideas_home_inactive'] = ActionIdea.objects.filter(active=False, category = 'home').order_by('-date_created')
-    context['action_ideas_home_active'] = ActionIdea.objects.filter(active=True, category = 'home').order_by('-date_created') #[:5]
+    context['action_ideas_home_active'] = ActionIdea.objects.filter(active=True, category = 'home').order_by('-date_created') 
     context['action_ideas_clothing_inactive'] = ActionIdea.objects.filter(active=False, category = 'clothing').order_by('-date_created')
-    context['action_ideas_clothing_active'] = ActionIdea.objects.filter(active=True, category = 'clothing').order_by('-date_created') #[:5]
+    context['action_ideas_clothing_active'] = ActionIdea.objects.filter(active=True, category = 'clothing').order_by('-date_created') 
     context['action_ideas_mobility_inactive'] = ActionIdea.objects.filter(active=False, category = 'mobility').order_by('-date_created')
-    context['action_ideas_mobility_active'] = ActionIdea.objects.filter(active=True, category = 'mobility').order_by('-date_created') #[:5]
+    context['action_ideas_mobility_active'] = ActionIdea.objects.filter(active=True, category = 'mobility').order_by('-date_created') 
     context['action_ideas_other_inactive'] = ActionIdea.objects.filter(active=False, category = 'other').order_by('-date_created')
-    context['action_ideas_other_active'] = ActionIdea.objects.filter(active=True, category = 'other').order_by('-date_created') #[:5]
+    context['action_ideas_other_active'] = ActionIdea.objects.filter(active=True, category = 'other').order_by('-date_created') 
     context['action_ideas_vote_inactive'] = ActionIdea.objects.filter(active=False).annotate(num_votes=Count('actionideavote')).order_by('-num_votes')
-    context['action_ideas_vote_active'] = ActionIdea.objects.filter(active=True).annotate(num_votes=Count('actionideavote')).order_by('-num_votes') #[:5]
+    context['action_ideas_vote_active'] = ActionIdea.objects.filter(active=True).annotate(num_votes=Count('actionideavote')).order_by('-num_votes') 
+    
+    #Voting Functionality
     try:
         context['userVotes'] = ActionIdeaVote.objects.filter(user=request.user).values_list('action_idea', flat=True)
     except:
@@ -62,11 +67,10 @@ def index(request):
         v.save()
         return HttpResponseRedirect('/index')
 
-
+    #Search Functionality
     if request.method == 'GET':
         # create a form instance and populate it with data from the request:
         form = SearchForm(request.GET)
-        # check whether it's valid:
         if form.is_valid():
             search_term = form.cleaned_data['SearchTerm']
             print(search_term)
@@ -74,10 +78,6 @@ def index(request):
             context['action_ideas_search_active'] = ActionIdea.objects.filter(tags__name = search_term)
             return HttpResponseRedirect('/HandprintGenerator/searchresults/')
 
-    #context['action_ideas_inactive'] = ActionIdea.objects.filter(active=True).order_by('-date_created')
-	#context['action_ideas']  = sorted(ActionIdea.objects.all(), key=lambda ai: ai.numvotes)
-	#context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
-	#context['action_ideas'] = ActionIdea.objects.order_by('-date_created')
     return render(request, 'HandprintGenerator/index.html', context)
 
 @transaction.atomic
@@ -219,8 +219,19 @@ def new_user(request):
             new_user = form.save(commit=False)
             new_user.save() 
             
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+            if x_forwarded_for:
+                ip = x_forwarded_for.split(',')[0]
+            else:
+                ip = request.META.get('REMOTE_ADDR')
+            if ip == '127.0.0.1':
+                ip = '72.14.207.99'
+            g = GeoIP2()
+            g = g.city(ip)
+            loc = g['city'] + ', ' + g['region'] + ', ' + g['country_name']
+            
             #creating an accompanying profile with role
-            user_profile = Profile(role='member', user_id=new_user.id)
+            user_profile = Profile(role='member', location=loc, user_id=new_user.id)
             user_profile.save()
             
             return HttpResponseRedirect('/login')

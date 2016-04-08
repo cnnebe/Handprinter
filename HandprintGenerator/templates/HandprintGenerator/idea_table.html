@@ -1,0 +1,89 @@
+<!-- This template is rendered in index.html and creates the action idea table depending on the filter or tab selected. -->
+{% load staticfiles %}
+
+<!-- Differentiate Active and Inactive Ideas for Staff -->
+{% if user.profile.role == "Moderator" or user.is_staff %}
+    <h2> Active </h2>
+{% endif %}
+
+<!-- Active Action Idea Table -->
+<table>
+    {% if idea_list_active %}
+        <tr>
+            <th data-toggle="tooltip" title="The title of the action idea.">Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <th data-toggle="tooltip" title="Context this idea is applicable in.">Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+            <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+            <th>Date Created</th>
+        <tr>
+<!-- "using page" allows different categories to be paginated independently. -->
+        {% for ai in idea_list_active %}
+            <td data-toggle="tooltip" title="Click on an idea to learn more about it and comment!">
+                <a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }} </a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>                 
+            <td> {{ ai.category }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+            <td> {{ai.numvotes}}&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+            <td> {{ai.date_created}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+            <!-- Allows Users to Vote if Logged in-->
+            {% if user.is_authenticated %}                
+            <td> 
+                {% if ai.id in userVotes %}
+                    <form action="" method="post">
+                        <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                        <input type="submit" name="unvote" value="Unvote">
+                        {% csrf_token %}
+                    </form>
+                {% else %}
+                    <form action="" method="post">
+                        <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                        <input type="submit" name="vote" data-toggle="tooltip" title="The more votes an ideas has, the greater likelihood it will be selected for enviornmental impact modeling by researchers!" value="Vote">
+                        {% csrf_token %}
+                    </form>
+                {% endif %}
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    {% else %}
+        <!-- Different Prompts if regular index/popular, category filtering, and search-->
+        {% if idea_list_active == action_ideas_active or idea_list_active == action_ideas_vote_active %}
+            <h4>No action ideas are available, why don't you <a href=/new>add one.</a> </h4>
+        {% elif idea_list_active = ai_search_active %}
+            <h4>No results found during your search. Why don't you <a href=/new>add an action idea with the tag you searched for.</a> </h4>
+        {% else %}
+            <h4>No action ideas are available in this category, why don't you <a href=/new>add one.</a> Try looking in another category or go back to the <a href=/index>main index.</a> </h4>
+        {% endif %}
+    {% endif %}
+</table>
+<br>
+
+<!-- Inactive Action Idea Table -->
+{% if user.profile.role == "Moderator" or user.is_staff %}
+    <h2>Inactive</h2>
+    <table>
+        {% if idea_list_inactive %}
+            <tr>
+                <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+                <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th> <!-- Can't vote on inactive ideas. -->
+                <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+            </tr>
+            {% for ai in idea_list_inactive %}
+                <tr>
+                    <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
+                    <td> {{ ai.category }} </td>
+                    <td> {{ai.numvotes}}</td>
+                    <td> {{ai.date_created}} </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <!-- Different Prompts if regular index/popular, category filtering, and search -->
+            {% if idea_list_inactive == action_ideas_inactive or idea_list_inactive == action_ideas_vote_inactive %}
+                <h4>There are no inactive action ideas. To make an idea inactive, you must delete it.</h4>
+            {% elif idea_list_inactive = ai_search_inactive %}
+                <h4>No inactive action ideas found during the search. You can search for deleted action ideas using a tag associated with it.</h4>
+            {% else %}
+                <h4>There are no inactive action ideas in this category. To make an idea inactive, you must delete it. Try looking in another category or go back to the <a href=/index>main index.</a></h4>
+            {% endif %}
+        {% endif %}
+    </table>
+{% endif %}
+
