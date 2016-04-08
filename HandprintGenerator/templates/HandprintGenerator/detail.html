@@ -39,6 +39,7 @@
                     <a href="{% url 'HandprintGenerator:delete_action_idea' ai.id%}">Delete Action Idea</a> 
                 {% endif %}
             {% endif %}
+            <br><br>
             {% if user.is_authenticated and ai.active %}                
                 {% if userVote %}
                     <form action="/handprintgenerator/{{ ai.id }}/" method="post">
@@ -51,6 +52,13 @@
                         {% csrf_token %}
                     </form>
                 {% endif %}
+                <br>
+                <form action="" method="post">
+                        <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                        <input type="submit" name="report" data-toggle="tooltip" title="You can report this entry to moderators if you believe that it is offensive, inappropriate, irrelevant and/or violates the terms of service." value="Report as Inappropriate">
+                        {% csrf_token %}
+                </form>
+                <br>
             {% endif %}
         </div>
         <div id="comments">
@@ -61,12 +69,18 @@
                     <p> {{ c.text }}</p>
                     <p> <b> {{ c.user.username}} </b> on {{c.date_created}}</p>
                     {% if user.is_authenticated %}
+                        <p><form action="" method="post">
+                            <input type="hidden" name="comment_reported" value="{{ c.id }}">
+                            <input type="submit" name="report_comment" data-toggle="tooltip" title="You can report this entry to moderators if you believe that it is offensive, inappropriate, irrelevant and/or violates the terms of service." value="Report as Inappropriate">
+                            {% csrf_token %}
+                        </form></p>
                         {% if c.user == request.user or user.profile.role == "Moderator" or user.is_staff %}
-                        <form action="/handprintgenerator/{{ ai.id }}/" method="post">
+                        <p><form action="/handprintgenerator/{{ ai.id }}/" method="post">
                             <input type="hidden" name="comment" value="{{ c.id }}">
                             <input type="submit" name="delete" value="Delete Comment">
                             {% csrf_token %}
-                        </form>
+                        </form></p>
+                        <br><br> 
                         {% endif %}
                     {% endif %}
                 </li>
