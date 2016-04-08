@@ -23,14 +23,14 @@ def home(request):
     return render(request, 'HandprintGenerator/home.html', context)
 
 def user_profile(request):
-    if request.user.is_anonymous:
-        return render(request, 'HandprintGenerator/user_profile.html')
-    else:
-        ideas = ActionIdea.objects.filter(creator=request.user, active=True).order_by('-date_created')
-        context = {
-        'ideas': ideas
-        }
-        return render(request, 'HandprintGenerator/user_profile.html', context)
+    try:
+        context = {}
+        context['myideas'] = ActionIdea.objects.filter(creator=request.user, active=True).order_by('-date_created')
+        context['mycomments'] = ActionIdeaComment.objects.filter(user = request.user)
+        context['myvotes'] = ActionIdeaVote.objects.filter(user = request.user)
+    except:
+        pass
+    return render(request, 'HandprintGenerator/user_profile.html', context)
 
 def index(request):
     # Action Idea Objects divided by activity and sorted by category, popularity and most recent. 

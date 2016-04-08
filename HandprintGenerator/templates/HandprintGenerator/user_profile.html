@@ -28,13 +28,13 @@
                         </a>
                     </li>
                     <li>
-                        <a data-toggle="tab" href="#email">
-                            <span class="glyphicon glyphicon-envelope"></span>
+                        <a data-toggle="tab" href="#myactionitems">
+                            <span class="glyphicon glyphicon-tree-deciduous" ></span>
                         </a>
                     </li>
                     <li>
-                        <a data-toggle="tab" href="#events">
-                            <span class="glyphicon glyphicon-calendar"></span>
+                        <a data-toggle="tab" href="#myhistory">
+                            <span class="glyphicon glyphicon-thumbs-up"></span>
                         </a>
                     </li>
                 </ul>
@@ -58,39 +58,65 @@
                         <div id="settings" class="tab-pane">
                             <h4>Settings</h4>
                         </div>
-                        <div id="email" class="tab-pane">
+                        <div id="myactionitems" class="tab-pane">
                             <h4>My Action Ideas</h4>
-                            {% if ideas %}
-                                    {% for ai in ideas %}
-                                    <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th>
-                                        {% if ai.user == user.username %}
-                                                <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td> 
-                                                <td> {{ ai.category }} </td>
-                                                <td> {{ai.numvotes}}</td>
-                                                <td> {{ai.date_created}} </td>
-                                        {% endif %}
-                                            </tr>
+                            {% if myideas %}
+                            <table>
+                                <tr>
+                                    <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                    <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+                                    <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+                                    <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+                                </tr>
+                                    {% for ai in myideas %}
+                                        <tr>
+                                            <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td> 
+                                            <td> {{ ai.category }} </td>
+                                            <td> {{ai.numvotes}}</td>
+                                            <td> {{ai.date_created}} </td>
+                                        </tr>
                                      {% endfor %}
-                                    {% else %}
-                                        <p>No action ideas are available.</p>
+                            </table>     
+                            {% else %}
+                                <p>You haven't suggested any action ideas. Create one <a href=/new>here</a>!</p>
                             {% endif %}
 
                         </div>
-                        <div id="events" class="tab-pane">
-                            <h4>Action Idea History</h4>
-                            <p>
+                        <div id="myhistory" class="tab-pane">
+                            <h4>My Comment History</h4>
+                            <table>
+                                {% if mycomments %}
                                 <table>
-                                    {% if ideas %}
-                                    {% for ai in ideas %}
-                                    <tr><th>Action Idea</th><th>Category</th><th>Votes</th><th>Date Created</th>
-                                                <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
-                                                <td> {{ ai.category }} </td>
-                                                <td> {{ai.numvotes}}</td>
-                                                <td> {{ai.date_created}} </td>
-                                            </tr>
+                                <tr>
+                                    <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                    <th>Comment &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+                                </tr>
+                                    {% for comment in mycomments %}
+                                        <tr>
+                                            <td><a href="{% url 'HandprintGenerator:detail' comment.action_idea.id %}">{{ comment.action_idea.name }}</a></td> 
+                                            <td> {{comment.text}} </td>
+                                        </tr>
                                      {% endfor %}
+                                </table>  
+                                {% else %}
+                                    <p>You have no comments.</p>
+                                {% endif %}
+                            </table>
+                            <h4>My Voting History</h4>
+                                <table>
+                                    {% if myvotes %}
+                                    <table>
+                                    <tr>
+                                        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                    </tr>
+                                        {% for vote in myvotes %}
+                                            <tr>
+                                                <td><a href="{% url 'HandprintGenerator:detail' vote.action_idea.id %}">{{ vote.action_idea.name }}</a></td> 
+                                            </tr>
+                                         {% endfor %}
+                                    </table>  
                                     {% else %}
-                                        <p>No action ideas are available.</p>
+                                        <p>You have no comments.</p>
                                     {% endif %}
 
                                 </table>
