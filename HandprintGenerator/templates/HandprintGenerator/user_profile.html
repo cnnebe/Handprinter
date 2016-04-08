@@ -85,6 +85,25 @@
 
                         <div id="settings" class="tab-pane">
                             <h4>Settings</h4>
+                            <br><br>
+                            <table class='table'>
+                                <form action="/profile"" method="post">
+		                       
+                                    Enter New Email: <input type="text" name="change_email"><br><br>
+                                                    
+                                    <input class="btn btn-primary btn-block" type="submit" name="Change Email" value="Permanently Change Email on File">
+                                    {% csrf_token %}
+                                </form>
+                                <br> <br>
+                                <form action="/profile" method="post">
+		                       
+                                    Enter New Password: <input type="password" name="change_password"><br><br>
+                                    Confirm New Password: <input type="password" name="change_password_confirmation"><br><br>
+                                                    
+                                    <input class="btn btn-primary btn-block" type="submit" name="Change Password" value="Permanently Change Account Password">
+                                    {% csrf_token %}
+                                </form>
+                            </table>
                         </div>
 
 
@@ -159,6 +178,11 @@
 
                         <div id="control" class="tab-pane">
                             <h4>Superuser Controls</h4>
+                            <i>This tab is only visible to administrators</i>
+                            <br>
+                            <p>
+                                There will be an option to send a message to every user registered. Coming soon!
+                            </p>
                         </div>
 
 

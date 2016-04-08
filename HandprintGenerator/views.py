@@ -28,6 +28,20 @@ def user_profile(request):
         context['myideas'] = ActionIdea.objects.filter(creator=request.user, active=True).order_by('-date_created')
         context['mycomments'] = ActionIdeaComment.objects.filter(user = request.user)
         context['myvotes'] = ActionIdeaVote.objects.filter(user = request.user)
+        if request.method == "POST":
+            if request.POST.get('change_email') and request.POST.get('change_email') != '':
+                u = User.objects.get(id=request.user.id)
+                u.email = request.POST.get('change_email')
+                u.save()
+                return HttpResponseRedirect('/logout')
+        if request.method == "POST":
+            if request.POST.get('change_password') and request.POST.get('change_password') != '':
+                if request.POST.get('change_password') != request.POST.get('change_password_confirmation'):
+                    return HttpResponseRedirect('/profile')
+                u = User.objects.get(id=request.user.id)
+                u.set_password(request.POST.get('change_password'))
+                u.save()
+                return HttpResponseRedirect('/logout')
     except:
         pass
     return render(request, 'HandprintGenerator/user_profile.html', context)
