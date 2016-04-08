@@ -50,13 +50,13 @@
                                 <span class="glyphicon glyphicon-tree-deciduous"></span>
                             </a>
                         </li>
-                        {% if user.is_superuser %}
+                       {% if user.is_superuser %} 
                         <li>
-                            <a data-toggle="tab" href="#mycontrol">
+                            <a data-toggle="tab" href="#control">
                                 <span class="glyphicon glyphicon-star"></span>
                             </a>
                         </li>
-                        {% endif %}
+                        {% endif %} 
                     </ul>
 
                 <div class="user-body">
@@ -153,15 +153,15 @@
                                     {% endif %}
 
                                 </table>
+                        </div>
 
                         <!-- control tab for superuser -->
 
-                        <div id="mycontrol" class="tab-pane">
+                        <div id="control" class="tab-pane">
                             <h4>Superuser Controls</h4>
                         </div>
 
 
-                        </div>
                         <!-- end of content for user tab content-->
 
                     </div>
