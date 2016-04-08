@@ -1,91 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-        
 
 <h2> Search Results for "{% firstof search_term %}"</h2>
-
- 
- <br>
-
- <a href="/index">Go Back to Index</a></li>
-
+<br>
+<a href="/index">Go Back to Index</a></li>
 <br><br>
 
-
+<!-- Search Bar -->
 <form action="/searchresults" method="get">
     {% csrf_token %}
     <label for="search">Search for Ideas by Tags: </label>
     <input id="search" type="text" name="searchTerm" value="{{ searchTerm }}">
     <input type="submit" value="Search">
 </form>
-
 <br><br>
 
-    {% if user.profile.role == "Moderator" or user.is_staff %}
-    <h2> Active </h2>
-    {% endif %}
-    <table>
-    {% if ai_search_active %}
-    <tr>
-        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
-        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
-        <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
-    </tr>
-        {% for ai in ai_search_active %}
-            <tr>
-                <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }} </a> </td>                 
-                <td> {{ ai.category }} </td>
-                <td> {{ai.numvotes}}</td>
-                <td> {{ai.date_created}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
-                {% if user.is_authenticated %}                
-                <td> 
-                    {% if ai.id in userVotes %}
-                        <form action="" method="post">
-                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
-                            <input type="submit" name="unvote" value="Unvote">
-                            {% csrf_token %}
-                        </form>
-                    {% else %}
-                        <form action="" method="post">
-                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
-                            <input type="submit" name="vote" value="Vote">
-                            {% csrf_token %}
-                        </form>
-                    {% endif %}
-                </td>
-                {% endif %}
-            </tr>
-        {% endfor %}
-    {% else %}
-        <h4>No results found during your search. Why don't you <a href=/new>add an action idea with the tag you searched for.</a> </h4>
-    {% endif %}
-
-    </table>
-    <br>
-    {% if user.profile.role == "Moderator" or user.is_staff %}
-        <h2> Inactive</h2>
-        <table>
-        {% if ai_search_inactive %}
-       <tr>
-        <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-        <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
-        <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
-        <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
-    </tr>
-            {% for ai in ai_search_inactive %}
-                <tr>
-                    <td><a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }}</a></td>                
-                    <td> {{ ai.category }} </td>
-                    <td> {{ai.numvotes}}</td>
-                    <td> {{ai.date_created}} </td>
-                </tr>
-            {% endfor %}
-        {% else %}
-            <h4>No inactive action ideas found during the search. You can search for deleted action ideas using a tag associated with it.</h4>
-        {% endif %}
-    </table>
-    {% endif %}
-
+<!-- One variable for active, one for inactive, and page allows for independent pagination.-->
+{% include "HandprintGenerator/idea_table.html" with idea_list_active=ai_search_active idea_list_inactive=ai_search_inactive page="search" %}
+    
 {% endblock %}
