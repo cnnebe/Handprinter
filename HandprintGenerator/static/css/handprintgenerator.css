@@ -11,20 +11,26 @@ body {
   margin-top: 50px;
   padding: 0;
   margin-bottom: 80px;
-  background-image: gray;
-  text-align: center; /* !!! */
+  background: rgb(250, 250, 250);
+  /*background-color: rgb(250, 250, 250);*/
+  text-align: center; 
 }
 
 
 .footer{
-  position: absolute;
+  padding: 10px 0;
+  color: black;
+  position: fixed;
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
   height: auto;
-  background-color: gray;
+  background-color: white;
 }
 
+.footer .nav.navbar-nav li a{
+  color: black;
+}
 
 
 /* CUSTOMIZE THE NAVBAR
@@ -33,8 +39,8 @@ body {
 
 /* Special class on .container surrounding .navbar, used for positioning it into place. */
 .navbar-wrapper {
- /* position: absolute; */
-  top: 0;
+  /*position: absolute; */
+  top: 30;
   right: 0;
   left: 0;
   z-index: 0;
@@ -49,7 +55,7 @@ body {
 .navbar-wrapper .navbar {
   /*padding-right: 15px;
   padding-left: 15px;*/
-  background: linear-gradient(rgb(47, 167, 142), rgb(40, 155, 130));
+  background: rgb(256, 256, 256);
   border-color: black;
   font-size: 14px;
 }
@@ -64,7 +70,7 @@ body {
 }
 
 .nav.navbar-nav li a {
-    color: white;
+    color: rgb(47, 167, 142);
 }
 
 
@@ -100,8 +106,8 @@ body {
 /* Home css */
 
 .well {
-    /* background: rgba(53, 154, 136, 1); */
-    background: #98C748;
+    /* background: #98C748; */
+    background: rgb(47, 167, 142);
     border-color: black;
     color: white;
     font-size: 20px;
@@ -116,6 +122,59 @@ body {
   color: black;
 }
 
+
+.banner {
+    padding: 100px 0;
+    color: #f8f8f8;
+    background: url(../img/banner-bg.jpg) no-repeat center center;
+    background-size: cover;
+    border-color: black;
+}
+
+.banner h2 {
+    margin: 0;
+    text-shadow: 2px 2px 3px rgba(0,0,0,0.6);
+    font-size: 3em;
+}
+
+.banner ul {
+    margin-bottom: 0;
+}
+
+.banner-social-buttons {
+    float: right;
+    margin-top: 0;
+}
+
+@media(max-width:1199px) {
+    ul.banner-social-buttons {
+        float: left;
+        margin-top: 15px;
+    }
+}
+
+@media(max-width:767px) {
+    .banner h2 {
+        margin: 0;
+        text-shadow: 2px 2px 3px rgba(0,0,0,0.6);
+        font-size: 3em;
+    }
+
+    ul.banner-social-buttons > li {
+        display: block;
+        margin-bottom: 20px;
+        padding: 0;
+    }
+
+    ul.banner-social-buttons > li:last-child {
+        margin-bottom: 0;
+    }
+}
+
+
+p.copyright {
+    margin: 15px 0 0;
+}
 /* RESPONSIVE CSS
 -------------------------------------------------- */
 

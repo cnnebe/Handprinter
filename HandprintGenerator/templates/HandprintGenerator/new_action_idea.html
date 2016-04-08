@@ -4,6 +4,8 @@
 
 <!-- If no existing ID, then create a new action idea. -->
 {% if action_id == None %}
+
+<div class="container">
     <h1> Create a new Handprint action idea </h1>
 
         <!-- Button trigger modal -->
@@ -74,10 +76,13 @@
     <h3> You cannot edit action ideas that you did not submit. <br> <br> You can view action ideas <a href="/index">here.</a> </h3>
 {% endif %}
 
+</div>
+
 <!-- Modal Javascript -->
 <script>
     $('#myModal').on('shown.bs.modal', function () {
         $('#myInput').focus()
         })
 </script>
+
 {% endblock %}
