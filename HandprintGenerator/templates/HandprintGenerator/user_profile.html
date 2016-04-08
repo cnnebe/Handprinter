@@ -4,47 +4,72 @@
 
 {% if user.is_authenticated %}
 
-<br><br><br><br><br>
-<div class="container">
-    <div class="row centered">
-        <div class="col-xs-12 col-md-12 user-details">
-            <div class="user-image">
-            <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
-            </div>
+<br><br> 
+
+<div class="use_profile">
+    <div class="container">
+        <div class="row ">
+            <div class="col-xs-12 col-md-12 user-details">
+            
+
+
+                    <!-- user profile image -->
+                    <div class="user-image">
+                    <img id="profile-img" class="profile-img-card" src="static/img/Pear_Leaf.jpg" />
+                    </div> 
+
             <div class="user-info-block">
-                <div class="user-heading">
-                    <h3>{{ user.first_name }} {{ user.last_name }}</h3>
-                    <span class="help-block">{{ user.profile.location }}</span>
-                </div>
-                <ul class="navigation">
-                    <li class="active">
-                        <a data-toggle="tab" href="#information">
-                            <span class="glyphicon glyphicon-user"></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href="#settings">
-                            <span class="glyphicon glyphicon-cog"></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href="#myactionitems">
-                            <span class="glyphicon glyphicon-tree-deciduous" ></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href="#myhistory">
-                            <span class="glyphicon glyphicon-thumbs-up"></span>
-                        </a>
-                    </li>
-                </ul>
+
+                    <!-- heading for user profile page  -->
+                    <div class="user-heading">
+                        {% if user.first_name != "" and user.last_name != "" %}
+                            <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+                        {% else %}  
+                            <h3>{{ user.username }}</h3>
+                        {% endif %}
+                        <span class="help-block">{{ user.profile.location }}</span>
+                    </div>
+                    <ul class="navigation">
+                        <li class="active">
+                            <a data-toggle="tab" href="#information">
+                                <span class="glyphicon glyphicon-user"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#settings">
+                                <span class="glyphicon glyphicon-cog"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#myactionitems">
+                                <span class="glyphicon glyphicon-leaf" ></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#myhistory">
+                                <span class="glyphicon glyphicon-tree-deciduous"></span>
+                            </a>
+                        </li>
+                       {% if user.is_superuser %} 
+                        <li>
+                            <a data-toggle="tab" href="#control">
+                                <span class="glyphicon glyphicon-star"></span>
+                            </a>
+                        </li>
+                        {% endif %} 
+                    </ul>
+
                 <div class="user-body">
                     <div class="tab-content">
+
+                        <!-- information tab for user-->
                         <div id="information" class="tab-pane active">
                             <h4>Account Information</h4>
                             <table>
+                            {% if user.first_name != "" and user.last_name != "" %}
                                 <tr>Name: {{ user.first_name }} {{ user.last_name }}</tr>
                                 <br>
+                            {% endif %}
                                 <tr>Username: {{ user.username }}</tr>
                                 <br>
                                 <tr>Email: {{ user.email }}</tr> 
@@ -55,9 +80,15 @@
                                 <br>
                             </table>
                         </div>
+
+                        <!-- settings tab for user-->
+
                         <div id="settings" class="tab-pane">
                             <h4>Settings</h4>
                         </div>
+
+
+                        <!-- my action ideas tab for user-->
                         <div id="myactionitems" class="tab-pane">
                             <h4>My Action Ideas</h4>
                             {% if myideas %}
@@ -80,8 +111,10 @@
                             {% else %}
                                 <p>You haven't suggested any action ideas. Create one <a href=/new>here</a>!</p>
                             {% endif %}
-
                         </div>
+
+
+                        <!-- action idea history tab for user-->
                         <div id="myhistory" class="tab-pane">
                             <h4>My Comment History</h4>
                             <table>
@@ -116,19 +149,28 @@
                                          {% endfor %}
                                     </table>  
                                     {% else %}
-                                        <p>You have no comments.</p>
+                                        <p>You have not voted on anything.</p>
                                     {% endif %}
 
                                 </table>
-                            </p>
                         </div>
+
+                        <!-- control tab for superuser -->
+
+                        <div id="control" class="tab-pane">
+                            <h4>Superuser Controls</h4>
+                        </div>
+
+
+                        <!-- end of content for user tab content-->
+
                     </div>
                 </div>
             </div>
         </div>
 	</div>
 </div>
-
+</div>
 {% else %}
 
 <h3> Please <a href=/login>login</a> or create a <a href=/create_user>new account</a> to view your profile. </h3>
@@ -136,5 +178,7 @@
 {% endif %}
 
 <br><br><br><br>
+
+</div>
 
 {% endblock %}

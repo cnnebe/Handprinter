@@ -108,6 +108,47 @@ def detail(request, actionidea_id):
     if request.POST.get('delete'):
         c = get_object_or_404(ActionIdeaComment, pk = request.POST.get('comment')).delete()
         return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
+    if request.POST.get('report'):
+        action_idea = context['ai']
+        report_message = """Hi Handprinter Admin Team,
+            
+There has been an action idea reported as inappropriate.
+
+Action Idea ID: %d
+Action Idea Title: %s
+Action Idea Description: %s
+Action Idea References: %s
+
+For your reference, the user who reported this is: %s
+
+Thanks,
+The Handprinter Team
+""" % (action_idea.id, action_idea.name, action_idea.description, action_idea.references, request.user.username)
+        send_mail('Reported Action Idea', report_message, 'handprinterteam@yahoo.com',
+    ['handprinterteam@yahoo.com'], fail_silently=False)
+        return HttpResponseRedirect('/index')
+    if request.POST.get('report_comment'):
+        action_idea = context['ai']
+        c = request.POST.get('comment_reported')
+        comment = ActionIdeaComment.objects.get(id = c)
+        report_message = """Hi Handprinter Admin Team,
+            
+There has been a comment reported as inappropriate.
+
+Comment ID: %d
+Comment Text: %s
+Comment Creator: %s
+Action Idea ID: %d
+Action Idea Name: %s
+
+For your reference, the user who reported this is: %s
+
+Thanks,
+The Handprinter Team
+""" % (comment.id, comment.text, User.objects.get(id = comment.user_id).username, action_idea.id, action_idea.name, request.user.username)
+        send_mail('Reported Action Idea Comment', report_message, 'handprinterteam@yahoo.com',
+    ['handprinterteam@yahoo.com'], fail_silently=False)
+        return HttpResponseRedirect('/index')
     form = CommentForm(request.POST)
     context['comment_form'] = form
     if request.method == "POST":
