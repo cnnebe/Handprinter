@@ -159,8 +159,7 @@ For your reference, the user who reported this is: %s
 Thanks,
 The Handprinter Team
 """ % (comment.id, comment.text, User.objects.get(id = comment.user_id).username, action_idea.id, action_idea.name, request.user.username)
-        send_mail('Reported Action Idea Comment', report_message, 'handprinterteam@yahoo.com',
-    ['handprinterteam@yahoo.com'], fail_silently=False)
+        send_mail('Reported Action Idea Comment', report_message, 'handprinterteam@yahoo.com', ['handprinterteam@yahoo.com'], fail_silently=False)
         return HttpResponseRedirect('/index')
     form = CommentForm(request.POST)
     context['comment_form'] = form
