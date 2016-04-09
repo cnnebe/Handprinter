@@ -138,8 +138,7 @@ For your reference, the user who reported this is: %s
 Thanks,
 The Handprinter Team
 """ % (action_idea.id, action_idea.name, action_idea.description, action_idea.references, request.user.username)
-        send_mail('Reported Action Idea', report_message, 'handprinterteam@yahoo.com',
-    ['handprinterteam@yahoo.com'], fail_silently=False)
+        send_mail('Reported Action Idea', report_message, 'handprinterteam@yahoo.com', ['handprinterteam@yahoo.com'], fail_silently=False)
         return HttpResponseRedirect('/index')
     if request.POST.get('report_comment'):
         action_idea = context['ai']
