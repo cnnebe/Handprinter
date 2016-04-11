@@ -10,7 +10,7 @@ from django.db.models import Count
 from django.contrib.gis import geoip2
 from django.contrib.gis.geoip2 import GeoIP2
 
-import stmplib
+from email import stmplib
 from email.mime.text import MIMEText
 from django.conf import settings
 
