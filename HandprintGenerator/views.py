@@ -5,11 +5,14 @@ from django.db import transaction
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import auth
-from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.contrib.gis import geoip2
 from django.contrib.gis.geoip2 import GeoIP2
+
+import stmplib
+from email.mime.text import MIMEText
+from django.conf import settings
 
 from .models import * 
 from .forms import *
@@ -124,7 +127,7 @@ def detail(request, actionidea_id):
         return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
     if request.POST.get('report'):
         action_idea = context['ai']
-        report_message = """Hi Handprinter Admin Team,
+        msg = MIMEText("""Hi Handprinter Admin Team,
             
 There has been an action idea reported as inappropriate.
 
@@ -137,8 +140,14 @@ For your reference, the user who reported this is: %s
 
 Thanks,
 The Handprinter Team
-""" % (action_idea.id, action_idea.name, action_idea.description, action_idea.references, request.user.username)
-        send_mail('Reported Action Idea', report_message, 'actions@handprinter.org', ['actions@handprinter.org',], fail_silently=False)
+""" % (action_idea.id, action_idea.name, action_idea.description, action_idea.references, request.user.username))
+        msg['Subject'] = "Reported Action Idea"
+        msg['From']    = "handprinter@%s" % MAILGUN_DOMAIN
+        msg['To']      = "actions@handprinter.org"
+        s = smtplib.SMTP(MAILGUN_SMTP_SERVER, MAILGUN_SMTP_PORT)
+        s.login(MAILGUN_SMTP_LOGIN, MAILGUN_SMTP_PASSWORD)
+        s.sendmail(msg['From'], msg['To'], msg.as_string())
+        s.quit()
         return HttpResponseRedirect('/index')
     if request.POST.get('report_comment'):
         action_idea = context['ai']
