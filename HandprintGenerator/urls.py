@@ -24,6 +24,14 @@ urlpatterns = [
     url(r'^forgot_password/$', views.forgot_password, name='forgot_password'),
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT, }),
     url(r'^searchresults$', views.search_results),
+    url(r'^index_popular$', views.index_popular, name='index_popular'),
+    url(r'^index_home$', views.index_home, name='index_home'),
+    url(r'^index_work$', views.index_work, name='index_work'),
+    url(r'^index_community$', views.index_community, name='index_community'),
+    url(r'^index_mobility$', views.index_mobility, name='index_mobility'),
+    url(r'^index_food$', views.index_food, name='index_food'),
+    url(r'^index_clothing$', views.index_clothing, name='index_clothing'),
+    url(r'^index_other$', views.index_other, name='index_other'),
 
 ]
 

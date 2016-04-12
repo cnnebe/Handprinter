@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-    {% include "HandprintGenerator/idea_page_header.html" with header="Action Ideas" filter="recent" %}
+    {% include "HandprintGenerator/idea_page_header.html" with header="Action Ideas Related to Mobility" filter="mobility" %}
     <!-- Tab Content. Renders template using idea_table.html based on contexts in views.py for index function-->
     <!-- One variable for active, one for inactive, and page allows for independent pagination.-->
-    {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_active idea_list_inactive=action_ideas_inactive page="main" %}   
+    {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_mobility_active idea_list_inactive=action_ideas_mobility_inactive page="mobility" %}
 </div>
 {% endblock %}
 

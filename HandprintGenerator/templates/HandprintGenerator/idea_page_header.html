@@ -1,0 +1,72 @@
+<!-- This template creates the page header depending on the filter or search result on all index_ pages and  the searchresults.html page.-->
+{% load staticfiles %}
+
+<div class="jumbotron">
+    <h1> {{header}} </h1>
+     <!-- Button trigger modal -->
+     <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">What is this?</button>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">A Global Collection of Eco-Friendly Ideas</h4>
+      </div>
+      <div class="modal-body">
+        <p> This page displays action ideas, submitted by people from all over the world. <b>Clicking on an idea's name</b> will allow you view specific details about that idea, such as its description, and allow you to comment on the idea. <br><br> You can also <b>filter</b> ideas by their category to match contexts' you're interested in and filter by popularity, to see what everyone else is interested in. <br><br> Ideas carry <b>tags</b>, and you can enter a tag to search for to find ideas tailored to your interests. <br><br> Finally, registered users can <b>vote</b> on an action idea, increasing it's chances of being modeled by researchers to determine it's environmental impact. Show your support or interest in an idea by voting or it! <p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-dismiss="modal">Got it!</button>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+
+<!-- Displays any messages resulting from errors or actions -->
+{% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+        <p{% if message.tags %} class="{{ message.tags }}"{% endif %}><b>{{ message }}</b></p>
+    {% endfor %}
+	</ul>
+{% endif %}
+
+<!-- Search Bar -->
+<form action="/searchresults" method="get">
+    {% csrf_token %}
+    <label for="search">Search for Ideas by Tags: </label>
+    <input id="search" type="text" name="searchTerm" value="{{ searchTerm }}">
+    <input type="submit" value="Search" class="btn btn-success">
+</form>
+<br><br>
+
+<!-- Filter Dropdown -->
+<div class="dropdown">
+	<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Filter By
+
+	<span class="caret"></span></button>
+	 <!-- Dropdown Options -->
+    <ul class="dropdown-menu" aria-labelledby="myTabDrop1" id="myTabDrop1-contents">
+    	<li><a href="/index">Most Recent</a></li>
+    	<li><a href="/index_popular">Most Popular</a></li>
+    	<li><a href="/index_home">Home</a></li>
+    	<li><a href="/index_work">Work</a></li>
+    	<li><a href="/index_community">Community</a></li>
+    	<li><a href="/index_mobility">Mobility</a></li>
+    	<li><a href="/index_food">Food</a></li>
+    	<li><a href="/index_clothing">Clothing</a></li>
+    	<li><a href="/index_other">Other</a></li>
+    </ul> 
+</div>
+
+ <!-- Modal Javascript -->
+<script type="text/javascript">
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').focus()
+        })
+</script>

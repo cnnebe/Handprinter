@@ -2,21 +2,12 @@
 
 {% block content %}
 
-<h2> Search Results for "{% firstof search_term %}"</h2>
-<br>
-<a href="/index" class="btn btn-primary">Go Back to Index</a></li>
-<br><br>
-
-<!-- Search Bar -->
-<form action="/searchresults" method="get">
-    {% csrf_token %}
-    <label for="search">Search for Ideas by Tags: </label>
-    <input id="search" type="text" name="searchTerm" value="{{ searchTerm }}">
-    <input type="submit" value="Search">
-</form>
-<br><br>
+<div class="container">
+<!-- Load Header, Filter Options, and Search Bar. Header var allows for custom header defined in search_results in view.py-->
+{% include "HandprintGenerator/idea_page_header.html" with header=header filter="all filter options will be shown" %}
 
 <!-- One variable for active, one for inactive, and page allows for independent pagination.-->
 {% include "HandprintGenerator/idea_table.html" with idea_list_active=ai_search_active idea_list_inactive=ai_search_inactive page="search" %}
+</div>
     
 {% endblock %}
