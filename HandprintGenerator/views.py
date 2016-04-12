@@ -76,8 +76,8 @@ def search_results(request):
             context['ai_search_inactive'] = ActionIdea.objects.filter(active=False, tags__name__in=[search_term]).order_by('-date_created')
             context['header'] = "Search Results for \"%s\"" % search_term
             #Pagination
-            paginate(context, context['ai_search_active'], request)
-            paginate(context, context['ai_search_inactive'], request)    
+            #paginate(context, context['ai_search_active'], request)
+            #paginate(context, context['ai_search_inactive'], request)    
             return render(request, 'HandprintGenerator/searchresults.html', context)
     #Returns to main index if unvote/vote button clicked on as the GET request cannot be refreshed upon vote/unvote action.
     return HttpResponseRedirect('/index')
