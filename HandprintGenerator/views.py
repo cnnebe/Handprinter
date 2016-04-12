@@ -148,7 +148,7 @@ Thanks,
 The Handprinter Team
 """ % (action_idea.id, action_idea.name, action_idea.description, action_idea.references, request.user.username))
         msg['Subject'] = "Reported Action Idea"
-        msg['From']    = "handprinter@%s" % os.environ['MAILGUN_DOMAIN']
+        msg['From']    = "actions@handprinter.org"
         msg['To']      = "actions@handprinter.org"
         s = smtplib.SMTP(os.environ['MAILGUN_SMTP_SERVER'], os.environ['MAILGUN_SMTP_PORT'])
         s.login(os.environ['MAILGUN_SMTP_LOGIN'], os.environ['MAILGUN_SMTP_PASSWORD'])
