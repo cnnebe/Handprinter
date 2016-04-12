@@ -28,13 +28,13 @@
                 {% if ai.id in userVotes %}
                     <form action="" method="post">
                         <input type="hidden" name="action_idea" value="{{ ai.id }}">
-                        <input type="submit" name="unvote" value="Unvote">
+                        <input type="submit" name="unvote" value="Unvote" class="btn btn-warning"> 
                         {% csrf_token %}
                     </form>
                 {% else %}
                     <form action="" method="post">
                         <input type="hidden" name="action_idea" value="{{ ai.id }}">
-                        <input type="submit" name="vote" data-toggle="tooltip" title="The more votes an ideas has, the greater likelihood it will be selected for enviornmental impact modeling by researchers!" value="Vote">
+                        <input type="submit" name="vote" data-toggle="tooltip" title="The more votes an ideas has, the greater likelihood it will be selected for enviornmental impact modeling by researchers!" value="Vote" class="btn btn-warning">
                         {% csrf_token %}
                     </form>
                 {% endif %}

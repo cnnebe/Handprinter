@@ -8,14 +8,19 @@
 <h3> You are already logged in! View your <a href=/profile>profile</a> or view some <a href=/index>action ideas.</a></h3>
 
 {% else %}
-
     <div class="container"> 
         <div class="row centered-form">
             <div class="col-xs-12 col-sm-6 col-md-6 col-sm-offset-3 col-md-offset-3">
-
                     <div class="card card-container">
                         <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
                         <p id="profile-name" class="profile-name-card"></p>
+                        {% if messages %}
+                        <ul class="messages">
+    {% for message in messages %}
+    <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+    {% endfor %}
+</ul>
+{% endif %}
                         {% if form.errors %}
             				<p class="error">Sorry, that's not a valid username or password</p>
             			{% endif %}	

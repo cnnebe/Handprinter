@@ -26,10 +26,12 @@
                         <h2 class="panel-title">Join Today and grow your <a href=/about>Handprint!</a></h2>
                         </div>
                         <div class="panel-body">
+                        <p> * <i> indicates a required field </i> </p>
                         <form action="#" method="post">
                             {% for field in registration_form %}
                             {{field.label_tag}}
-                            {{field}}
+                            {{field}} <br>
+                            <i>{{field.help_text}}</i>
                             <br><br>
                             {% endfor %}
                             <input type="submit" value="Register" class="btn btn-primary btn-lg">

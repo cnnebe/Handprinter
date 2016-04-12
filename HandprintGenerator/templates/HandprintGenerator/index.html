@@ -6,8 +6,8 @@
     <div class="jumbotron">
             <h1> Action Ideas </h1>
             <!-- Button trigger modal -->
-            <button type="button" class="btn-group btn-group-xs" data-toggle="modal" data-target="#myModal">
-                <i> What is this? </i>
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">
+                What is this? 
             </button>
     </div>
 
@@ -24,7 +24,7 @@
         <p> This page displays all action ideas, submitted by people from all over the world. <b>Clicking on an idea's name</b> will allow you view specific details about that idea, such as its description, and allow you to comment on the idea. <br><br> You can also <b>filter</b> ideas by their category to match contexts' you're interested in and filter by popularity, to see what everyone else is interested in. <br><br> Ideas carry <b>tags</b>, and you can enter a tag to search for to find ideas tailored to your interests. <br><br> Finally, registered users can <b>vote</b> on an action idea, increasing it's chances of being modeled by researchers to determine it's environmental impact. Show your support or interest in an idea by voting or it! <p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Got it!</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal">Got it!</button>
       </div>
     </div>
   </div>
@@ -36,7 +36,7 @@
     {% csrf_token %}
     <label for="search">Search for Ideas by a Tag: </label>
     <input id="search" type="text" name="searchTerm" value="{{ searchTerm }}">
-    <input type="submit" value="Search">
+    <input type="submit" value="Search" class="btn btn-success">
 </form>
 <br><br>
 

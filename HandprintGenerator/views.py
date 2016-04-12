@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.contrib.gis import geoip2
 from django.contrib.gis.geoip2 import GeoIP2
+from django.contrib import messages
 
 from .models import * 
 from .forms import *
@@ -317,13 +318,21 @@ def login(request):
             auth.login(request, user)
             # Redirect to a success page.
             return HttpResponseRedirect('/index')
-
+        #Inactive User attempting to login.
+        elif user is not None and user is not user.is_active:
+            messages.add_message(request, messages.ERROR, 'Your account has been deleted. Please contact staff for assistance.')
+            HttpResponseRedirect('/login')
+        #Incorrect Login Credentials.
+        elif user is None:
+            messages.add_message(request, messages.ERROR, 'The information you entered does not match any account.')
+            HttpResponseRedirect('/login')
     return render(request, 'registration/login.html', context)
 
     
 def logout(request):
     context = {}
     auth.logout(request)
+    messages.add_message(request, messages.SUCCESS, 'You have been logged out!')
     return render(request, 'registration/logout.html', context)
     
 def forgot_password(request):

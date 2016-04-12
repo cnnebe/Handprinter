@@ -9,8 +9,8 @@
     <h1> Create a new Handprint action idea </h1>
 
         <!-- Button trigger modal -->
-        <button type="button" class="btn-group btn-group-xs" data-toggle="modal" data-target="#myModal">
-            <i> What is an Action Idea?</i>
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">
+            What is an Action Idea?
         </button>
         <br>
 
@@ -35,22 +35,23 @@
                         <p> You can also view <b><a href=/index>current action ideas</a></b> and click on them to view how they were created! </p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Got it!</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Got it!</button>
                     </div>
                 </div>
             </div>
         </div>
         <br>
-
+<p> * <i> indicates a required field </i> </p>
     <!-- Action Idea Creation Form -->
     <form enctype="multipart/form-data" action="#" method="post">
    		{{ NewActionIdeaForm.errors }}
         {% for field in NewActionIdeaForm %}
-            {{field.label_tag}}  
+            {{field.label_tag}}  <br> 
+           <i> {{field.help_text}} </i> <br>
             {{field}}
             <br><br>
         {% endfor %}
-        <input type="submit" value="Submit">
+        <input type="submit" value="Create New Action Idea" class="btn btn-primary btn-lg">
         {% csrf_token %}  
     </form>
 
@@ -61,11 +62,12 @@
         <form enctype="multipart/form-data" action="#" method="post">
             {{ NewActionIdeaForm.errors }}
             {% for field in NewActionIdeaForm %}
-                {{field.label_tag}}  
-                {{field}}
+                 {{field.label_tag}}  <br> 
+           <i> {{field.help_text}} </i> <br>
+            {{field}}
                 <br><br>
             {% endfor %}
-        <input type="submit" value="Submit">
+        <input type="submit" value="Edit Action Idea" class="btn btn-primary btn-lg">
         {% csrf_token %}
         </form>
     {% else %}  <!-- Idea is inactive and can't be edited. -->
