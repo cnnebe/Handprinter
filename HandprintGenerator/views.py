@@ -1,3 +1,4 @@
+#for django things
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader, RequestContext
 from django.shortcuts import get_object_or_404, render
@@ -10,14 +11,18 @@ from django.db.models import Count
 from django.contrib.gis import geoip2
 from django.contrib.gis.geoip2 import GeoIP2
 
+#for email 
+import os
 import email
 import smtplib 
 from email.mime.text import MIMEText
 from django.conf import settings
 
+#our other django files
 from .models import * 
 from .forms import *
 
+#helpful python packages
 import datetime
 import string
 import random
@@ -143,10 +148,10 @@ Thanks,
 The Handprinter Team
 """ % (action_idea.id, action_idea.name, action_idea.description, action_idea.references, request.user.username))
         msg['Subject'] = "Reported Action Idea"
-        msg['From']    = "handprinter@%s" % MAILGUN_DOMAIN
+        msg['From']    = "handprinter@%s" % os.environ['MAILGUN_DOMAIN']
         msg['To']      = "actions@handprinter.org"
-        s = smtplib.SMTP(MAILGUN_SMTP_SERVER, MAILGUN_SMTP_PORT)
-        s.login(MAILGUN_SMTP_LOGIN, MAILGUN_SMTP_PASSWORD)
+        s = smtplib.SMTP(os.environ['MAILGUN_SMTP_SERVER'], os.environ['MAILGUN_SMTP_PORT'])
+        s.login(os.environ['MAILGUN_SMTP_LOGIN'], os.environ['MAILGUN_SMTP_PASSWORD'])
         s.sendmail(msg['From'], msg['To'], msg.as_string())
         s.quit()
         return HttpResponseRedirect('/index')
