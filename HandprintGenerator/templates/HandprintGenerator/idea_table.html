@@ -15,7 +15,6 @@
             <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
             <th>Date Created</th>
         <tr>
-<!-- "using page" allows different categories to be paginated independently. -->
         {% for ai in idea_list_active %}
             <td data-toggle="tooltip" title="Click on an idea to learn more about it and comment!">
                 <a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }} </a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>                 
@@ -53,6 +52,21 @@
         {% endif %}
     {% endif %}
 </table>
+
+<!-- Pagination for Active Ideas -->
+<div class="pagination">
+    <span class="step-links">
+        {% if idea_list_active.has_previous %}
+            <a href="?page={{ idea_list_active.previous_page_number }}">previous</a>
+        {% endif %}
+        <span class="current">
+            Page {{ idea_list_active.number }} of {{ idea_list_active.paginator.num_pages }}.
+        </span>
+        {% if idea_list_active.has_next %}
+            <a href="?page={{ idea_list_active.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
 <br>
 
 <!-- Inactive Action Idea Table -->
@@ -85,5 +99,20 @@
             {% endif %}
         {% endif %}
     </table>
+
+    <!-- Pagination for Inactive Ideas -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if idea_list_inactive.has_previous %}
+                <a href="?page={{ idea_list_inactive.previous_page_number }}">previous</a>
+            {% endif %}
+            <span class="current">
+                Page {{ idea_list_inactive.number }} of {{ idea_list_inactive.paginator.num_pages }}.
+            </span>
+            {% if idea_list_inactive.has_next %}
+                <a href="?page={{ idea_list_inactive.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
 {% endif %}
 

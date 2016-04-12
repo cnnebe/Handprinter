@@ -4,7 +4,7 @@
     {% include "HandprintGenerator/idea_page_header.html" with header="Action Ideas Related to Clothing" filter="clothing" %}
     <!-- Tab Content. Renders template using idea_table.html based on contexts in views.py for index function-->
     <!-- One variable for active, one for inactive, and page allows for independent pagination.-->
-    {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_clothing_active idea_list_inactive=action_ideas_clothing_inactive page="clothing" %}
+    {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_clothing_active idea_list_inactive=action_ideas_clothing_inactive %}
 </div>
 {% endblock %}
 

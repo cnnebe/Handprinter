@@ -11,6 +11,7 @@ from django.db.models import Count
 from django.contrib.gis import geoip2
 from django.contrib.gis.geoip2 import GeoIP2
 from django.contrib import messages
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import * 
 from .forms import *
@@ -53,14 +54,18 @@ def user_profile(request):
 def index(request):
     context = {}
     context['action_ideas_inactive'] = ActionIdea.objects.filter(active=False).order_by('-date_created')
-    context['action_ideas_active'] = ActionIdea.objects.filter(active=True).order_by('-date_created')   
+    context['action_ideas_active'] = ActionIdea.objects.filter(active=True).order_by('-date_created')
+    #Pagination
+    for ideas in context:
+        paginate(context, ideas, request)   
     #Voting Functionality
     vote(request, context)
     return render(request, 'HandprintGenerator/index.html', context)
 
 #Generates search results page on search.
 def search_results(request):
-    context = {}
+    context = {} 
+    #Voting Functionality
     vote(request, context)
     if request.method == 'GET':
         form = SearchForm(request.GET)
@@ -70,6 +75,9 @@ def search_results(request):
             context['ai_search_active'] = ActionIdea.objects.filter(active=True, tags__name__in=[search_term]).order_by('-date_created')
             context['ai_search_inactive'] = ActionIdea.objects.filter(active=False, tags__name__in=[search_term]).order_by('-date_created')
             context['header'] = "Search Results for \"%s\"" % search_term
+            #Pagination
+            paginate(context, context['ai_search_active'], request)
+            paginate(context, context['ai_search_inactive'], request)    
             return render(request, 'HandprintGenerator/searchresults.html', context)
     #Returns to main index if unvote/vote button clicked on as the GET request cannot be refreshed upon vote/unvote action.
     return HttpResponseRedirect('/index')
@@ -79,6 +87,9 @@ def index_popular(request):
     context = {}
     context['action_ideas_vote_inactive'] = ActionIdea.objects.filter(active=False).annotate(num_votes=Count('actionideavote')).order_by('-num_votes')
     context['action_ideas_vote_active'] = ActionIdea.objects.filter(active=True).annotate(num_votes=Count('actionideavote')).order_by('-num_votes') 
+    #Pagination
+    for ideas in context:
+        paginate(context, ideas, request)
     #Voting Functionality
     vote(request, context)
     return render(request, 'HandprintGenerator/index_popular.html', context)
@@ -88,6 +99,9 @@ def index_home(request):
     context = {}
     context['action_ideas_home_inactive'] = ActionIdea.objects.filter(active=False, category = 'home').order_by('-date_created')
     context['action_ideas_home_active'] = ActionIdea.objects.filter(active=True, category = 'home').order_by('-date_created') 
+    #Pagination
+    for ideas in context:
+        paginate(context, ideas, request)
     #Voting Functionality
     vote(request, context)
     return render(request, 'HandprintGenerator/index_home.html', context)
@@ -97,6 +111,9 @@ def index_work(request):
     context = {}
     context['action_ideas_work_inactive'] = ActionIdea.objects.filter(active=False, category = 'work').order_by('-date_created')
     context['action_ideas_work_active'] = ActionIdea.objects.filter(active=True, category = 'work').order_by('-date_created')  
+    #Pagination
+    for ideas in context:
+        paginate(context, ideas, request)
     #Voting Functionality
     vote(request, context)
     return render(request, 'HandprintGenerator/index_work.html', context)
@@ -106,6 +123,9 @@ def index_community(request):
     context = {}
     context['action_ideas_community_inactive'] = ActionIdea.objects.filter(active=False, category = 'community').order_by('-date_created')
     context['action_ideas_community_active'] = ActionIdea.objects.filter(active=True, category = 'community').order_by('-date_created')    
+    #Pagination
+    for ideas in context:
+        paginate(context, ideas, request)
     #Voting Functionality
     vote(request, context)  
     return render(request, 'HandprintGenerator/index_community.html', context)
@@ -115,6 +135,9 @@ def index_mobility(request):
     context = {}
     context['action_ideas_mobility_inactive'] = ActionIdea.objects.filter(active=False, category = 'mobility').order_by('-date_created')
     context['action_ideas_mobility_active'] = ActionIdea.objects.filter(active=True, category = 'mobility').order_by('-date_created')    
+    #Pagination
+    for ideas in context:
+        paginate(context, ideas, request)
     #Voting Functionality
     vote(request, context) 
     return render(request, 'HandprintGenerator/index_mobility.html', context)
@@ -124,6 +147,9 @@ def index_food(request):
     context = {}
     context['action_ideas_food_inactive'] = ActionIdea.objects.filter(active=False, category = 'food').order_by('-date_created')
     context['action_ideas_food_active'] = ActionIdea.objects.filter(active=True, category = 'food').order_by('-date_created')  
+    #Pagination
+    for ideas in context:
+        paginate(context, ideas, request)
     #Voting Functionality
     vote(request, context)
     return render(request, 'HandprintGenerator/index_food.html', context)
@@ -133,6 +159,9 @@ def index_clothing(request):
     context = {}
     context['action_ideas_clothing_inactive'] = ActionIdea.objects.filter(active=False, category = 'clothing').order_by('-date_created')
     context['action_ideas_clothing_active'] = ActionIdea.objects.filter(active=True, category = 'clothing').order_by('-date_created') 
+    #Pagination
+    for ideas in context:
+        paginate(context, ideas, request)
     #Voting Functionality
     vote(request, context) 
     return render(request, 'HandprintGenerator/index_clothing.html', context)
@@ -142,7 +171,9 @@ def index_other(request):
     context = {}
     context['action_ideas_other_inactive'] = ActionIdea.objects.filter(active=False, category = 'other').order_by('-date_created')
     context['action_ideas_other_active'] = ActionIdea.objects.filter(active=True, category = 'other').order_by('-date_created')   
-    
+    #Pagination
+    for ideas in context:
+        paginate(context, ideas, request)
     #Voting Functionality
     vote(request, context)
     
@@ -173,6 +204,17 @@ def vote(request, context):
             v.save()
         else:
             messages.add_message(request, messages.ERROR, 'You already voted for this idea!')
+    return 
+
+def paginate(context, index, request):
+    paginator = Paginator(context[index], 5)
+    page = request.GET.get('page')
+    try:
+        context[index] = paginator.page(page)
+    except PageNotAnInteger:
+        context[index] = paginator.page(1)
+    except EmptyPage:
+        context[index] = paginator.page(paginator.num_pages)
     return 
 
 ####################################################### Details, Edit, Delete, and Login Views ###############################################

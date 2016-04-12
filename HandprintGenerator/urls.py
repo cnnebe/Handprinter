@@ -32,7 +32,6 @@ urlpatterns = [
     url(r'^index_food$', views.index_food, name='index_food'),
     url(r'^index_clothing$', views.index_clothing, name='index_clothing'),
     url(r'^index_other$', views.index_other, name='index_other'),
-
 ]
 
     
