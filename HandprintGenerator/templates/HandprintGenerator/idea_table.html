@@ -53,6 +53,7 @@
     {% endif %}
 </table>
 
+{% if paginate or paginate == None %} <!-- Pagination occurs on everything except search as it does not work. -->
 <!-- Pagination for Active Ideas -->
 <div class="pagination">
     <span class="step-links">
@@ -67,6 +68,7 @@
         {% endif %}
     </span>
 </div>
+{% endif %}
 <br>
 
 <!-- Inactive Action Idea Table -->
@@ -99,7 +101,7 @@
             {% endif %}
         {% endif %}
     </table>
-
+    {% if paginate or paginate == None %}  <!-- Pagination occurs on everything except search as it does not work. -->
     <!-- Pagination for Inactive Ideas -->
     <div class="pagination">
         <span class="step-links">
@@ -114,5 +116,6 @@
             {% endif %}
         </span>
     </div>
+    {% endif %}
 {% endif %}
 

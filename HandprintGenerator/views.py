@@ -73,11 +73,9 @@ def search_results(request):
             search_term = form.cleaned_data['searchTerm']
             context['search_term'] = search_term
             context['ai_search_active'] = ActionIdea.objects.filter(active=True, tags__name__in=[search_term]).order_by('-date_created')
-            context['ai_search_inactive'] = ActionIdea.objects.filter(active=False, tags__name__in=[search_term]).order_by('-date_created')
-            context['header'] = "Search Results for \"%s\"" % search_term
-            #Pagination
-            #paginate(context, context['ai_search_active'], request)
-            #paginate(context, context['ai_search_inactive'], request)    
+            context['ai_search_inactive'] = ActionIdea.objects.filter(active=False, tags__name__in=[search_term]).order_by('-date_created')    
+            context['header'] = "Search Results for \"%s\"" % search_term 
+            context['paginate'] = False #Pagination does not work for search results due to GET request handling for each page.  
             return render(request, 'HandprintGenerator/searchresults.html', context)
     #Returns to main index if unvote/vote button clicked on as the GET request cannot be refreshed upon vote/unvote action.
     return HttpResponseRedirect('/index')
