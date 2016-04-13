@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-    {% include "HandprintGenerator/idea_page_header.html" with header="Action Ideas in Non-traditional Contexts" filter="other" %}
-    <!-- Tab Content. Renders template using idea_table.html based on contexts in views.py for index function-->
-    <!-- One variable for active, one for inactive, and page allows for independent pagination.-->
+	<!-- Load Header, Filter Options, and Search Bar. Header var allows for custom header-->
+    {% include "HandprintGenerator/idea_page_header.html" with header="Action Ideas in Misc. Contexts" %}
+    <!-- Page Content. Renders template using idea_table.html based on the index_other function in views.py-->
     {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_other_active idea_list_inactive=action_ideas_other_inactive %}
 </div>
 {% endblock %}

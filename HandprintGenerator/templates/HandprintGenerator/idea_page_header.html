@@ -1,4 +1,4 @@
-<!-- This template creates the page header depending on the filter or search result on all index_ pages and  the searchresults.html page.-->
+<!-- This template creates the page header depending on the filter or search result on all index_ pages and the searchresults.html page.-->
 {% load staticfiles %}
 
 <div class="jumbotron">
@@ -27,14 +27,8 @@
 </div>
 <br>
 
-<!-- Displays any messages resulting from errors or actions -->
-{% if messages %}
-    <ul class="messages">
-    {% for message in messages %}
-        <p{% if message.tags %} class="{{ message.tags }}"{% endif %}><b>{{ message }}</b></p>
-    {% endfor %}
-	</ul>
-{% endif %}
+<!-- Displays any messages -->
+{% include "HandprintGenerator/message_template.html" %}
 
 <!-- Search Bar -->
 <form action="/searchresults" method="get">
@@ -50,7 +44,7 @@
 	<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Filter By
 
 	<span class="caret"></span></button>
-	 <!-- Dropdown Options -->
+	 <!-- Dropdown Options. Future developers should make the current page not show up during selection. -->
     <ul class="dropdown-menu" aria-labelledby="myTabDrop1" id="myTabDrop1-contents">
     	<li><a href="/index">Most Recent</a></li>
     	<li><a href="/index_popular">Most Popular</a></li>

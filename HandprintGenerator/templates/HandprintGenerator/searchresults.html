@@ -1,13 +1,9 @@
 {% extends "base.html" %}
-
 {% block content %}
-
 <div class="container">
-<!-- Load Header, Filter Options, and Search Bar. Header var allows for custom header defined in search_results in view.py-->
-{% include "HandprintGenerator/idea_page_header.html" with header=header filter="all filter options will be shown" %}
-
-<!-- One variable for active, one for inactive, and page allows for independent pagination.-->
-{% include "HandprintGenerator/idea_table.html" with idea_list_active=ai_search_active idea_list_inactive=ai_search_inactive paginate=paginate %}
-</div>
-    
+	<!-- Load Header, Filter Options, and Search Bar. Header var allows for custom header defined in search_results in view.py-->
+	{% include "HandprintGenerator/idea_page_header.html" with header=header %}
+	<!-- One variable for active, one for inactive, and paginate prevents pagination until it can be fixed for search.-->
+	{% include "HandprintGenerator/idea_table.html" with idea_list_active=ai_search_active idea_list_inactive=ai_search_inactive paginate=paginate %}
+</div> 
 {% endblock %}

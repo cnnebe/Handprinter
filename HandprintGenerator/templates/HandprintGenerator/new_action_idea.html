@@ -4,16 +4,13 @@
 
 <!-- If no existing ID, then create a new action idea. -->
 {% if action_id == None %}
-
 <div class="container">
     <h1> Create a new Handprint action idea </h1>
-
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">
             What is an Action Idea?
         </button>
         <br>
-
         <!-- Modal -->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
@@ -41,8 +38,8 @@
             </div>
         </div>
         <br>
-<p> * <i> indicates a required field </i> </p>
     <!-- Action Idea Creation Form -->
+    <h5><b> * <i> indicates a required field </i> </b></h5>
     <form enctype="multipart/form-data" action="#" method="post">
    		{{ NewActionIdeaForm.errors }}
         {% for field in NewActionIdeaForm %}
@@ -54,7 +51,6 @@
         <input type="submit" value="Create New Action Idea" class="btn btn-primary btn-lg">
         {% csrf_token %}  
     </form>
-
  <!-- If there is an ID and the user is a mod, staff, or existing idea owner, an ACTIVE idea can be edited-->
 {% elif creator == request.user.id or user.is_staff or user.profile.role == "Moderator" %} 
     {% if active == True %}
@@ -73,11 +69,10 @@
     {% else %}  <!-- Idea is inactive and can't be edited. -->
     <h3> You cannot edit action ideas that have been deleted. <br> <br> You can view action ideas <a href="/index">here.</a> </h3>
     {% endif %}
-
-{% else %}  <!-- User attempting to edit is not staff or the owner. -->
+<!-- User attempting to edit is not staff or the owner. -->
+{% else %}  
     <h3> You cannot edit action ideas that you did not submit. <br> <br> You can view action ideas <a href="/index">here.</a> </h3>
 {% endif %}
-
 </div>
 
 <!-- Modal Javascript -->
@@ -86,5 +81,4 @@
         $('#myInput').focus()
         })
 </script>
-
 {% endblock %}

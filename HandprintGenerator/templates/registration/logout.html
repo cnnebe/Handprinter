@@ -1,11 +1,7 @@
 {% extends "base.html" %}
-
 {% block content %}
-
 <h3>Logged out!</h3>
-
 {% csrf_token %}
-
+<!-- User is redirected to login page on logout -->
 <script>window.location.href = "/login";</script>
-
 {% endblock %}

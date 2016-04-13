@@ -14,7 +14,7 @@ class NewActionIdeaForm(forms.ModelForm):
             'description': Textarea(attrs={'cols': 20, 'rows': 5}),
             'references': Textarea(attrs={'cols': 20, 'rows': 5}),
         }
-        labels = {
+        labels = { #Use labels to mark required fields.
             'name': ('Idea Title*'),
             'description': ('Describe your idea*'),
             'references': ('Any references or sources?'),
@@ -22,7 +22,7 @@ class NewActionIdeaForm(forms.ModelForm):
             'category': ('Category*'),
             'tags': ('Submit some tags related to your idea'),
 
-        }
+        } #Use text instead of tooltips or help icon to make it easier for mobile users.
         help_texts = {
             'name': ('A title should describe the main objective of an idea'),
             'description': ('What is your idea and how can people adopt it?'),
@@ -69,14 +69,14 @@ class UserCreateForm(UserCreationForm):
         widgets = {
             'email': forms.EmailInput(),
         }
-        labels = {
+        labels = { #Use labels to mark required fields.
             'username': ('Username*'),
             'email': ('Email*'),
             'first_name': ('First Name'),
             'last_name': ('Last Name'),
 
         }
-        help_texts = {
+        help_texts = { #Use text instead of tooltips or help icon to make it easier for mobile users.
             'username': ('Your username is used to login and will be displayed when you submit new ideas and comments.'),
             'email': ( 'To validate your account and reset your password, your email is needed. Your information is not shared with third parties.'),
             'last_name': ('Your name is optional and will be displayed on your profile, which only you can see.'),

@@ -48,7 +48,7 @@ def user_profile(request):
         pass
     return render(request, 'HandprintGenerator/user_profile.html', context)
 
-####################################################### Action Idea Display and Search Views ###############################################
+##################################### Action Idea Index and Search Views ###########################################
 
 #The main action idea index (most recent)
 def index(request):
@@ -205,6 +205,7 @@ def vote(request, context):
     return 
 
 def paginate(context, index, request):
+    #Displays 5 ideas at a time per page.
     paginator = Paginator(context[index], 5)
     page = request.GET.get('page')
     try:
@@ -215,7 +216,7 @@ def paginate(context, index, request):
         context[index] = paginator.page(paginator.num_pages)
     return 
 
-####################################################### Details, Edit, Delete, and Login Views ###############################################
+###################################### View, Edit, and Delete Ideas ###############################################
 
 @transaction.atomic
 def detail(request, actionidea_id):
@@ -305,7 +306,6 @@ def edit_action_idea(request, actionidea_id=None):
         action_idea = get_object_or_404(ActionIdea, pk = actionidea_id)
     else: #new action idea
         action_idea = ActionIdea(date_created = datetime.datetime, creator_id = request.user.id)
-    
     form = NewActionIdeaForm(request.POST or None, request.FILES or None, instance=action_idea)
     context['creator'] = action_idea.creator_id
     context['active'] = action_idea.active
@@ -357,13 +357,14 @@ def delete_action_idea(request, actionidea_id):
         action_idea = get_object_or_404(ActionIdea, pk = actionidea_id)
         action_idea.active = False
         action_idea.save()
+        messages.add_message(request, messages.SUCCESS, 'Action Idea Deleted!')
         return HttpResponseRedirect('/index')
     else:
         form = DeleteActionIdeaForm()
         context['DeleteActionIdeaForm'] = form
-
     return render(request, 'HandprintGenerator/delete_action_idea.html', context)   
 
+########################################### Authentication Views ###############################################
 @transaction.atomic
 def new_user(request):
     context = {
@@ -380,6 +381,8 @@ def new_user(request):
                 context["error"] = "error"
                 return render(request, 'registration/new_user.html', context)
             new_user.save() 
+
+            #Location Gathering using GeoIP2
             x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
             if x_forwarded_for:
                 ip = x_forwarded_for.split(',')[0]
@@ -393,13 +396,11 @@ def new_user(request):
             
             #creating an accompanying profile with role
             user_profile = Profile(role='member', location=loc, user_id=new_user.id)
-            user_profile.save()
-            
+            user_profile.save()         
             return HttpResponseRedirect('/login')
     else:
         form = UserCreateForm()
         context['registration_form'] = form
-        
     return render(request, 'registration/new_user.html', context)
     
 def login(request):
@@ -427,25 +428,24 @@ def login(request):
 
     
 def logout(request):
-    context = {}
     auth.logout(request)
     messages.add_message(request, messages.SUCCESS, 'You have been logged out!')
-    return render(request, 'registration/logout.html', context)
+    return render(request, 'registration/logout.html')
     
 def forgot_password(request):
     context = {}
     if request.method == "POST":
         try:
             user_email = request.POST.get('email')
-            #see if the person's email matches an actual user
+            # Match submitted email to a user's email.
             forgotten_user = User.objects.get(email=user_email)
-            #now generate a random string to reset their password to
+            # Generates a random string to set as the new password upon reset.
             #from: http://stackoverflow.com/questions/2257441/random-string-generation-with-upper-case-letters-and-digits-in-python
             new_password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
-            #now reset their password
+            # Save generated password as the user's new password.
             forgotten_user.set_password(new_password)
             forgotten_user.save()
-            #now put the password in an email message
+            # Email Message containing username and password.
             password_message = """Hi %s,
             
 You recently requested to reset your password for your Handprint Generator account. We have reset your password. Your new, temporary password is:
@@ -461,13 +461,15 @@ The Handprinter Team
 
 P.S. We also love hearing from you and assisting you with any concerns you may have. Please reply to this email if you want to ask a question or submit a comment.
 """ % (forgotten_user.first_name, new_password, forgotten_user.username)
-            #now send them an email with the new password
+            # Sends an email with the new password
             send_mail('Handprinter Password Reset', password_message, 'handprinterteam@yahoo.com',
-    [user_email], fail_silently=False)
-            
-            return render(request, 'registration/forgot_password_success.html', context)
+                [user_email], fail_silently=False)
+            messages.add_message(request, messages.SUCCESS,'An email has been sent to the address given. Please follow the instructions in the email.')
+            # Redirect to login and displays success message.
+            return render(request, 'registration/login.html', context)
         except:
-            #it didn't work, let the user know
-            return render(request, 'registration/forgot_password_failure.html', context)
+            # Email not found in system. Allow user to try again and give error.
+            messages.add_message(request, messages.ERROR,'The email given is not associated with an account. Please try again or create a new account.')
+            return render(request, 'registration/forgot_password.html', context)
 
     return render(request, 'registration/forgot_password.html', context)
