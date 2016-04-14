@@ -26,17 +26,21 @@
             </div>
             <div class="panel-body">
                 {% if registration_form.errors %}
-                    <p>{{ registration_form.errors }}</p> <br>
+                    {{ registration_form.errors }} <br>
                 {% endif %}
-                {% if error %}
-                    <p>An account is already associated with the email provided. If you have an account, please <a href=/login>login</a> or <a href=/forgot_password>reset your password</a>. If you believe this is an error, please contact us at <b>actions@handprinter.org</b></p> <br>
+                {% if error %} <!-- Email uniqueness verified in view.py not in form logic. -->
+                    <p>An account is already associated with the email provided. If you have an account, please <a href=/login>login</a> or <a href=/forgot_password>reset your password/get your username</a>. If you believe this is an error, please contact us at <b>actions@handprinter.org</b></p> <br>
                 {% endif %}
                 <form action="#" method="post">
                     {% for field in registration_form %}
                         {{field.label_tag}}
                         {{field}}  <br> 
-                        <i>{{field.help_text}} </i>
-                        <br><br>
+                        {% if field.help_text %}
+                            <i>{{field.help_text}} </i>
+                        {% else %} <!-- Help text for password not recognized. -->
+                            <i> At least eight characters with one letter. Can't be related to username. Won't accept common passwords tried by hackers. </i>
+                        {% endif %}
+                         <br><br>
                     {% endfor %}
                     <input type="submit" value="Register" class="btn btn-primary btn-lg center-block">
                     {% csrf_token %}        

@@ -386,7 +386,8 @@ def new_user(request):
             
             #creating an accompanying profile with role
             user_profile = Profile(role='member', location=loc, user_id=new_user.id)
-            user_profile.save()         
+            user_profile.save()
+            messages.add_message(request, messages.SUCCESS, 'Account created. Please login!')         
             return HttpResponseRedirect('/login')
     else:
         form = UserCreateForm()
