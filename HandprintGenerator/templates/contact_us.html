@@ -1,13 +1,11 @@
 {% extends "base.html" %}
-
 {% block content %}
-
-	<br><br>
-		<iframe src="http://www.handprinter.org/contact-us/"
-        width="100%" height="875" frameborder="0"
-        allowfullscreen sandbox>
-        <p> <a href="http://www.handprinter.org/contact-us/">
-        Fallback link for browsers that don't support iframes</a> </p>
-        </iframe>
-        
+<!-- Webpage nesting. Displays contact us section from Handprinter.org. Will not work in HTTPS. -->
+<br><br>
+<iframe src="http://www.handprinter.org/contact-us/"
+    width="100%" height="875" frameborder="0"
+    allowfullscreen sandbox>
+    <p> <a href="http://www.handprinter.org/contact-us/">
+    Fallback link for browsers that don't support iframes</a> </p>
+</iframe>       
 {% endblock %}

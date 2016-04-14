@@ -60,7 +60,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'HandprintGenerator',
     'taggit',
-    #'el_pagination',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -91,11 +90,6 @@ TEMPLATES = [
         },
     },
 ]
-
-#TEMPLATE_CONTEXT_PROCESSORS += (
-#    'django.core.context_processors.request',
-#)
-
 
 WSGI_APPLICATION = 'Handprinter.wsgi.application'
 

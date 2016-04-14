@@ -1,126 +1,166 @@
-
 {% extends "base.html" %}
 {% block content %}
+<div class="container"> 
+    <div class="row centered-form">
+        <div class="col-xs-12 col-sm-6 col-md-6 col-sm-offset-3 col-md-offset-3">
+            <div class="card card-container">
+            <!-- Anyone can view an active idea. Staff can view inactive. -->
+            {% if user.profile.role == "Moderator" or user.is_staff or ai.active %}
+                <div id="page-content">
+                    <div id="action-idea">
+                        <!-- Name and navigation -->
+                        <h2 data-toggle="tooltip" title="The title of the action idea."><b>{{ ai.name }} </b></h1>
+                        
+                        <!-- Displays any messages -->
+                        {% include "HandprintGenerator/message_template.html" %}
 
-{% if user.profile.role == "Moderator" or user.is_staff or ai.active %}
-        
-    <div id="page-content">
-        <div id="action-idea">
-            <h1 data-toggle="tooltip" title="The title of the action idea.">{{ ai.name }}</h1>
-            <a href=/index>Go Back</a> 
-            {% if ai.image != "" %} 
-            <img style="max-height:300px;" src="../../media/{{ ai.image }}" alt="{{ ai.name }}" >
-            {% endif%}
-            <br> <br>
-            <p data-toggle="tooltip" title="What the idea is and how to adopt it."> Description: {{ ai.description }}</p>
-            <p data-toggle="tooltip" title="Sources of inspiration or further reading."> References: {{ ai.references }}</p>
-            <p data-toggle="tooltip" title="Context this idea is applicable in."> Category: {{ ai.category }}</p>
-            <p data-toggle="tooltip" title="Relevant keywords about the idea. Tags are used for search, so having lots of tags increases search visibility!"> Tags: 
-            {% for tag in ai.tags.names %}
-            <form id="tagForm" action="/searchresults" method="get">
-                {% csrf_token %}
-                <input id="search" type="hidden" name="searchTerm" value="{{ tag }}">
-                <input type="submit" class="tagLink" value="{{tag}}">
-            </form>{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-            <p> Votes: {{ai.numvotes}} </p>
-            {% if user.profile.role == "Moderator" or user.is_staff %}
-                <p> Active: {{ ai.active }}</p>
-                {% if not ai.active %} 
-                <ul>
-                 <li> <b>Reason:</b> {{reason.reason}} </li>
-                 </ul>
-                {% endif %}
-            {% endif %}
-            <p> Submitted By: {{ ai.creator.username}}</p>
-            {% if ai.creator == request.user or user.is_staff or user.profile.role == "Moderator" %}
-                <a href="{% url 'HandprintGenerator:edit_action_idea' ai.id %}">Edit Action Idea</a>
-                {% if ai.active %}
-                    <a href="{% url 'HandprintGenerator:delete_action_idea' ai.id%}">Delete Action Idea</a> 
-                {% elif not ai.active %}
-                    {% if user.is_staff or user.profile.role == "Moderator" %}
-                        <form action="/handprintgenerator/{{ ai.id }}/" method="post">
-                            <input type="submit" name="restore" value="Restore Action Item">
+                        <!-- Image -->
+                        {% if ai.image != "" %} 
+                            <img class="center-block"style="max-height:300px;" src="../../media/{{ ai.image }}" alt="{{ ai.name }}" >
+                        {% endif %}
+                        <br> <br>
+
+                         <!-- Inactivity  -->
+                        {% if user.profile.role == "Moderator" or user.is_staff %}
+                            <h4> <u>Active:</u> {{ ai.active }}</h4>
+                            {% if not ai.active %} 
+                                <ul>
+                                    <li> <b>Reason:</b> {{reason.reason}} </li>
+                                    <li> <b>Who deleted it?:</b> {{reason.responsible}} </li>
+                                </ul>
+                            {% endif %}
+                        {% endif %}
+                        <br>
+
+                        <!-- Idea Information-->
+                        <h4 data-toggle="tooltip" title="What the idea is and how to adopt it."> 
+                            <u>Description</u> <br> {{ ai.description }}
+                        </h4> <br>
+                        <h4 data-toggle="tooltip" title="Context this idea is applicable in."> <u>Category:</u> {{ ai.category }}</h4>
+                        <br>
+                        {% if ai.references %} <!-- Display if any references -->
+                        <h4 data-toggle="tooltip" title="Sources of inspiration or further reading."> <u>References</u> <br>{{ ai.references }}</h4>
+                        <br>
+                        {% endif %}
+
+                        <!-- Voting. Only vote if logged in and idea is active. -->
+                        <h4> <u>Votes:</u> {{ai.numvotes}} </h4>
+                         {% if user.is_authenticated and ai.active %}                
+                            {% if userVote %}
+                                <form action="/handprintgenerator/{{ ai.id }}/" method="post">
+                                    <input type="submit" name="unvote" value="Unvote" class="btn btn-warning btn-lg center-block">
+                                    {% csrf_token %}
+                                </form>
+                            {% else %}
+                                <form action="/handprintgenerator/{{ ai.id }}/" method="post">
+                                    <input type="submit" name="vote" data-toggle="tooltip" title="The more votes an ideas has, the greater likelihood it will be selected for enviornmental impact modeling by researchers!" value="Vote" class="btn btn-warning btn-lg center-block">
+                                    {% csrf_token %}
+                                </form>
+                            {% endif %}
+                        <br>
+                        {% endif %} 
+
+                    <!-- Comments-->
+                    <div id="comments">
+                        <h4 class="text-center"> Comments </h4>
+                        <p> <i> Have a suggestion, question, or concern about this idea? Post a comment! </i> </p> <hr>
+
+                        <!-- Comment Creation-->
+                        {% if user.is_authenticated %}
+                            <div id="post_comment">
+                                <form action="/handprintgenerator/{{ ai.id }}/" method="post">
+                                    {% for field in comment_form.visible_fields %}
+                                    <div class="text-center">
+                                        {{field}}
+                                    </div>
+                                        <br>
+                                    {% endfor %}
+                                    <input type="submit" value="Submit Comment" class="btn btn-success center-block">
+                                    {% for field in comment_form.hidden_fields %}
+                                        {{field}}
+                                    {% endfor %}
+                                    {% csrf_token %}
+                                </form>
+                            </div>
+                        {% else %}
+                        <h4 class="text-center"> You must be logged in to comment. </h4>
+                        {% endif %}
+                    <br>
+
+                        {% for c in ai.comments %} <!-- Comment Display -->
+                                <p> {{ c.text }}</p>
+                                <p> <b> {{ c.user.username}} </b> on {{c.date_created}}</p>
+                                {% if user.is_authenticated %}
+                                    <!-- Report Comment  -->
+                                    <p><form action="" method="post">
+                                        <input type="hidden" name="comment_reported" value="{{ c.id }}">
+                                        <input type="submit" name="report_comment" data-toggle="tooltip" title="You can report this entry to moderators if you believe that it is offensive, inappropriate, irrelevant and/or violates the terms of service." value="Report Comment" class="btn btn-danger btn-sm">
+                                        {% csrf_token %}
+                                    </form></p>
+
+                                    <!-- Delete Comment  -->
+                                    {% if c.user == request.user or user.profile.role == "Moderator" or user.is_staff %}
+                                    <p><form action="/handprintgenerator/{{ ai.id }}/" method="post">
+                                        <input type="hidden" name="comment" value="{{ c.id }}">
+                                        <input type="submit" name="delete" value="Delete Comment" class="btn btn-danger btn-sm">
+                                        {% csrf_token %}
+                                    </form></p>
+                                    <br><br> 
+                                    {% endif %}
+                                {% endif %}
+                            
+                        {% endfor %}
+                    </div> <!-- Ends comments div -->
+
+                        <!-- Edit, Delete and Restore -->
+                        {% if ai.creator == request.user or user.is_staff or user.profile.role == "Moderator" %}
+                            {% if ai.active %}
+                            <a href="{% url 'HandprintGenerator:edit_action_idea' ai.id %}" class="btn btn-info center-block">Edit Action Idea</a> <br>
+                            <a href="{% url 'HandprintGenerator:delete_action_idea' ai.id%}" class="btn btn-danger center-block">Delete Action Idea</a> 
+                            {% elif not ai.active %} <!-- Restore deleted idea to active -->
+                                {% if user.is_staff or user.profile.role == "Moderator" %}
+                                    <br> <br>
+                                    <form action="/handprintgenerator/{{ ai.id }}/" method="post">
+                                        <input type="submit" name="restore" value="Restore Action Item" class="btn btn-info center-block">
+                                        {% csrf_token %}
+                                    </form>
+                                {% endif %}
+                            {% endif %}
+                            <br><br>
+                        {% endif %}
+
+                        <!-- Tags -->
+                        {% if ai.tags.names %} <!-- Display if any tags -->
+                        <h4 data-toggle="tooltip" title="Relevant keywords about the idea. Tags are used for search, so having lots of tags increases search visibility! Click on a tag to view all ideas with that tag!"> <u>Tags:</u> 
+                        {% for tag in ai.tags.names %}
+                            <form id="tagForm" action="/searchresults" method="get">
+                                {% csrf_token %}
+                                <input id="search" type="hidden" name="searchTerm" value="{{ tag }}">
+                                <input type="submit" class="tagLink" value="{{tag}}">
+                            </form>{% if not forloop.last %}, {% endif %}
+                        {% endfor %} </h4>
+                        {% endif %}
+
+                        <!-- Creator -->
+                        <h4> <u>Submitted By:</u> {{ ai.creator.username}}</h4>
+
+                        <!-- Report Idea. Display if idea is active and user is not owner. -->
+                        {% if ai.creator != request.user and user.is_authenticated and ai.active  %}
+                        <form action="" method="post">
+                            <input type="hidden" name="action_idea" value="{{ ai.id }}">
+                            <input type="submit" name="report" data-toggle="tooltip" title="You can report this entry to moderators if you believe that it is offensive, inappropriate, irrelevant and/or violates the terms of service." value="Report Idea" class="btn btn-danger center-block">
                             {% csrf_token %}
                         </form>
-                    {% endif %}
-                {% endif %}
-            {% endif %}
-            {% if user.is_authenticated and ai.active %}                
-                {% if userVote %}
-                    <form action="/handprintgenerator/{{ ai.id }}/" method="post">
-                        <input type="submit" name="unvote" value="Unvote">
-                        {% csrf_token %}
-                    </form>
-                {% else %}
-                    <form action="/handprintgenerator/{{ ai.id }}/" method="post">
-                        <input type="submit" name="vote" data-toggle="tooltip" title="The more votes an ideas has, the greater likelihood it will be selected for enviornmental impact modeling by researchers!" value="Vote">
-                        {% csrf_token %}
-                    </form>
-                {% endif %}
-                <br>
-                <form action="" method="post">
-                        <input type="hidden" name="action_idea" value="{{ ai.id }}">
-                        <input type="submit" name="report" data-toggle="tooltip" title="You can report this entry to moderators if you believe that it is offensive, inappropriate, irrelevant and/or violates the terms of service." value="Report as Inappropriate">
-                        {% csrf_token %}
-                </form>
-                <br>
-            {% endif %}
-        </div>
-        <div id="comments">
-            <h4> Comments </h4>
-            <p> <i> Have a suggestion, question, or concern about this idea? Post a comment! </i> </p> <hr>
-            {% for c in ai.comments %}
-                <li>
-                    <p> {{ c.text }}</p>
-                    <p> <b> {{ c.user.username}} </b> on {{c.date_created}}</p>
-                    {% if user.is_authenticated %}
-                        <p><form action="" method="post">
-                            <input type="hidden" name="comment_reported" value="{{ c.id }}">
-                            <input type="submit" name="report_comment" data-toggle="tooltip" title="You can report this entry to moderators if you believe that it is offensive, inappropriate, irrelevant and/or violates the terms of service." value="Report as Inappropriate">
-                            {% csrf_token %}
-                        </form></p>
-                        {% if c.user == request.user or user.profile.role == "Moderator" or user.is_staff %}
-                        <p><form action="/handprintgenerator/{{ ai.id }}/" method="post">
-                            <input type="hidden" name="comment" value="{{ c.id }}">
-                            <input type="submit" name="delete" value="Delete Comment">
-                            {% csrf_token %}
-                        </form></p>
-                        <br><br> 
-                        {% endif %}
-                    {% endif %}
-                </li>
-            {% endfor %}
-            {% if ai.comments.count == 0 and user.is_authenticated %}
-                <p> There are no comments yet. Why don't you be the first to make one? </p>
-            {% elif ai.comments.count == 0 %}
-                <p> There are no comments yet. <a href=/create_user>Create an Account</a> or <a href=/login>Login</a> and be the first to make one! </p>
-            {% endif %}
-
-
-            {% if user.is_authenticated %}
-            <div id="post_comment">
-                <form action="/handprintgenerator/{{ ai.id }}/" method="post">
-                    {% for field in comment_form.visible_fields %}
-                        {{field.label_tag}}
-                        {{field}}
                         <br>
-                    {% endfor %}
-                    <input type="submit" value="Submit Comment">
-                    {% for field in comment_form.hidden_fields %}
-                        {{field}}
-                    {% endfor %}
-                    {% csrf_token %}
-                </form>
-
-            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <h3 class="text-center"> You cannot view a deleted action idea! <a href=/index>View existing action ideas.</a></h3>
             {% endif %}
+            </div>
         </div>
     </div>
-
-    {% else %}
-    <h3> You cannot view a deleted action idea! <a href=/index>View existing action ideas.</a></h3>
-
-    {% endif %}
-
+</div>
 {% endblock %}
+

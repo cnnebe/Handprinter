@@ -1,6 +1,6 @@
 
 
-/* Sticky footer styles
+/* General CSS (applies to multiple pages)
 -------------------------------------------------- */
 html {
   position: relative;
@@ -13,9 +13,28 @@ body {
   margin-bottom: 80px;
   background: rgb(250, 250, 250);
   /*background-color: rgb(250, 250, 250);*/
-  text-align: center; 
+  /*text-align: center; */
 }
 
+h2 {
+  text-align: center;
+}
+
+#indicates { /* For required fields text on forms */
+  color: red;
+}
+
+#messages { /* For dynamic messages across all pages */
+  color: red;
+
+}
+
+#registrationHead { /* Color for title on new user page. It's lame, so remove if needed.*/
+  color: #4E6172;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
 
 .footer{
   padding: 10px 0;
@@ -70,7 +89,8 @@ body {
 }
 
 .nav.navbar-nav li a {
-    color: rgb(47, 167, 142);
+    color: #8B4513;
+    font-size: 16px;
 }
 
 
