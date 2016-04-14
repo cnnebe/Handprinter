@@ -32,10 +32,10 @@
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="{% url 'HandprintGenerator:home' %}">Home</a></li>
                             <li><a href="{% url 'HandprintGenerator:about_us' %}">About Handprinter</a></li>
-                            <li><a href="{% url 'HandprintGenerator:index' %}">Action Idea Index</a></li>
+                            <li><a href="{% url 'HandprintGenerator:index' %}">View Action Ideas</a></li>
                             <!-- Only registered users can make a new action idea. -->
                             {% if user.is_authenticated %}
-                                <li><a href="{% url 'HandprintGenerator:new_action_idea' %}">Create A New Action Idea</a></li>
+                                <li><a href="{% url 'HandprintGenerator:new_action_idea' %}">Submit Idea</a></li>
                             {% endif %}
                             <!-- If not logged in, register and login. If logged in: profile and logout. -->
                             {% if not user.is_authenticated %}

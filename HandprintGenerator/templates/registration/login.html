@@ -2,7 +2,8 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-    <h3> You are already logged in! View your <a href=/profile>profile</a> or view some <a href=/index>action ideas.</a></h3>
+    <h3 class="text-center"> You are already logged in! View your <a href=/profile>profile</a> or view some 
+        <a href=/index>action ideas.</a></h3>
 {% else %}
     <div class="container"> 
         <div class="row centered-form">
@@ -10,6 +11,7 @@
                 <div class="card card-container">
                     <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
                     <p id="profile-name" class="profile-name-card"></p>
+                    <div class="text-center">
                     <!-- Displays any messages -->
                     {% include "HandprintGenerator/message_template.html" %}
                     <form action="#" method="post">
@@ -21,6 +23,7 @@
                         <button class="btn btn-block btn-primary btn-signin" type="submit">Sign in</button>
                         {% csrf_token %}
                     </form>
+                    </div>
                     <br>
                     <a href="/forgot_password" class="forgot-password">Forgot your login information?</a>
                 </div> <!-- /card-container -->

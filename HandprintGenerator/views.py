@@ -28,21 +28,28 @@ def user_profile(request):
     try:
         context = {}
         context['myideas'] = ActionIdea.objects.filter(creator=request.user, active=True).order_by('-date_created')
-        context['mycomments'] = ActionIdeaComment.objects.filter(user = request.user)
-        context['myvotes'] = ActionIdeaVote.objects.filter(user = request.user)
+        context['myideasinactive'] = ActionIdea.objects.filter(creator=request.user, active=False).order_by('-date_created')
+        for ideas in context:
+            paginate(context, ideas, request)
+        #Only show content of existing ideas
+        context['mycomments'] = ActionIdeaComment.objects.filter(user = request.user, action_idea__active=True)
+        context['myvotes'] = ActionIdeaVote.objects.filter(user = request.user, action_idea__active=True)
         if request.method == "POST":
             if request.POST.get('change_email') and request.POST.get('change_email') != '':
                 u = User.objects.get(id=request.user.id)
                 u.email = request.POST.get('change_email')
                 u.save()
+                messages.add_message(request, messages.SUCCESS, 'Email changed!')
                 return HttpResponseRedirect('/logout')
         if request.method == "POST":
             if request.POST.get('change_password') and request.POST.get('change_password') != '':
                 if request.POST.get('change_password') != request.POST.get('change_password_confirmation'):
+                    messages.add_message(request, messages.ERROR, 'Passwords do not match')
                     return HttpResponseRedirect('/profile')
                 u = User.objects.get(id=request.user.id)
                 u.set_password(request.POST.get('change_password'))
                 u.save()
+                messages.add_message(request, messages.SUCCESS, 'Password changed!')
                 return HttpResponseRedirect('/logout')
     except:
         pass
@@ -58,15 +65,11 @@ def index(request):
     #Pagination
     for ideas in context:
         paginate(context, ideas, request)   
-    #Voting Functionality
-    vote(request, context)
     return render(request, 'HandprintGenerator/index.html', context)
 
 #Generates search results page on search.
 def search_results(request):
     context = {} 
-    #Voting Functionality
-    vote(request, context)
     if request.method == 'GET':
         form = SearchForm(request.GET)
         if form.is_valid():
@@ -77,7 +80,6 @@ def search_results(request):
             context['header'] = "Search Results for \"%s\"" % search_term 
             context['paginate'] = False #Pagination does not work for search results due to GET request handling for each page.  
             return render(request, 'HandprintGenerator/searchresults.html', context)
-    #Returns to main index if unvote/vote button clicked on as the GET request cannot be refreshed upon vote/unvote action.
     return HttpResponseRedirect('/index')
 
 #Filter by category 'most popular'
@@ -88,8 +90,6 @@ def index_popular(request):
     #Pagination
     for ideas in context:
         paginate(context, ideas, request)
-    #Voting Functionality
-    vote(request, context)
     return render(request, 'HandprintGenerator/index_popular.html', context)
 
 #Filter by category 'home'
@@ -100,8 +100,6 @@ def index_home(request):
     #Pagination
     for ideas in context:
         paginate(context, ideas, request)
-    #Voting Functionality
-    vote(request, context)
     return render(request, 'HandprintGenerator/index_home.html', context)
 
 #Filter by category 'work'
@@ -112,8 +110,6 @@ def index_work(request):
     #Pagination
     for ideas in context:
         paginate(context, ideas, request)
-    #Voting Functionality
-    vote(request, context)
     return render(request, 'HandprintGenerator/index_work.html', context)
 
 #Filter by category 'community'
@@ -123,9 +119,7 @@ def index_community(request):
     context['action_ideas_community_active'] = ActionIdea.objects.filter(active=True, category = 'community').order_by('-date_created')    
     #Pagination
     for ideas in context:
-        paginate(context, ideas, request)
-    #Voting Functionality
-    vote(request, context)  
+        paginate(context, ideas, request) 
     return render(request, 'HandprintGenerator/index_community.html', context)
 
 #Filter by category 'mobility'
@@ -135,9 +129,7 @@ def index_mobility(request):
     context['action_ideas_mobility_active'] = ActionIdea.objects.filter(active=True, category = 'mobility').order_by('-date_created')    
     #Pagination
     for ideas in context:
-        paginate(context, ideas, request)
-    #Voting Functionality
-    vote(request, context) 
+        paginate(context, ideas, request) 
     return render(request, 'HandprintGenerator/index_mobility.html', context)
 
 #Filter by category 'food'
@@ -148,8 +140,6 @@ def index_food(request):
     #Pagination
     for ideas in context:
         paginate(context, ideas, request)
-    #Voting Functionality
-    vote(request, context)
     return render(request, 'HandprintGenerator/index_food.html', context)
 
 #Filter by category 'clothing'
@@ -160,8 +150,6 @@ def index_clothing(request):
     #Pagination
     for ideas in context:
         paginate(context, ideas, request)
-    #Voting Functionality
-    vote(request, context) 
     return render(request, 'HandprintGenerator/index_clothing.html', context)
 
 #Filter by category 'other'
@@ -172,37 +160,7 @@ def index_other(request):
     #Pagination
     for ideas in context:
         paginate(context, ideas, request)
-    #Voting Functionality
-    vote(request, context)
-    
     return render(request, 'HandprintGenerator/index_other.html', context)
-
-#Voting Logic for all index and search results pages
-def vote(request, context):
-    #Populate Vote History
-    try:
-        context['userVotes'] = ActionIdeaVote.objects.filter(user=request.user).values_list('action_idea', flat=True)
-    except:
-        context['userVote'] = False
-    #Handle Vote/Unvote Requests
-    if request.POST.get('unvote'):
-        #If there is no existing vote by this user, then you cannot unvote. 
-        is_current_vote = ActionIdeaVote.objects.filter(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
-        if is_current_vote:
-            messages.add_message(request, messages.SUCCESS, 'Idea Unvoted.')
-            ActionIdeaVote.objects.get(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user).delete()
-        else: 
-            messages.add_message(request, messages.ERROR, 'You cannot unvote an idea you have not voted for!')
-    if request.POST.get('vote'):
-        #If there is a current vote by this user, the user cannot vote again.
-        is_current_vote = ActionIdeaVote.objects.filter(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
-        if not is_current_vote:
-            v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
-            messages.add_message(request, messages.SUCCESS, 'Thank you for voting!')
-            v.save()
-        else:
-            messages.add_message(request, messages.ERROR, 'You already voted for this idea!')
-    return 
 
 def paginate(context, index, request):
     #Displays 5 ideas at a time per page.
@@ -222,71 +180,93 @@ def paginate(context, index, request):
 def detail(request, actionidea_id):
     context = {}
     context['ai'] = get_object_or_404(ActionIdea, pk=actionidea_id)
+
+    #Voting
     try:
         context['userVote'] = ActionIdeaVote.objects.get(user=request.user, action_idea = ActionIdea.objects.get(pk=actionidea_id))
     except:
         context['userVote'] = False
+    if request.POST.get('unvote'):
+        is_current_vote = ActionIdeaVote.objects.filter(action_idea = ActionIdea.objects.get(pk=actionidea_id), user = request.user)
+        if is_current_vote:
+            messages.add_message(request, messages.SUCCESS, 'Idea Unvoted.')
+            ActionIdeaVote.objects.get(action_idea = ActionIdea.objects.get(pk=actionidea_id), user = request.user).delete()
+        else: 
+            messages.add_message(request, messages.ERROR, 'You cannot unvote an idea you have not voted for!')
+        return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
+    if request.POST.get('vote'):
+        #If there is a current vote by this user, the user cannot vote again.
+        is_current_vote = ActionIdeaVote.objects.filter(action_idea = ActionIdea.objects.get(pk=actionidea_id), user = request.user)
+        if not is_current_vote:
+            v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=actionidea_id), user = request.user)
+            messages.add_message(request, messages.SUCCESS, 'Thank you for voting!')
+            v.save()
+        else:
+            messages.add_message(request, messages.ERROR, 'You already voted for this idea!')
+        return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
+    
+    # Reason if idea is inactive.
     try: 
         context['reason'] = ActionIdeaInactive.objects.get(action_idea = ActionIdea.objects.get(pk=actionidea_id))
     except: 
         context['reason'] = False
+
+    #Restore.
     if request.POST.get('restore'):
         ai = ActionIdea.objects.get(pk=actionidea_id)
         ai.active = True
         ai.save()
         ActionIdeaInactive.objects.get(action_idea = ai).delete()
         return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
-    if request.POST.get('unvote'):
-        ActionIdeaVote.objects.get(action_idea = ActionIdea.objects.get(pk=actionidea_id), user = request.user).delete()
-        return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
-    if request.POST.get('vote'):
-        v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=actionidea_id), user = request.user)
-        v.save()
-        return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
-    if request.POST.get('delete'):
-        c = get_object_or_404(ActionIdeaComment, pk = request.POST.get('comment')).delete()
-        return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
+
+    #Report Idea.
     if request.POST.get('report'):
         action_idea = context['ai']
         report_message = """Hi Handprinter Admin Team,
             
-There has been an action idea reported as inappropriate.
+        There has been an action idea reported as inappropriate.
 
-Action Idea ID: %d
-Action Idea Title: %s
-Action Idea Description: %s
-Action Idea References: %s
+        Action Idea ID: %d
+        Action Idea Title: %s
+        Action Idea Description: %s
+        Action Idea References: %s
 
-For your reference, the user who reported this is: %s
+        For your reference, the user who reported this is: %s
 
-Thanks,
-The Handprinter Team
-""" % (action_idea.id, action_idea.name, action_idea.description, action_idea.references, request.user.username)
+        Thanks,
+        The Handprinter Team
+        """ % (action_idea.id, action_idea.name, action_idea.description, action_idea.references, request.user.username)
         send_mail('Reported Action Idea', report_message, 'handprinterteam@yahoo.com',
-    ['handprinterteam@yahoo.com'], fail_silently=False)
+                  ['handprinterteam@yahoo.com'], fail_silently=False)
+        messages.add_message(request, messages.SUCCESS, 'Idea Reported!')
         return HttpResponseRedirect('/index')
+
+    #Report Comment.
     if request.POST.get('report_comment'):
         action_idea = context['ai']
         c = request.POST.get('comment_reported')
         comment = ActionIdeaComment.objects.get(id = c)
         report_message = """Hi Handprinter Admin Team,
             
-There has been a comment reported as inappropriate.
+        There has been a comment reported as inappropriate.
 
-Comment ID: %d
-Comment Text: %s
-Comment Creator: %s
-Action Idea ID: %d
-Action Idea Name: %s
+        Comment ID: %d
+        Comment Text: %s
+        Comment Creator: %s
+        Action Idea ID: %d
+        Action Idea Name: %s
 
-For your reference, the user who reported this is: %s
+        For your reference, the user who reported this is: %s
 
-Thanks,
-The Handprinter Team
-""" % (comment.id, comment.text, User.objects.get(id = comment.user_id).username, action_idea.id, action_idea.name, request.user.username)
+        Thanks,
+        The Handprinter Team
+        """ % (comment.id, comment.text, User.objects.get(id = comment.user_id).username, action_idea.id, action_idea.name, request.user.username)
         send_mail('Reported Action Idea Comment', report_message, 'handprinterteam@yahoo.com',
-    ['handprinterteam@yahoo.com'], fail_silently=False)
+                 ['handprinterteam@yahoo.com'], fail_silently=False)
+        messages.add_message(request, messages.SUCCESS, 'Comment Reported!')
         return HttpResponseRedirect('/index')
+
+    #Comment Display and Implementation
     form = CommentForm(request.POST)
     context['comment_form'] = form
     if request.method == "POST":
@@ -295,11 +275,19 @@ The Handprinter Team
             new_comment.action_idea = ActionIdea.objects.get(pk=actionidea_id)
             new_comment.user_id = request.user.id
             new_comment.save()
+            messages.add_message(request, messages.SUCCESS, 'Thanks for commenting!')
             return HttpResponseRedirect('.')
+
+    if request.POST.get('delete'):
+        c = get_object_or_404(ActionIdeaComment, pk = request.POST.get('comment')).delete()
+        messages.add_message(request, messages.SUCCESS, 'Comment Deleted!')
+        return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
+
     return render(request, 'HandprintGenerator/detail.html', context)
 
 @login_required
 @transaction.atomic
+# Edit option is displayed in the details page of an action idea.
 def edit_action_idea(request, actionidea_id=None):
     context = {}
     if actionidea_id: #editing action idea
@@ -314,6 +302,7 @@ def edit_action_idea(request, actionidea_id=None):
         if form.is_valid():
             #form.image = request.FILES['image']
             form.save()
+            messages.add_message(request, messages.SUCCESS, 'Action Idea Edited!')
             return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
     else:
         context['NewActionIdeaForm'] = form
@@ -333,6 +322,7 @@ def new_action_idea(request):
             new_action_idea = form.save(commit=False)
             new_action_idea.save()
             form.save_m2m()
+            messages.add_message(request, messages.SUCCESS, 'Action Idea Created! Click it to view details, comment, vote, or make changes.')
             return HttpResponseRedirect('/index')
     else:
         form = NewActionIdeaForm()
@@ -437,8 +427,8 @@ def forgot_password(request):
     if request.method == "POST":
         try:
             user_email = request.POST.get('email')
-            # Match submitted email to a user's email.
-            forgotten_user = User.objects.get(email=user_email)
+            # Match submitted email to a user's email who is active in the system.
+            forgotten_user = User.objects.get(email=user_email, active=True)
             # Generates a random string to set as the new password upon reset.
             #from: http://stackoverflow.com/questions/2257441/random-string-generation-with-upper-case-letters-and-digits-in-python
             new_password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
@@ -460,7 +450,7 @@ Thanks,
 The Handprinter Team
 
 P.S. We also love hearing from you and assisting you with any concerns you may have. Please reply to this email if you want to ask a question or submit a comment.
-""" % (forgotten_user.first_name, new_password, forgotten_user.username)
+""" % (forgotten_user.username, new_password, forgotten_user.username)
             # Sends an email with the new password
             send_mail('Handprinter Password Reset', password_message, 'handprinterteam@yahoo.com',
                 [user_email], fail_silently=False)
@@ -469,7 +459,38 @@ P.S. We also love hearing from you and assisting you with any concerns you may h
             return render(request, 'registration/login.html', context)
         except:
             # Email not found in system. Allow user to try again and give error.
-            messages.add_message(request, messages.ERROR,'The email given is not associated with an account. Please try again or create a new account.')
+            messages.add_message(request, messages.ERROR,'The email given is not associated with an account or your account is banned. Please try again or create a new account.')
             return render(request, 'registration/forgot_password.html', context)
 
     return render(request, 'registration/forgot_password.html', context)
+
+
+#Voting Logic for all index and search results pages
+""" 
+To implement vote on index pages, call vote(request, context) on each index page and search page. 
+def vote(request, context):
+    #Populate Vote History
+    try:
+        context['userVotes'] = ActionIdeaVote.objects.filter(user=request.user).values_list('action_idea', flat=True)
+    except:
+        context['userVote'] = False
+    #Handle Vote/Unvote Requests
+    if request.POST.get('unvote'):
+        #If there is no existing vote by this user, then you cannot unvote. 
+        is_current_vote = ActionIdeaVote.objects.filter(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
+        if is_current_vote:
+            messages.add_message(request, messages.SUCCESS, 'Idea Unvoted.')
+            ActionIdeaVote.objects.get(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user).delete()
+        else: 
+            messages.add_message(request, messages.ERROR, 'You cannot unvote an idea you have not voted for!')
+    if request.POST.get('vote'):
+        #If there is a current vote by this user, the user cannot vote again.
+        is_current_vote = ActionIdeaVote.objects.filter(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
+        if not is_current_vote:
+            v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
+            messages.add_message(request, messages.SUCCESS, 'Thank you for voting!')
+            v.save()
+        else:
+            messages.add_message(request, messages.ERROR, 'You already voted for this idea!')
+    return 
+"""

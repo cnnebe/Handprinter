@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container">
 	<!-- Load Header, Filter Options, and Search Bar. Header var allows for custom header-->
-    {% include "HandprintGenerator/idea_page_header.html" with header="Action Ideas" %}
+    {% include "HandprintGenerator/idea_page_header.html" with header="Most Recent Action Ideas" %}
     <!-- Page Content. Renders template using idea_table.html based on the index function in views.py-->
     {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_active idea_list_inactive=action_ideas_inactive %}   
 </div>

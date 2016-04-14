@@ -2,51 +2,50 @@
 
 {% block content %}
 
-{% if user.is_authenticated %}
-
-<h3> You cannot create a new account if you're logged in!</h3>
-<br>
-<h4> View your <a href=/profile>profile</a> or view some <a href=/index>action ideas.</a></h4>
-
-{% else %}
-
-<br><br>
-{% if registration_form.errors %}
-    {{ registration_form.errors }}
-{% endif %}
- 
-<div class="container">
-    {% if error%}
-        <p> This email is already associated with an account. If you forgot your password, reset your password <a href="/forgot_password" class="forgot-password"> here</a>. <p>
-    {% endif %}
-        <div class="row centered-form">
-        <div class="col-xs-12 col-sm-8 col-md-8 col-sm-offset-2 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                        <h2 class="panel-title">Join Today and grow your <a href=/about>Handprint!</a></h2>
-                        </div>
-                        <div class="panel-body">
-                        <p> * <i> indicates a required field </i> </p>
-                        <form action="#" method="post">
-                            {% for field in registration_form %}
-                            {{field.label_tag}}
-                            {{field}} <br>
-                            <i>{{field.help_text}}</i>
-                            <br><br>
-                            {% endfor %}
-                            <input type="submit" value="Register" class="btn btn-primary btn-lg">
-                            {% csrf_token %}
-                        
-                        </form>
-                    </div>
-                </div>
+{% if user.is_authenticated %} <!-- If Logged in, encourage to expand involvement -->
+<div class="container"> 
+    <div class="row centered-form">
+        <div class="col-xs-12 col-sm-6 col-md-6 col-sm-offset-3 col-md-offset-3">
+            <div class="card card-container">
+                <h3 class="text-center"> You already are a member of the community.</h3>
+                <br>
+                <h4 class="text-center"> View your <a href=/profile>profile</a> or view some <a href=/index>action ideas.</a></h4>
             </div>
         </div>
-    </div>       
-         
-    </form>
+    </div>
+</div>
 
+{% else %}
+<br><br>
+<div class="container">
+    <div class="row centered-form">
+    <div class="col-xs-12 col-sm-8 col-md-8 col-sm-offset-2 col-md-offset-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title" id="registrationHead"><b>Create an account to submit and collaborate on action ideas!</b></h2>
+            </div>
+            <div class="panel-body">
+                {% if registration_form.errors %}
+                    <p>{{ registration_form.errors }}</p> <br>
+                {% endif %}
+                {% if error %}
+                    <p>An account is already associated with the email provided. If you have an account, please <a href=/login>login</a> or <a href=/forgot_password>reset your password</a>. If you believe this is an error, please contact us at <b>actions@handprinter.org</b></p> <br>
+                {% endif %}
+                <form action="#" method="post">
+                    {% for field in registration_form %}
+                        {{field.label_tag}}
+                        {{field}}  <br> 
+                        <i>{{field.help_text}} </i>
+                        <br><br>
+                    {% endfor %}
+                    <input type="submit" value="Register" class="btn btn-primary btn-lg center-block">
+                    {% csrf_token %}        
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>       
 {% endif %}
-
 {% endblock %}
 

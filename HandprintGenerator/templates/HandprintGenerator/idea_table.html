@@ -1,6 +1,8 @@
 <!-- This template is rendered in index.html and creates the action idea table depending on the filter or tab selected. -->
 {% load staticfiles %}
 
+<div class="container"> 
+            <div class="col-xs-12 col-sm-6 col-md-6 col-sm-offset-3 col-md-offset-3">
 <!-- Differentiate Active and Inactive Ideas for Staff -->
 {% if user.profile.role == "Moderator" or user.is_staff %}
     <h2> Active </h2>
@@ -21,24 +23,6 @@
             <td> {{ ai.category }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
             <td> {{ai.numvotes}}&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
             <td> {{ai.date_created}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
-            <!-- Allows Users to Vote if Logged in-->
-            {% if user.is_authenticated %}                
-            <td> 
-                {% if ai.id in userVotes %}
-                    <form action="" method="post">
-                        <input type="hidden" name="action_idea" value="{{ ai.id }}">
-                        <input type="submit" name="unvote" value="Unvote" class="btn btn-warning"> 
-                        {% csrf_token %}
-                    </form>
-                {% else %}
-                    <form action="" method="post">
-                        <input type="hidden" name="action_idea" value="{{ ai.id }}">
-                        <input type="submit" name="vote" data-toggle="tooltip" title="The more votes an ideas has, the greater likelihood it will be selected for enviornmental impact modeling by researchers!" value="Vote" class="btn btn-warning">
-                        {% csrf_token %}
-                    </form>
-                {% endif %}
-            </td>
-            {% endif %}
         </tr>
         {% endfor %}
     {% else %}
@@ -120,3 +104,5 @@
     {% endif %}
 {% endif %}
 
+</div>
+</div>

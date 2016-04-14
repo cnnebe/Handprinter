@@ -8,7 +8,7 @@ from django.contrib import auth
 class NewActionIdeaForm(forms.ModelForm):
     class Meta:
         model = ActionIdea
-        fields = ['name', 'description', 'references', 'image', 'category', 'tags']
+        fields = ['category','name', 'description', 'tags', 'references', 'image']
         exclude = ['creator', 'date_created', 'active']
         widgets = {
             'description': Textarea(attrs={'cols': 20, 'rows': 5}),
@@ -26,8 +26,8 @@ class NewActionIdeaForm(forms.ModelForm):
         help_texts = {
             'name': ('A title should describe the main objective of an idea'),
             'description': ('What is your idea and how can people adopt it?'),
-            'references': ('Any websites, text, or additional information you want to include? This is optional.'),
-            'image': ('This is optional, but adds some visual appeal.'),
+            'references': ('Any websites or additional information you want to include? Optional.'),
+            'image': ('Optional, but adds some visual appeal.'),
             'category': ('What context does your idea apply to? Select one you think best fits.'),
             'tags': ('Any tags you enter will make your idea searchable by that tag. Use spaces or commas to separate tags.'),
         }
@@ -65,21 +65,19 @@ class PickyAuthenticationForm(AuthenticationForm):
 class UserCreateForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2', 'first_name', 'last_name')
+        fields = ('email','username', 'password1', 'password2')
+        exclude = ['first_name', 'last_name']
         widgets = {
             'email': forms.EmailInput(),
         }
         labels = { #Use labels to mark required fields.
-            'username': ('Username*'),
-            'email': ('Email*'),
-            'first_name': ('First Name'),
-            'last_name': ('Last Name'),
+            'username': ('Username'),
+            'email': ('Email'),
 
         }
         help_texts = { #Use text instead of tooltips or help icon to make it easier for mobile users.
-            'username': ('Your username is used to login and will be displayed when you submit new ideas and comments.'),
-            'email': ( 'To validate your account and reset your password, your email is needed. Your information is not shared with third parties.'),
-            'last_name': ('Your name is optional and will be displayed on your profile, which only you can see.'),
+            'username': ('To login and will be displayed when you submit new ideas and comments.'),
+            'email': ( 'To validate your account and reset your password.'),
         }
 
 
