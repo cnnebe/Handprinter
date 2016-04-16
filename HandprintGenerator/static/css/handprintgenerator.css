@@ -8,12 +8,9 @@ html {
 }
 body {
   /* Margin bottom by footer height */
-  margin-top: 50px;
-  padding: 0;
-  margin-bottom: 80px;
+  padding-top: 50px;
+  padding-bottom: 80px;
   background: rgb(250, 250, 250);
-  /*background-color: rgb(250, 250, 250);*/
-  /*text-align: center; */
 }
 
 h2 {
@@ -39,8 +36,8 @@ h2 {
 .footer{
   padding: 10px 0;
   color: black;
-  position: fixed;
-  bottom: 0;
+  position: absolute;
+  bottom: 20px;
   width: 100%;
   /* Set the fixed height of the footer here */
   height: auto;
@@ -56,43 +53,22 @@ h2 {
 -------------------------------------------------- */
 
 
-/* Special class on .container surrounding .navbar, used for positioning it into place. */
-.navbar-wrapper {
-  /*position: absolute; */
-  top: 30;
-  right: 0;
-  left: 0;
-  z-index: 0;
-}
-
-/* Flip around the padding for proper display in narrow viewports */
-  .navbar-wrapper > .container {
-  padding-right: 0;
-  padding-left: 0;
-  margin-top: 0px;
-} 
-.navbar-wrapper .navbar {
-  /*padding-right: 15px;
-  padding-left: 15px;*/
-  background: rgb(256, 256, 256);
+.navbar-default,
+.navbar-inverse {
   border-color: black;
-  font-size: 14px;
-}
-
-.navbar-wrapper .navbar .container {
-  width: auto;
-} 
-
-/* The navbar becomes detached from the top, so we round the corners */
-.navbar-wrapper .navbar {
-  border-radius: 0px;
+  background: rgb(255, 255, 255);
 }
 
 .nav.navbar-nav li a {
-    color: #8B4513;
-    font-size: 16px;
+    color: black;
+    font-size: 1.25em;
 }
 
+/* changes hover color to brand color*/
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    background-color: rgb(200, 200, 200);
+    color: rgb(47, 167, 142);
+}
 
 /* CUSTOMIZE THE CAROUSEL
 -------------------------------------------------- */
