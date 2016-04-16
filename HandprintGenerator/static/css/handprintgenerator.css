@@ -9,14 +9,19 @@ html {
 body {
   /* Margin bottom by footer height */
   padding-top: 50px;
-  padding-bottom: 80px;
+  padding-bottom: 0px;
   background: rgb(250, 250, 250);
 }
 
 h2 {
   text-align: center;
 }
-
+#main{
+  width: 100%;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+}
 #indicates { /* For required fields text on forms */
   color: red;
 }
@@ -34,18 +39,16 @@ h2 {
 -------------------------------------------------- */
 
 .footer{
-  padding: 10px 0;
+  padding: 0px 0;
   color: black;
-  position: absolute;
-  bottom: 20px;
   width: 100%;
-  /* Set the fixed height of the footer here */
-  height: auto;
+  margin-top: 50px;
   background-color: white;
+  position: relative;
 }
 
-.footer .nav.navbar-nav li a{
-  color: black;
+.footer li a{
+  color: grey;
 }
 
 
@@ -55,7 +58,7 @@ h2 {
 
 .navbar-default,
 .navbar-inverse {
-  border-color: black;
+  border: none;
   background: rgb(255, 255, 255);
 }
 
@@ -331,12 +334,12 @@ p.copyright {
 /* css for user profile page */
 
 
-.user-details {position: relative; padding: 0;}
-.user-details .user-image {position: relative;  z-index: 1; width: 100%; text-align: center;}
+.user-details {position: relative; padding: 0; background-color: rgb(232, 245, 211);}
+.user-details .user-image {position: relative;  z-index: 1; width: 100%; padding-top: 10px;text-align: center;}
  .user-image img { clear: both; margin: auto; position: relative;}
 
-.user-details .user-info-block {width: 100%; position: absolute; top: 75px; background: rgb(232, 245, 211); z-index: 0; padding-top: 35px;}
- .user-info-block .user-heading {width: 100%; text-align: center; margin: 20px 0 0;}
+.user-details .user-info-block { top: 75px; background-color: rgb(232, 245, 211); z-index: 0; padding-top: 35px;}
+ .user-info-block .user-heading {width: 100%; text-align: center; margin: 10px 0 0;}
  .user-info-block .navigation {background-color: white; float: left; width: 100%; margin: 0; padding: 0; list-style: none; border-bottom: 2px solid rgba(53, 154, 136, 1); border-top: 2px solid rgba(53, 154, 136, 1);}
   .navigation li {float: left; margin: 0; padding: 0;}
    .navigation li a {padding: 20px 30px; float: left;}
