@@ -94,7 +94,7 @@
                                     <!-- Report Comment  -->
                                     <p><form action="" method="post">
                                         <input type="hidden" name="comment_reported" value="{{ c.id }}">
-                                        <input type="submit" name="report_comment" data-toggle="tooltip" title="You can report this entry to moderators if you believe that it is offensive, inappropriate, irrelevant and/or violates the terms of service." value="Report Comment" class="btn btn-danger btn-sm">
+                                        <input type="submit" name="report_comment" data-toggle="tooltip" title="You can report this entry to moderators if you believe that it is offensive, inappropriate, irrelevant and/or violates the terms of service." value="Report Comment" class="btn btn-link">
                                         {% csrf_token %}
                                     </form></p>
 
@@ -102,7 +102,7 @@
                                     {% if c.user == request.user or user.profile.role == "Moderator" or user.is_staff %}
                                     <p><form action="/handprintgenerator/{{ ai.id }}/" method="post">
                                         <input type="hidden" name="comment" value="{{ c.id }}">
-                                        <input type="submit" name="delete" value="Delete Comment" class="btn btn-danger btn-sm">
+                                        <input type="submit" name="delete" value="Delete Comment" class="btn btn-link">
                                         {% csrf_token %}
                                     </form></p>
                                     <br><br> 
