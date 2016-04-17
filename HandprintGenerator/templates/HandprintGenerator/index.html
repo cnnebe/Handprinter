@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
+	<div class="bg"></div>
 	<!-- Load Header, Filter Options, and Search Bar. Header var allows for custom header-->
     {% include "HandprintGenerator/idea_page_header.html" with header="Most Recent Action Ideas" %}
     <!-- Page Content. Renders template using idea_table.html based on the index function in views.py-->
