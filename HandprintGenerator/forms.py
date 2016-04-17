@@ -11,8 +11,8 @@ class NewActionIdeaForm(forms.ModelForm):
         fields = ['category','name', 'description', 'tags', 'references', 'image']
         exclude = ['creator', 'date_created', 'active']
         widgets = {
-            'description': Textarea(attrs={'cols': 20, 'rows': 5}),
-            'references': Textarea(attrs={'cols': 20, 'rows': 5}),
+            'description': Textarea(),
+            'references': Textarea(),
         }
         labels = { #Use labels to mark required fields.
             'name': ('Idea Title*'),
@@ -47,7 +47,7 @@ class CommentForm(forms.ModelForm):
         fields = ['text']
         exclude = ['date_created', 'action_idea', 'user']
         widgets = {
-            'text': Textarea(attrs={'cols': 20, 'rows': 5}),
+            'text': Textarea(),
         }
         labels = {
             'text': ('Post a Comment'),

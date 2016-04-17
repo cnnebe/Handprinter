@@ -16,6 +16,7 @@ body {
 h2 {
   text-align: center;
 }
+
 #main{
   width: 100%;
   padding-left: 0px;
@@ -395,7 +396,6 @@ p.copyright {
   width: 100%; 
   text-align: center; 
   margin: 10px 0 0;
-  background-color: #87BD24;
   border: black;
 }
 
@@ -431,7 +431,7 @@ p.copyright {
  .user-info-block .user-body {
   float: left; 
   padding: 5%; 
-  width: 90%;
+  width: 100%;
 }
 
   .user-body .tab-content > div {
@@ -557,4 +557,11 @@ p.copyright {
   font-size: 12px;
   text-transform: uppercase;
   text-decoration: none;
+}
+
+/* css for text areas */
+#id_description, #id_references, #id_text {
+  width: 100%;
+  height: 200px;
+
 }
