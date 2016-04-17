@@ -11,6 +11,7 @@
                     <img id="profile-img" class="profile-img-card" src="static/img/Pear_Leaf.jpg" />
                 </div> 
             <div class="user-info-block">
+                
                 <!-- Header (username and location)  -->
                 <div class="user-heading">
                     <h3>{{ user.username }}'s profile</h3>
@@ -82,6 +83,12 @@
                                 <h4 class="text-center">Enter New Password: <input type="password" name="change_password"> </h4>
                                 <h4 class="text-center">Confirm New Password: <input type="password" name="change_password_confirmation"></h4> <br>
                                 <input class="btn btn-primary btn-lg center-block" type="submit" name="Change Password" value="Permanently Change Account Password">
+                                {% csrf_token %}
+                            </form>
+                            <br> <br>
+                            <form action="/profile" method="post">
+                                <h4 class="text-center">Change Location: <input type="text" name="change_location"> </h4> <br>
+                                <input class="btn btn-primary btn-lg center-block" type="submit" name="chnage_location" value="Change Location">
                                 {% csrf_token %}
                             </form>
                         </table>

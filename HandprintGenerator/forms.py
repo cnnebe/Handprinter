@@ -52,7 +52,7 @@ class CommentForm(forms.ModelForm):
         labels = {
             'text': ('Post a Comment'),
         }
-        
+
 class PickyAuthenticationForm(AuthenticationForm):
     def confirm_login_allowed(self, user):
         if not user.is_active:

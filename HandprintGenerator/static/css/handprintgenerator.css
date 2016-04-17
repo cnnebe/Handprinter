@@ -94,6 +94,7 @@ h2 {
 }
 
 
+
 /* CUSTOMIZE THE CAROUSEL
 -------------------------------------------------- */
 
@@ -365,7 +366,7 @@ p.copyright {
   .navigation li {float: left; margin: 0; padding: 0;}
    .navigation li a {padding: 20px 30px; float: left;}
    .navigation li.active a {background: rgba(53, 154, 136, 1); color: #fff;}
- .user-info-block .user-body {float: left; padding: 5%; width: 90%;}
+ .user-info-block .user-body {float: left; padding: 5%; width: 100%;}
   .user-body .tab-content > div {float: left; width: 100%;}
   .user-body .tab-content h4 {width: 100%; margin: 10px 0; color: #333;}
 

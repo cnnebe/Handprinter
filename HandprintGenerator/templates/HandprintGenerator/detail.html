@@ -17,6 +17,8 @@
                         <!-- Image -->
                         {% if ai.image != "" %} 
                             <img class="center-block"style="max-height:300px;" src="../../media/{{ ai.image }}" alt="{{ ai.name }}" >
+                        {% else %}
+                            <img class="center-block"style="max-height:300px;" src="../../static/img/categories/{{ai.category}}.jpg" alt="{{ ai.name }}" >
                         {% endif %}
                         <br> <br>
 
