@@ -1,16 +1,28 @@
 {% extends "base.html" %}
+
 {% block content %}
+
+
+
 {% if user.is_authenticated %}
-<br>
-<div class="use_profile">
+<br><br>
+<div class="user_profile">
     <div class="container">
         <div class="row ">
-            <div class="col-xs-12 col-md-12 user-details">
+            <div class="col-xs-12 col-md-10 col-md-offset-1 user-details">
+               
+
                 <!-- Profile Image -->
-                <div class="user-image">
-                    <img id="profile-img" class="profile-img-card" src="static/img/Pear_Leaf.jpg" />
-                </div> 
+                <div class="user-image"><img id="profile-img" class="profile-img-card" src="static/img/Pear_Leaf.jpg" /></div> 
+
+
+
+
             <div class="user-info-block">
+
+
+
+
                 <!-- Header (username and location)  -->
                 <div class="user-heading">
                     <h3>{{ user.username }}'s profile</h3>
@@ -18,6 +30,9 @@
                         <span class="help-block">{{ user.profile.location }}</span>
                     {% endif %}
                 </div>
+
+
+
                 <!--Profile Options  -->
                 <ul class="navigation">
                     <li class="active">
@@ -52,6 +67,8 @@
 
             <div class="user-body">
                 <div class="tab-content">
+
+
                     <!-- information tab for user-->
                     <div id="information" class="tab-pane active">
                         <div class="text-center">
@@ -68,6 +85,8 @@
                         </table>
                         </div>
                     </div>
+
+
                     <!-- settings tab for user-->
                     <div id="settings" class="tab-pane">
                         <h3 class="text-center">Settings</h3> <br>
@@ -86,11 +105,14 @@
                             </form>
                         </table>
                     </div>
+
+
                     <!-- Active Action Idea History-->
                     <div id="myactionitems" class="tab-pane">
                         <h3 class="text-center">My Action Ideas</h3> <br>
                         {% include "HandprintGenerator/idea_table.html" with idea_list_active=myideas idea_list_inactive=myideasinactive %} 
                     </div>
+
                     <!-- Collaboration History (Comments and Votes) -->
                     <div id="myhistory" class="tab-pane">
                         <!-- Comment History -->
@@ -132,6 +154,9 @@
                             {% endif %}
                         </table>
                     </div>
+
+
+
                     <!-- Superusers (admin) tab to send mass email -->
                     <div id="control" class="tab-pane">
                         <h4 class="text-center">Superuser Controls</h4>
@@ -139,6 +164,8 @@
                             <br>
                             <p>There will be an option to send a message to every user registered. Coming soon!</p>
                     </div>
+
+
                 </div>  <!-- tab content div-->
             </div>  <!-- user body div-->
             </div>  <!-- user block div-->
@@ -147,7 +174,10 @@
         </div>
     </div>
 </div>
+
 {% else %}
 <h3 class="text-center">Please <a href=/login>login</a> or create a <a href=/create_user>new account</a> to view your profile.</h3>
 {% endif %}
+
+
 {% endblock %}
