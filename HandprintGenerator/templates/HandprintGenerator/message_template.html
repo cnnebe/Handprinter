@@ -1,0 +1,10 @@
+<!-- This template generates messages for performing actions on the index, login, logout, edit, and delete ideas pages.-->
+{% load staticfiles %}
+<!-- Displays any messages resulting from errors or actions -->
+{% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+        <h4 id="messages" {% if message.tags %} class="{{ message.tags }}"{% endif %}><i>{{ message }}</i></h4>
+    {% endfor %}
+	</ul>
+{% endif %}

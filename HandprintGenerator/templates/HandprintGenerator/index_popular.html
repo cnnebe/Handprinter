@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+	<!-- Load Header, Filter Options, and Search Bar. Header var allows for custom header-->
+    {% include "HandprintGenerator/idea_page_header.html" with header="Most Popular Action Ideas" %}
+    <!-- Page Content. Renders template using idea_table.html based on the index_popular function in views.py-->
+    {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_vote_active idea_list_inactive=action_ideas_vote_inactive %}
+</div>
+{% endblock %}
+

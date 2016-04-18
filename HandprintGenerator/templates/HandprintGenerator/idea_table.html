@@ -1,6 +1,8 @@
 <!-- This template is rendered in index.html and creates the action idea table depending on the filter or tab selected. -->
 {% load staticfiles %}
 
+<div class="container"> 
+            <div class="col-xs-12 col-sm-6 col-md-6 col-sm-offset-1 col-md-offset-1">
 <!-- Differentiate Active and Inactive Ideas for Staff -->
 {% if user.profile.role == "Moderator" or user.is_staff %}
     <h2> Active </h2>
@@ -13,33 +15,14 @@
             <th data-toggle="tooltip" title="The title of the action idea.">Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
             <th data-toggle="tooltip" title="Context this idea is applicable in.">Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
             <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
-            <th>Date Created</th>
+            <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
         <tr>
-<!-- "using page" allows different categories to be paginated independently. -->
         {% for ai in idea_list_active %}
             <td data-toggle="tooltip" title="Click on an idea to learn more about it and comment!">
                 <a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }} </a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>                 
             <td> {{ ai.category }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
             <td> {{ai.numvotes}}&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
             <td> {{ai.date_created}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
-            <!-- Allows Users to Vote if Logged in-->
-            {% if user.is_authenticated %}                
-            <td> 
-                {% if ai.id in userVotes %}
-                    <form action="" method="post">
-                        <input type="hidden" name="action_idea" value="{{ ai.id }}">
-                        <input type="submit" name="unvote" value="Unvote">
-                        {% csrf_token %}
-                    </form>
-                {% else %}
-                    <form action="" method="post">
-                        <input type="hidden" name="action_idea" value="{{ ai.id }}">
-                        <input type="submit" name="vote" data-toggle="tooltip" title="The more votes an ideas has, the greater likelihood it will be selected for enviornmental impact modeling by researchers!" value="Vote">
-                        {% csrf_token %}
-                    </form>
-                {% endif %}
-            </td>
-            {% endif %}
         </tr>
         {% endfor %}
     {% else %}
@@ -53,6 +36,23 @@
         {% endif %}
     {% endif %}
 </table>
+
+{% if paginate or paginate == None %} <!-- Pagination occurs on everything except search as it does not work. -->
+<!-- Pagination for Active Ideas -->
+<div class="pagination">
+    <span class="step-links">
+        {% if idea_list_active.has_previous %}
+            <a href="?page={{ idea_list_active.previous_page_number }}">previous</a>
+        {% endif %}
+        <span class="current">
+            Page {{ idea_list_active.number }} of {{ idea_list_active.paginator.num_pages }}.
+        </span>
+        {% if idea_list_active.has_next %}
+            <a href="?page={{ idea_list_active.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+{% endif %}
 <br>
 
 <!-- Inactive Action Idea Table -->
@@ -85,5 +85,24 @@
             {% endif %}
         {% endif %}
     </table>
+
+    {% if paginate or paginate == None %}  <!-- Pagination occurs on everything except search as it does not work. -->
+    <!-- Pagination for Inactive Ideas -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if idea_list_inactive.has_previous %}
+                <a href="?page={{ idea_list_inactive.previous_page_number }}">previous</a>
+            {% endif %}
+            <span class="current">
+                Page {{ idea_list_inactive.number }} of {{ idea_list_inactive.paginator.num_pages }}.
+            </span>
+            {% if idea_list_inactive.has_next %}
+                <a href="?page={{ idea_list_inactive.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+    {% endif %}
 {% endif %}
 
+</div>
+</div>

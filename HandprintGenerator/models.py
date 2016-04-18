@@ -29,16 +29,8 @@ REASON_CHOICES = (
 
 class Profile(models.Model):
     #we are using from Django's User class, and it has the following fields:
-    #username
-    #first_name
-    #last_name
-    #email
-    #password
-    #is_staff
-    #is_active
-    #is_superuser
-    #last_login
-    #date_joined
+    #username, first_name, last_name, email, password
+    #is_staff, is_active, is_superuser, last_login and date_joined
     user = models.OneToOneField(User)
     location = models.CharField(max_length=50, null=True, blank=True)
     role = models.CharField(
@@ -76,11 +68,11 @@ class ActionIdeaComment(models.Model):
     text = models.CharField(max_length=1000)
     date_created = models.DateTimeField(auto_now_add=True, blank=True)
 
-class ActionIdeaVote(models.Model):
+class ActionIdeaVote(models.Model): #Votes get their own model to ensure a user gets only one vote per idea.
     action_idea = models.ForeignKey(ActionIdea)
     user = models.ForeignKey(User)
 
-class ActionIdeaInactive(models.Model):
+class ActionIdeaInactive(models.Model): #Inactive ideas get their own model to record reason and user who deleted it.
     action_idea = models.ForeignKey(ActionIdea)
     reason = models.CharField(
         max_length = 15, 
