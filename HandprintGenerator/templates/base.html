@@ -13,80 +13,71 @@
     </head>
 
     <body>
+    <div class="container" id="main">
     <!-- Navigation Bar -->
-    <div class="navbar-wrapper">
-        <div class="container">
-            <nav class="navbar navbar-default navbar-fixed-top">
-                <div class="container">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a href="{% url 'HandprintGenerator:home' %}"><img class="img-responsive" src="static/img/logo_handprint.png"></a>
-                    </div>
-                    <div id="navbar" class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav navbar-right">
-                            <li><a href="{% url 'HandprintGenerator:home' %}">Home</a></li>
-                            <li><a href="{% url 'HandprintGenerator:about_us' %}">About Handprinter</a></li>
-                            <li><a href="{% url 'HandprintGenerator:index' %}">View Action Ideas</a></li>
-                            <!-- Only registered users can make a new action idea. -->
-                            {% if user.is_authenticated %}
-                                <li><a href="{% url 'HandprintGenerator:new_action_idea' %}">Submit Idea</a></li>
-                            {% endif %}
-                            <!-- If not logged in, register and login. If logged in: profile and logout. -->
-                            {% if not user.is_authenticated %}
-                                <li><a href="{% url 'HandprintGenerator:new_user' %}">Register</a></li>
-                            {% endif %}
-                            <li>
-                                {% if user.is_authenticated %} 
-                                <a href="/profile">Welcome, {{ user.username }}</a>
-                            </li>
-                            <li><a href="{% url 'HandprintGenerator:logout' %}">Logout</a>
-                                {% else %}
-                                <a href="{% url 'HandprintGenerator:login' %}">Log In</a>
-                                {% endif %}
-                            </li>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="{% url 'HandprintGenerator:home' %}"><img class="img-responsive" src="static/img/logo_handprint.png"></a>
+           </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{% url 'HandprintGenerator:about_us' %}">About Handprinter</a></li>
+                    <li><a href="{% url 'HandprintGenerator:index' %}">View Action Ideas</a></li>
+                    <!-- Only registered users can make a new action idea. -->
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'HandprintGenerator:new_action_idea' %}">Submit Idea</a></li>
+                    {% endif %}
+                    <!-- If not logged in, register and login. If logged in: profile and logout. -->
+                    {% if not user.is_authenticated %}
+                    <li><a href="{% url 'HandprintGenerator:new_user' %}">Register</a></li>
+                    {% endif %}
+                    {% if user.is_authenticated %} 
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.username }} <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                        <li><a href="/profile">Profile</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{% url 'HandprintGenerator:logout' %}">Logout</a>
                         </ul>
-                    </div>
-                </div>
-            </nav>
+                    </li>
+                    {% else %}
+                    <li><a href="{% url 'HandprintGenerator:login' %}">Log In</a></li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-    </div>
+    </nav>
+
     <!-- Content that inherits from this file (base.html) will be placed between the nav and footer. -->
     {% block content %}
     {% endblock %}            
-    <br>
-    <!-- /.banner -->
 
+</div>
+<hr>
     <!-- Footer -->
         <footer class="footer">
-            <div class="container">
-                <ul class="nav navbar-nav navbar-right">
+                <div class="container">
                     <ul class="list-inline text-center">
                         <br>
                         <li><a  href="http://eepurl.com/jG5y1">Subscribe</a></li>
                         <li><a href="{% url 'HandprintGenerator:contact_us' %}">Contact Us</a></li>
                         <li><a href="{% url 'HandprintGenerator:privacy_policy' %}">Privacy Policy</a></li>
                         <li><a href="{% url 'HandprintGenerator:terms_of_service' %}">Terms of Service</a></li> 
-                        <li><a href="http://www.facebook.com/pages/Handprinter/261588277249806?sk=wall">
-                            <img src="http://www.handprinter.org/wp-content/themes/handprinter/images/btn_facebook.png" alt="Facebook">
-                            </a> </li>
-                        <li> <a href="https://twitter.com/#!/Handprinter">
-                              <img src="http://www.handprinter.org/wp-content/themes/handprinter/images/btn_twitter.png" alt="Twitter"></a>
-                        </li>
                         <!-- Admin can access admin panel from footer. -->
                         {% if user.is_staff %}
                             <li><a href="/admin">Administration</a></li>
                         {% endif %}
                     </ul>
-                </ul>
-            </div>
+                </div>
         </footer>
-    </body>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -94,4 +85,22 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    </body>
+
 </html>
+
+<!--
+    this is a wrapper i used around the nav, right now, it is not useful"
+    <div class="navbar-wrapper">
+    <div class="container"> 
+    </div>
+    </div>
+
+    social media icons
+        <li><a href="http://www.facebook.com/pages/Handprinter/261588277249806?sk=wall">                        <img src="http://www.       handprinter.org/wp-content/themes/handprinter/images/btn_facebook.png" alt="Facebook">
+                </a> </li>
+                <li> <a href="https://twitter.com/#!/Handprinter">
+                <img src="http://www.handprinter.org/wp-content/themes/handprinter/images/btn_twitter.png" alt="Twitter"></a>
+         </li>
+-->

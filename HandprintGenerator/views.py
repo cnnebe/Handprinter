@@ -51,6 +51,13 @@ def user_profile(request):
                 u.save()
                 messages.add_message(request, messages.SUCCESS, 'Password changed!')
                 return HttpResponseRedirect('/logout')
+        if request.method == "POST":   
+            if request.POST.get('change_location'): 
+                p = User.objects.get(id=request.user.id).profile
+                p.location = request.POST.get('change_location')
+                p.save()
+                messages.add_message(request, messages.SUCCESS, 'Location changed!')
+                return HttpResponseRedirect('/profile')
     except:
         pass
     return render(request, 'HandprintGenerator/user_profile.html', context)

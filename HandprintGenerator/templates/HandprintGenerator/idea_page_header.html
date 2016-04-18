@@ -1,14 +1,18 @@
 <!-- This template creates the page header depending on the filter or search result on all index_ pages and the searchresults.html page.-->
 {% load staticfiles %}
 
-<div class="container"> 
-<div class="col-xs-12 col-sm-6 col-md-6 col-sm-offset-3 col-md-offset-3">
+<div class="container" id="index">
+<div class="col-xs-12 col-sm-12 col-md-12">
 
 <div class="jumbotron">
-    <h2 class="text-center"> {{header}} </h2>
+    <h2> {{header}}      
+      <button id="ibutton" type="submit" class="btn btn-primary" data-toggle="modal" data-target="#myModal"> 
+      <i class="fa fa-question"></i>
+      </button>
+    </h2>
      <!-- Button trigger modal -->
-     <button type="button" class="btn btn-link btn-lg center-block" data-toggle="modal" data-target="#myModal">More info</button>
-     <a href=/new class="btn btn-link btn-lg center-block">Submit a new idea!</a>
+  <br><br><br><br><br>
+     <a href=/new class="btn btn-success btn-md center-block">Submit Idea!</a>
 </div>
 
 
@@ -34,32 +38,85 @@
 <!-- Displays any messages -->
 {% include "HandprintGenerator/message_template.html" %}
 
-<!-- Search Bar -->
-<form action="/searchresults" method="get">
-    {% csrf_token %}
-    <label for="search">Search for Ideas by Tags: </label>
-    <input id="search" type="text" name="searchTerm" value="{{ searchTerm }}">
-    <input type="submit" value="Search" class="btn btn-success">
-</form>
-<br><br>
 
-<!-- Filter Dropdown -->
-<div class="dropdown">
-	<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Filter By
-	<span class="caret"></span></button>
-	 <!-- Dropdown Options. Future developers should make the current page not show up during selection. -->
-    <ul class="dropdown-menu" aria-labelledby="myTabDrop1" id="myTabDrop1-contents">
-    	<li><a href="/index">Most Recent</a></li>
-    	<li><a href="/index_popular">Most Popular</a></li>
-    	<li><a href="/index_home">Home</a></li>
-    	<li><a href="/index_work">Work</a></li>
-    	<li><a href="/index_community">Community</a></li>
-    	<li><a href="/index_mobility">Mobility</a></li>
-    	<li><a href="/index_food">Food</a></li>
-    	<li><a href="/index_clothing">Clothing</a></li>
-    	<li><a href="/index_other">Other</a></li>
-    </ul> 
-</div><br>
+<!-- Page Heading/Breadcrumbs -->
+<div class="row" id="action">
+<div class="col-lg-12">
+<div class="well">
+  <ul class="list-inline text-center">
+  <form action="/searchresults" method="get">
+      {% csrf_token %}
+      <label for="search">Search Ideas: </label>
+      <input id="search" type="text" name="searchTerm" value="{{ searchTerm }}">
+      <input type="submit" value="Search" class="btn btn-success">
+  </form>
+  <ul>
+  </div>
+  </div>
+</div>
+        <!-- /.row -->
+
+<!-- filters -->
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="left-sidebar">
+            <h2>Filters</h2>
+            <div class="panel-group category-products" id="accordian"><!--filters nav-->
+
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordian" href="#sportswear">
+                      <span class="badge pull-right"><i class="fa fa-plus"></i></span>
+                      Sort By
+                    </a>
+                  </h4>
+                </div>
+                <div id="sportswear" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <ul>
+                      <li><a href="/index">Recent</a></li>
+                      <li><a href="/index_popular">Popular</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordian" href="#womens">
+                      <span class="badge pull-right"><i class="fa fa-plus"></i></span>
+                      Categories 
+                    </a>
+                  </h4>
+                </div>
+                <div id="womens" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <ul>
+                      <li><a href="/index_home">Home</a></li>
+                      <li><a href="/index_work">Work</a></li>
+                      <li><a href="/index_community">Community</a></li>
+                      <li><a href="/index_mobility">Mobility</a></li>
+                      <li><a href="/index_food">Food</a></li>
+                      <li><a href="/index_clothing">Clothing</a></li>
+                      <li><a href="/index_other">Other</a></li>
+
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title"><a href="/index">View All</a></h4>
+                </div>
+              </div>
+             
+            </div><!--/filters nav-->
+
+          
 
 </div> <!-- Container -->
 </div> <!-- Offset -->
@@ -70,3 +127,23 @@
         $('#myInput').focus()
         })
 </script>
+
+    <!-- Menu Toggle Script -->
+
+
+<!-- Filter Dropdown 
+<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Filter By
+  <span class="caret"></span></button>
+    <ul class="dropdown-menu" aria-labelledby="myTabDrop1" id="myTabDrop1-contents">
+      <li><a href="/index">Most Recent</a></li>
+      <li><a href="/index_popular">Most Popular</a></li>
+      <li><a href="/index_home">Home</a></li>
+      <li><a href="/index_work">Work</a></li>
+      <li><a href="/index_community">Community</a></li>
+      <li><a href="/index_mobility">Mobility</a></li>
+      <li><a href="/index_food">Food</a></li>
+      <li><a href="/index_clothing">Clothing</a></li>
+      <li><a href="/index_other">Other</a></li>
+    </ul> 
+</div><br> -->
