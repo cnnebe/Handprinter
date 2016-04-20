@@ -326,13 +326,13 @@ def edit_action_idea(request, actionidea_id=None):
     if request.method == "POST":
         context['NewActionIdeaForm'] = form
         if form.is_valid():
-            #form.image = request.FILES['image']
-            form.save(commit=False)
+            existing_idea = form.save(commit=False)
             #image is uploaded locally, now upload to Heroku cloudinary
-            new_image = cloudinary.uploader.upload(form.image, crop = 'limit', width = 2000)
+            new_image = cloudinary.uploader.upload(existing_idea.image, crop = 'limit', width = 2000)
             #set the new image URL on cloudinary
-            form.image = new_image['url']
-            form.save()
+            existing_idea.image = new_image['url']
+            existing_idea.save()
+            form.save_m2m()
             messages.add_message(request, messages.SUCCESS, 'Action Idea Edited!')
             return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
     else:
