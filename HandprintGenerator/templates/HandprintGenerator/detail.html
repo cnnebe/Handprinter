@@ -59,24 +59,6 @@
                 <h4 data-toggle="tooltip" title="What the idea is and how to adopt it."> 
                     <u>Description</u> <br><small> {{ ai.description }}</small>
                 </h4> <br>
-                <hr>
-                <!-- Voting. Only vote if logged in and idea is active. -->
-                <h4> <u>Votes:</u> {{ai.numvotes}} </h4>
-                    {% if user.is_authenticated and ai.active %}                
-                        {% if userVote %}
-                            <form action="/handprintgenerator/{{ ai.id }}/" method="post">
-                                <input type="submit" name="unvote" value="Unvote" class="btn btn-warning btn-lg center-block">
-                                {% csrf_token %}
-                            </form>
-                        {% else %}
-                            <form action="/handprintgenerator/{{ ai.id }}/" method="post">
-                                <input type="submit" name="vote" data-toggle="tooltip" title="The more votes an ideas has, the greater likelihood it will be selected for enviornmental impact modeling by researchers!" value="Vote" class="btn btn-primary btn-lg center-block">
-                                {% csrf_token %}
-                            </form>
-                        {% endif %}
-                        <br>
-                    {% endif %} 
-                <hr>
 
                 <!-- Blog Comments -->
                 <!-- Comments Form -->
@@ -115,7 +97,8 @@
                                 <!-- comment -->
                                 <div class="media">
                                     <a class="pull-left" href="#">
-                                        <img class="media-object" src="http://placehold.it/64x64" alt="">
+                                        <!-- if adding image, add it here. Make it 64x64 
+                                        <img class="media-object" src="http://placehold.it/64x64" alt=""> -->
                                     </a>
                                     <div class="media-body">
                                         <h4 class="media-heading"> {{ c.user.username }} 
@@ -153,7 +136,7 @@
             <!-- Blog Sidebar Widgets Column -->
             <div class="col-md-4">
 
-                <!-- Blog Search Well -->
+                <!-- category  Well -->
                 <div class="well" id="details">
                         <h4 data-toggle="tooltip" title="Context this idea is applicable in."> <u>Category:</u> {{ ai.get_category_display }}</h4>
                         <br>
@@ -166,7 +149,7 @@
                 </div>
 
 
-                <!-- Side Widget Well -->
+                <!-- tag Well -->
                 <div class="well" id="details">
                        {% if ai.tags.names %} <!-- Display if any tags -->
                         <h4 data-toggle="tooltip" title="Relevant keywords about the idea. Tags are used for search, so having lots of tags increases search visibility! Click on a tag to view all ideas with that tag!"> <u>Tags:</u> 
@@ -180,12 +163,30 @@
                         {% endif %}
                 </div>
 
-            </div>
+                <!-- Vote Well -->
+                <div class="well" id="details">
+                <hr>
+                <!-- Voting. Only vote if logged in and idea is active. -->
+                <h4> <u>Votes:</u> {{ai.numvotes}} </h4>
+                    {% if user.is_authenticated and ai.active %}                
+                        {% if userVote %}
+                            <form action="/handprintgenerator/{{ ai.id }}/" method="post">
+                                <input type="submit" name="unvote" value="Unvote" class="btn btn-warning btn-lg center-block">
+                                {% csrf_token %}
+                            </form>
+                        {% else %}
+                            <form action="/handprintgenerator/{{ ai.id }}/" method="post">
+                                <input type="submit" name="vote" data-toggle="tooltip" title="The more votes an ideas has, the greater likelihood it will be selected for enviornmental impact modeling by researchers!" value="Vote" class="btn btn-primary btn-lg center-block">
+                                {% csrf_token %}
+                            </form>
+                        {% endif %}
+                        <br>
+                    {% endif %} 
+                <hr>
+                </div>
 
-        </div>
-        <!-- /.row -->
-
-                        <!-- Edit, Delete and Restore -->
+                <div class="well" id="details">
+      <!-- Edit, Delete and Restore -->
                         {% if ai.creator == request.user or user.is_staff or user.profile.role == "Moderator" %}
                             {% if ai.active %}
                             <a href="{% url 'HandprintGenerator:edit_action_idea' ai.id %}" class="btn btn-info center-block">Edit Action Idea</a> <br>
@@ -211,6 +212,13 @@
                         </form>
                         <br>
                         {% endif %}
+                </div>
+
+
+            </div>
+
+        </div>
+        <!-- /.row -->
 
         <hr>
     {% else %}
