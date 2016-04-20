@@ -20,7 +20,7 @@
                         {% if ai.image != "" %} 
                             <img class="center-block"style="width:100%;" src={{ ai.image }} alt={{ ai.name }} >
                         {% else %}
-                            <img class="center-block"style="width:100%;" src={% static '/img/categories/{{ai.category}}.jpg' alt="{{ ai.name }}" >
+                            <img class="center-block"style="width:100%;" src="../../static/img/categories/{{ai.category}}.jpg" alt="{{ ai.name }}" >
                         {% endif %}
                         <br> <br>
 
