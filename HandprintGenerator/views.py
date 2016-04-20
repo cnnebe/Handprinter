@@ -327,7 +327,7 @@ def edit_action_idea(request, actionidea_id=None):
         context['NewActionIdeaForm'] = form
         if form.is_valid():
             #form.image = request.FILES['image']
-            form.save(commit=false)
+            form.save(commit=False)
             #image is uploaded locally, now upload to Heroku cloudinary
             new_image = cloudinary.uploader.upload(form.image, crop = 'limit', width = 2000)
             #set the new image URL on cloudinary
