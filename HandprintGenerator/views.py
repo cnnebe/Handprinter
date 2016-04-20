@@ -352,9 +352,9 @@ def new_action_idea(request):
         if form.is_valid():
             new_action_idea = form.save(commit=False)
             #image is uploaded locally, now upload to Heroku cloudinary
-            new_image = cloudinary.uploader.upload(form.image, crop = 'limit', width = 2000)
+            new_image = cloudinary.uploader.upload(new_action_idea.image, crop = 'limit', width = 2000)
             #set the new image URL on cloudinary
-            form.image = new_image['url']
+            new_action_idea.image = new_image['url']
             new_action_idea.save()
             form.save_m2m()
             messages.add_message(request, messages.SUCCESS, 'Action Idea Created! Click it to view details, comment, vote, or make changes.')
