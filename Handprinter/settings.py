@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'HandprintGenerator',
     'taggit',
+    'cloudinary',
 ]
 
 MIDDLEWARE_CLASSES = [
