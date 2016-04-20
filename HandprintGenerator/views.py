@@ -328,9 +328,10 @@ def edit_action_idea(request, actionidea_id=None):
         if form.is_valid():
             existing_idea = form.save(commit=False)
             #image is uploaded locally, now upload to Heroku cloudinary
-            new_image = cloudinary.uploader.upload(existing_idea.image, crop = 'limit', width = 2000)
-            #set the new image URL on cloudinary
-            existing_idea.image = new_image['url']
+            if existing_idea.image != None:
+                new_image = cloudinary.uploader.upload(existing_idea.image, crop = 'limit', width = 2000)
+                #set the new image URL on cloudinary
+                existing_idea.image = new_image['url']
             existing_idea.save()
             form.save_m2m()
             messages.add_message(request, messages.SUCCESS, 'Action Idea Edited!')
@@ -352,9 +353,10 @@ def new_action_idea(request):
         if form.is_valid():
             new_action_idea = form.save(commit=False)
             #image is uploaded locally, now upload to Heroku cloudinary
-            new_image = cloudinary.uploader.upload(new_action_idea.image, crop = 'limit', width = 2000)
-            #set the new image URL on cloudinary
-            new_action_idea.image = new_image['url']
+            if new_action_idea.image != None:
+                new_image = cloudinary.uploader.upload(new_action_idea.image, crop = 'limit', width = 2000)
+                #set the new image URL on cloudinary
+                new_action_idea.image = new_image['url']
             new_action_idea.save()
             form.save_m2m()
             messages.add_message(request, messages.SUCCESS, 'Action Idea Created! Click it to view details, comment, vote, or make changes.')
