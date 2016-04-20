@@ -29,6 +29,11 @@ import datetime
 import string
 import random
 
+#for image uploading (Heroku cloudinary add-on)
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
 def home(request):
     context = {}
     return render(request, 'HandprintGenerator/home.html', context)
@@ -322,6 +327,11 @@ def edit_action_idea(request, actionidea_id=None):
         context['NewActionIdeaForm'] = form
         if form.is_valid():
             #form.image = request.FILES['image']
+            form.save(commit=false)
+            #image is uploaded locally, now upload to Heroku cloudinary
+            new_image = cloudinary.uploader.upload(form.image, crop = 'limit', width = 2000)
+            #set the new image URL on cloudinary
+            form.image = new_image['url']
             form.save()
             messages.add_message(request, messages.SUCCESS, 'Action Idea Edited!')
             return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
@@ -341,6 +351,10 @@ def new_action_idea(request):
         context['NewActionIdeaForm'] = form
         if form.is_valid():
             new_action_idea = form.save(commit=False)
+            #image is uploaded locally, now upload to Heroku cloudinary
+            new_image = cloudinary.uploader.upload(form.image, crop = 'limit', width = 2000)
+            #set the new image URL on cloudinary
+            form.image = new_image['url']
             new_action_idea.save()
             form.save_m2m()
             messages.add_message(request, messages.SUCCESS, 'Action Idea Created! Click it to view details, comment, vote, or make changes.')
