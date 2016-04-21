@@ -488,7 +488,7 @@ p.copyright {
 }
 .left-sidebar h2, .brands_products h2 {
   color: white;
-  font-size: 18px;
+  font-size: 1em;
   font-weight: 700;
   margin: 0 auto 30px;
   text-align: center;
@@ -564,4 +564,10 @@ p.copyright {
   width: 100%;
   height: 200px;
 
+}
+
+/* css for details page */
+#details{
+  background: rgb(232, 245, 211);
+  width: 100%
 }
