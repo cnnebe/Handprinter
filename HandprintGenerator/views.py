@@ -69,6 +69,20 @@ def user_profile(request):
                 p.save()
                 messages.add_message(request, messages.SUCCESS, 'Location changed!')
                 return HttpResponseRedirect('/profile')
+        if request.method == "POST":   
+            if request.POST.get('email_subject'): 
+                sg = sendgrid.SendGridClient(os.environ['SENDGRID_USERNAME'], os.environ['SENDGRID_PASSWORD'])
+
+                message = sendgrid.Mail()
+                for eaddress in User.objects.all():
+                    message.add_to(eaddress.email)
+                message.set_subject(request.POST.get('email_subject'))
+                message.set_text(request.POST.get('email_message'))
+                message.set_from("actions@handprinter.org")
+                status, msg = sg.send(message)
+                
+                messages.add_message(request, messages.SUCCESS, 'Message Sent!')
+                return HttpResponseRedirect('/profile')
     except:
         pass
     return render(request, 'HandprintGenerator/user_profile.html', context)
