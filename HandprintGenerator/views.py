@@ -257,7 +257,7 @@ def detail(request, actionidea_id):
 
 Thanks,
 The Handprinter Team
-""" % (action_idea.id, action_idea.name, action_idea.description, action_idea.references, request.user.username))
+""" % (action_idea.id, action_idea.name, action_idea.description, action_idea.references, request.user.username)
         #Now send the email
         sg = sendgrid.SendGridClient(os.environ['SENDGRID_USERNAME'], os.environ['SENDGRID_PASSWORD'])
 
