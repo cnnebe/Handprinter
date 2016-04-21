@@ -15,11 +15,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 #for email 
 import os
-import email
-import sendgrid
-import smtplib 
-from email.mime.text import MIMEText
-from django.conf import settings
+import sendgrid 
 
 #our other django files
 from .models import * 
@@ -292,7 +288,16 @@ The Handprinter Team
 Thanks,
 The Handprinter Team
 """ % (comment.id, comment.text, User.objects.get(id = comment.user_id).username, action_idea.id, action_idea.name, request.user.username)
-        send_mail('Reported Action Idea Comment', report_message, 'actions@handprinter.org', ['actions@handprinter.org',], fail_silently=False)
+        #Now, send the email
+        sg = sendgrid.SendGridClient(os.environ['SENDGRID_USERNAME'], os.environ['SENDGRID_PASSWORD'])
+
+        message = sendgrid.Mail()
+        message.add_to("actions@handprinter.org")
+        message.set_subject("Reported Action Idea Comment")
+        message.set_text(report_message)
+        message.set_from("actions@handprinter.org")
+        status, msg = sg.send(message)
+        
         messages.add_message(request, messages.SUCCESS, 'Comment Reported!')
         return HttpResponseRedirect('/index')
 
