@@ -15,7 +15,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 #for email 
 import os
-import sendgrid 
+import sendgrid
 
 #our other django files
 from .models import * 
