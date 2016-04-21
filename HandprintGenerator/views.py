@@ -475,7 +475,7 @@ def forgot_password(request):
 #        try:
             user_email = request.POST.get('email')
             # Match submitted email to a user's email who is active in the system.
-            forgotten_user = User.objects.get(email=user_email, active=True)
+            forgotten_user = User.objects.get(email=user_email, is_active=True)
             # Generates a random string to set as the new password upon reset.
             #from: http://stackoverflow.com/questions/2257441/random-string-generation-with-upper-case-letters-and-digits-in-python
             new_password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
