@@ -472,7 +472,7 @@ def logout(request):
 def forgot_password(request):
     context = {}
     if request.method == "POST":
-        try:
+#        try:
             user_email = request.POST.get('email')
             # Match submitted email to a user's email who is active in the system.
             forgotten_user = User.objects.get(email=user_email, active=True)
@@ -503,18 +503,18 @@ P.S. We also love hearing from you and assisting you with any concerns you may h
 
             message = sendgrid.Mail()
             message.add_to(user_email)
-            message.set_subject('Handprinter Password Reset')
+            message.set_subject("Handprinter Password Reset")
             message.set_text(password_message)
-            message.set_from('Handprinter Team ')
+            message.set_from("actions@handprinter.org")
             status, msg = sg.send(message)
             
             messages.add_message(request, messages.SUCCESS,'An email has been sent to the address given. Please follow the instructions in the email.')
             # Redirect to login and displays success message.
             return render(request, 'registration/login.html', context)
-        except:
-            # Email not found in system. Allow user to try again and give error.
-            messages.add_message(request, messages.ERROR,'The email given is not associated with an account or your account is banned. Please try again or create a new account.')
-            return render(request, 'registration/forgot_password.html', context)
+#        except:
+#            # Email not found in system. Allow user to try again and give error.
+#            messages.add_message(request, messages.ERROR,'The email given is not associated with an account or your account is banned. Please try again or create a new account.')
+#            return render(request, 'registration/forgot_password.html', context)
 
     return render(request, 'registration/forgot_password.html', context)
 
