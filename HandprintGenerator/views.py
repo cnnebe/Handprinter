@@ -328,7 +328,7 @@ def edit_action_idea(request, actionidea_id=None):
         if form.is_valid():
             existing_idea = form.save(commit=False)
             #image is uploaded locally, now upload to Heroku cloudinary
-            if !existing_idea.image:
+            if existing_idea.image != "":
                 new_image = cloudinary.uploader.upload(existing_idea.image, crop = 'limit', width = 2000)
                 #set the new image URL on cloudinary
                 existing_idea.image = new_image['url']
@@ -353,7 +353,7 @@ def new_action_idea(request):
         if form.is_valid():
             new_action_idea = form.save(commit=False)
             #image is uploaded locally, now upload to Heroku cloudinary
-            if !new_action_idea.image:
+            if new_action_idea.image != "":
                 new_image = cloudinary.uploader.upload(new_action_idea.image, crop = 'limit', width = 2000)
                 #set the new image URL on cloudinary
                 new_action_idea.image = new_image['url']
