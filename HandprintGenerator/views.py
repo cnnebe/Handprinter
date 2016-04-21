@@ -244,7 +244,7 @@ def detail(request, actionidea_id):
     #Report Idea.
     if request.POST.get('report'):
         action_idea = context['ai']
-        msg = MIMEText("""Hi Handprinter Admin Team,
+        reported_idea_message = """Hi Handprinter Admin Team,
             
         There has been an action idea reported as inappropriate.
 
@@ -258,13 +258,16 @@ def detail(request, actionidea_id):
 Thanks,
 The Handprinter Team
 """ % (action_idea.id, action_idea.name, action_idea.description, action_idea.references, request.user.username))
-        msg['Subject'] = "Reported Action Idea"
-        msg['From']    = "actions@handprinter.org"
-        msg['To']      = "actions@handprinter.org"
-        s = smtplib.SMTP(os.environ['MAILGUN_SMTP_SERVER'], os.environ['MAILGUN_SMTP_PORT'])
-        s.login(os.environ['MAILGUN_SMTP_LOGIN'], os.environ['MAILGUN_SMTP_PASSWORD'])
-        s.sendmail(msg['From'], msg['To'], msg.as_string())
-        s.quit()
+        #Now send the email
+        sg = sendgrid.SendGridClient(os.environ['SENDGRID_USERNAME'], os.environ['SENDGRID_PASSWORD'])
+
+        message = sendgrid.Mail()
+        message.add_to("actions@handprinter.org")
+        message.set_subject("Reported Action Idea")
+        message.set_text(reported_idea_message)
+        message.set_from("actions@handprinter.org")
+        status, msg = sg.send(message)
+        
         messages.add_message(request, messages.SUCCESS, 'Idea Reported!')
         
         return HttpResponseRedirect('/index')
