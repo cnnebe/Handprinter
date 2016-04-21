@@ -16,6 +16,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 #for email 
 import os
 import email
+import sendgrid
 import smtplib 
 from email.mime.text import MIMEText
 from django.conf import settings
@@ -490,8 +491,15 @@ The Handprinter Team
 P.S. We also love hearing from you and assisting you with any concerns you may have. Please reply to this email if you want to ask a question or submit a comment.
 """ % (forgotten_user.username, new_password, forgotten_user.username)
             # Sends an email with the new password
-            send_mail('Handprinter Password Reset', password_message, 'handprinterteam@yahoo.com',
-                [user_email], fail_silently=False)
+            sg = sendgrid.SendGridClient(os.environ['SENDGRID_USERNAME'], os.environ['SENDGRID_PASSWORD'])
+
+            message = sendgrid.Mail()
+            message.add_to(user_email)
+            message.set_subject('Handprinter Password Reset')
+            message.set_text(password_message)
+            message.set_from('Handprinter Team ')
+            status, msg = sg.send(message)
+            
             messages.add_message(request, messages.SUCCESS,'An email has been sent to the address given. Please follow the instructions in the email.')
             # Redirect to login and displays success message.
             return render(request, 'registration/login.html', context)
