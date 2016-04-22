@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load staticfiles %}
 {% block content %}
  <!-- Carousel
     ================================================== -->
@@ -53,13 +53,6 @@
     <div class="home">
       <div class="container">
 
-        <!-- Header Row -->
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="well text-centered">Getting Started</div>
-            </div>
-          </div>
-
         <div class="row">
             <div class="col-xs-12 col-md-6">
                 <div class="panel panel-default text-center">
@@ -70,8 +63,13 @@
                         </span>
                     </div>
                     <div class="panel-body">
-                        <h4>Become Leaf User</h4>
-                        <a href="{% url 'HandprintGenerator:new_user' %}" class="btn btn-primary">Join Community</a>
+                        {% if not user.is_authenticated %}
+                        <h4>Submit an Action Idea</h4>
+                        <a href="{% url 'HandprintGenerator:new_user' %}" class="btn btn-primary">Create an Account</a>
+                        {% else %}
+                        <h4>Thank you for being a part of our Community</h4>
+                        <a href="{% url 'HandprintGenerator:new_action_idea' %}" class="btn btn-primary">Submit an Action Idea</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

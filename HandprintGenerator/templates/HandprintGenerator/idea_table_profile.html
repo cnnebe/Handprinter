@@ -1,8 +1,6 @@
-<!-- This template is rendered in index.html and creates the action idea table depending on the filter or tab selected. -->
-{% load staticfiles %}
 
 <div class="container"> 
-            <div class="col-xs-12 col-sm-6 col-md-6 col-sm-offset-1 col-md-offset-1">
+            <div class="col-xs-12 col-sm-12 col-md-12">
 <!-- Differentiate Active and Inactive Ideas for Staff -->
 {% if user.profile.role == "Moderator" or user.is_staff %}
     <h2> Active </h2>

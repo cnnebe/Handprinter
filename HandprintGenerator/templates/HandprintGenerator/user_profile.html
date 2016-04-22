@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load staticfiles %}
 {% block content %}
 
 
@@ -9,11 +9,11 @@
 <div class="user_profile">
     <div class="container">
         <div class="row ">
-            <div class="col-xs-12 col-md-10 col-md-offset-1 user-details">
+            <div class="col-xs-12 col-md-12 user-details">
                
 
                 <!-- Profile Image -->
-                <div class="user-image"><img id="profile-img" class="profile-img-card" src="static/img/Pear_Leaf.jpg" /></div> 
+                <div class="user-image"><img id="profile-img" class="profile-img-card" src={% static 'img/Pear_Leaf.jpg' %} /></div> 
 
 
 
@@ -25,7 +25,7 @@
                 <div class="user-heading">
                     <h3>{{ user.username }}'s profile</h3>
                     {% if user.profile.location %} <!-- Display Location if recorded  -->
-                        <span class="help-block">{{ user.profile.location }}</span>
+                        <span class="help-block">IP-Based Location Upon Account Creation:<br>{{ user.profile.location }}</span>
                     {% endif %}
                 </div>
 
@@ -45,18 +45,18 @@
                     </li>
                     <li>
                         <a data-toggle="tab" href="#myactionitems">
-                        <span class="glyphicon glyphicon-leaf" ></span>
+                        <span class="glyphicon glyphicon-star" ></span>
                         </a>
                     </li>
                     <li>
                         <a data-toggle="tab" href="#myhistory">
-                        <span class="glyphicon glyphicon-tree-deciduous"></span>
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
                         </a>
                     </li>
                     {% if user.is_superuser %} 
                         <li>
                             <a data-toggle="tab" href="#control">
-                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-envelope"></span>
                             </a>
                         </li>
                     {% endif %} 
@@ -104,7 +104,7 @@
                             <br> <br>
                             <form action="/profile" method="post">
                                 <h4 class="text-center">Change Location: <input type="text" name="change_location"> </h4> <br>
-                                <input class="btn btn-primary btn-lg center-block" type="submit" name="chnage_location" value="Change Location">
+                                <input class="btn btn-primary btn-lg center-block" type="submit" name="change_location" value="Change Location">
                                 {% csrf_token %}
                             </form>
                         </table>
@@ -114,7 +114,7 @@
                     <!-- Active Action Idea History-->
                     <div id="myactionitems" class="tab-pane">
                         <h3 class="text-center">My Action Ideas</h3> <br>
-                        {% include "HandprintGenerator/idea_table.html" with idea_list_active=myideas idea_list_inactive=myideasinactive %} 
+                        {% include "HandprintGenerator/idea_table_profile.html" with idea_list_active=myideas idea_list_inactive=myideasinactive %} 
                     </div>
 
                     <!-- Collaboration History (Comments and Votes) -->
@@ -130,8 +130,8 @@
                                     </tr>
                                     {% for comment in mycomments %}
                                         <tr>
-                                            <td><a href="{% url 'HandprintGenerator:detail' comment.action_idea.id %}">{{ comment.action_idea.name }}</a></td> 
-                                            <td> {{comment.text}} </td>
+                                            <td width="30%" valign="top"><a href="{% url 'HandprintGenerator:detail' comment.action_idea.id %}">{{ comment.action_idea.name }}</a></td> 
+                                            <td width="70%" > {{comment.text}} </td>
                                         </tr>
                                     {% endfor %}
                                 </table>  
@@ -163,10 +163,15 @@
 
                     <!-- Superusers (admin) tab to send mass email -->
                     <div id="control" class="tab-pane">
-                        <h4 class="text-center">Superuser Controls</h4>
-                            <i>This tab is only visible to administrators</i>
-                            <br>
-                            <p>There will be an option to send a message to every user registered. Coming soon!</p>
+                        <h3 class="text-center">Send Email Message to All Users</h3>
+                            <p class="text-center"><i>This tab is only visible to administrators</i></p>
+                            <br> <br>
+                            <form action="/profile" method="post">
+                                <h4 class="text-center">Enter Subject:<br><br> <input type="text" name="email_subject"> </h4> <br>
+                                <h4 class="text-center">Enter Message:<br><br> <textarea rows="8" cols="50" name="email_message">Enter your message here. </textarea></h4> <br>
+                                <input class="btn btn-primary btn-lg center-block" type="submit" name="Send Message" value="Send Message">
+                                {% csrf_token %}
+                            </form>
                     </div>
 
 

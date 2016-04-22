@@ -1,3 +1,4 @@
+#for django things
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader, RequestContext
 from django.shortcuts import get_object_or_404, render
@@ -5,7 +6,6 @@ from django.db import transaction
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import auth
-from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.contrib.gis import geoip2
@@ -13,12 +13,23 @@ from django.contrib.gis.geoip2 import GeoIP2
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+#for email 
+import os
+import sendgrid
+
+#our other django files
 from .models import * 
 from .forms import *
 
+#helpful python packages
 import datetime
 import string
 import random
+
+#for image uploading (Heroku cloudinary add-on)
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 def home(request):
     context = {}
@@ -40,7 +51,7 @@ def user_profile(request):
                 u.email = request.POST.get('change_email')
                 u.save()
                 messages.add_message(request, messages.SUCCESS, 'Email changed!')
-                return HttpResponseRedirect('/logout')
+                return HttpResponseRedirect('/profile')
         if request.method == "POST":
             if request.POST.get('change_password') and request.POST.get('change_password') != '':
                 if request.POST.get('change_password') != request.POST.get('change_password_confirmation'):
@@ -57,6 +68,20 @@ def user_profile(request):
                 p.location = request.POST.get('change_location')
                 p.save()
                 messages.add_message(request, messages.SUCCESS, 'Location changed!')
+                return HttpResponseRedirect('/profile')
+        if request.method == "POST":   
+            if request.POST.get('email_subject'): 
+                sg = sendgrid.SendGridClient(os.environ['SENDGRID_USERNAME'], os.environ['SENDGRID_PASSWORD'])
+
+                message = sendgrid.Mail()
+                for eaddress in User.objects.all():
+                    message.add_to(eaddress.email)
+                message.set_subject(request.POST.get('email_subject'))
+                message.set_text(request.POST.get('email_message'))
+                message.set_from("actions@handprinter.org")
+                status, msg = sg.send(message)
+                
+                messages.add_message(request, messages.SUCCESS, 'Message Sent!')
                 return HttpResponseRedirect('/profile')
     except:
         pass
@@ -171,7 +196,7 @@ def index_other(request):
 
 def paginate(context, index, request):
     #Displays 5 ideas at a time per page.
-    paginator = Paginator(context[index], 5)
+    paginator = Paginator(context[index], 10)
     page = request.GET.get('page')
     try:
         context[index] = paginator.page(page)
@@ -229,7 +254,7 @@ def detail(request, actionidea_id):
     #Report Idea.
     if request.POST.get('report'):
         action_idea = context['ai']
-        report_message = """Hi Handprinter Admin Team,
+        reported_idea_message = """Hi Handprinter Admin Team,
             
         There has been an action idea reported as inappropriate.
 
@@ -240,12 +265,21 @@ def detail(request, actionidea_id):
 
         For your reference, the user who reported this is: %s
 
-        Thanks,
-        The Handprinter Team
-        """ % (action_idea.id, action_idea.name, action_idea.description, action_idea.references, request.user.username)
-        send_mail('Reported Action Idea', report_message, 'handprinterteam@yahoo.com',
-                  ['handprinterteam@yahoo.com'], fail_silently=False)
+Thanks,
+The Handprinter Team
+""" % (action_idea.id, action_idea.name, action_idea.description, action_idea.references, request.user.username)
+        #Now send the email
+        sg = sendgrid.SendGridClient(os.environ['SENDGRID_USERNAME'], os.environ['SENDGRID_PASSWORD'])
+
+        message = sendgrid.Mail()
+        message.add_to("actions@handprinter.org")
+        message.set_subject("Reported Action Idea")
+        message.set_text(reported_idea_message)
+        message.set_from("actions@handprinter.org")
+        status, msg = sg.send(message)
+        
         messages.add_message(request, messages.SUCCESS, 'Idea Reported!')
+        
         return HttpResponseRedirect('/index')
 
     #Report Comment.
@@ -265,11 +299,19 @@ def detail(request, actionidea_id):
 
         For your reference, the user who reported this is: %s
 
-        Thanks,
-        The Handprinter Team
-        """ % (comment.id, comment.text, User.objects.get(id = comment.user_id).username, action_idea.id, action_idea.name, request.user.username)
-        send_mail('Reported Action Idea Comment', report_message, 'handprinterteam@yahoo.com',
-                 ['handprinterteam@yahoo.com'], fail_silently=False)
+Thanks,
+The Handprinter Team
+""" % (comment.id, comment.text, User.objects.get(id = comment.user_id).username, action_idea.id, action_idea.name, request.user.username)
+        #Now, send the email
+        sg = sendgrid.SendGridClient(os.environ['SENDGRID_USERNAME'], os.environ['SENDGRID_PASSWORD'])
+
+        message = sendgrid.Mail()
+        message.add_to("actions@handprinter.org")
+        message.set_subject("Reported Action Idea Comment")
+        message.set_text(report_message)
+        message.set_from("actions@handprinter.org")
+        status, msg = sg.send(message)
+        
         messages.add_message(request, messages.SUCCESS, 'Comment Reported!')
         return HttpResponseRedirect('/index')
 
@@ -307,8 +349,14 @@ def edit_action_idea(request, actionidea_id=None):
     if request.method == "POST":
         context['NewActionIdeaForm'] = form
         if form.is_valid():
-            #form.image = request.FILES['image']
-            form.save()
+            existing_idea = form.save(commit=False)
+            #image is uploaded locally, now upload to Heroku cloudinary
+            if request.FILES:
+                new_image = cloudinary.uploader.upload(existing_idea.image, crop = 'limit', width = 2000)
+                #set the new image URL on cloudinary
+                existing_idea.image = new_image['url']
+            existing_idea.save()
+            form.save_m2m()
             messages.add_message(request, messages.SUCCESS, 'Action Idea Edited!')
             return HttpResponseRedirect('/handprintgenerator/%s/' % actionidea_id)
     else:
@@ -327,10 +375,14 @@ def new_action_idea(request):
         context['NewActionIdeaForm'] = form
         if form.is_valid():
             new_action_idea = form.save(commit=False)
+            #image is uploaded locally, now upload to Heroku cloudinary
+            if request.FILES:
+                new_image = cloudinary.uploader.upload(new_action_idea.image, crop = 'limit', width = 2000)
+                #set the new image URL on cloudinary
+                new_action_idea.image = new_image['url']
             new_action_idea.save()
             form.save_m2m()
-            messages.add_message(request, messages.SUCCESS, 'Action Idea Created! Click it to view details, comment, vote, or make changes.')
-            return HttpResponseRedirect('/index')
+            messages.add_message(request, messages.SUCCESS, 'Your idea has been submitted. Our experts will model the impact of your idea and other users may provide feedback on your idea.')
     else:
         form = NewActionIdeaForm()
         context['NewActionIdeaForm'] = form
@@ -436,7 +488,7 @@ def forgot_password(request):
         try:
             user_email = request.POST.get('email')
             # Match submitted email to a user's email who is active in the system.
-            forgotten_user = User.objects.get(email=user_email, active=True)
+            forgotten_user = User.objects.get(email=user_email, is_active=True)
             # Generates a random string to set as the new password upon reset.
             #from: http://stackoverflow.com/questions/2257441/random-string-generation-with-upper-case-letters-and-digits-in-python
             new_password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
@@ -460,45 +512,49 @@ The Handprinter Team
 P.S. We also love hearing from you and assisting you with any concerns you may have. Please reply to this email if you want to ask a question or submit a comment.
 """ % (forgotten_user.username, new_password, forgotten_user.username)
             # Sends an email with the new password
-            send_mail('Handprinter Password Reset', password_message, 'handprinterteam@yahoo.com',
-                [user_email], fail_silently=False)
+            sg = sendgrid.SendGridClient(os.environ['SENDGRID_USERNAME'], os.environ['SENDGRID_PASSWORD'])
+
+            message = sendgrid.Mail()
+            message.add_to(user_email)
+            message.set_subject("Handprinter Password Reset")
+            message.set_text(password_message)
+            message.set_from("actions@handprinter.org")
+            status, msg = sg.send(message)
+            
             messages.add_message(request, messages.SUCCESS,'An email has been sent to the address given. Please follow the instructions in the email.')
             # Redirect to login and displays success message.
             return render(request, 'registration/login.html', context)
         except:
             # Email not found in system. Allow user to try again and give error.
             messages.add_message(request, messages.ERROR,'The email given is not associated with an account or your account is banned. Please try again or create a new account.')
-            return render(request, 'registration/forgot_password.html', context)
 
     return render(request, 'registration/forgot_password.html', context)
 
 
-#Voting Logic for all index and search results pages
-""" 
-To implement vote on index pages, call vote(request, context) on each index page and search page. 
-def vote(request, context):
-    #Populate Vote History
-    try:
-        context['userVotes'] = ActionIdeaVote.objects.filter(user=request.user).values_list('action_idea', flat=True)
-    except:
-        context['userVote'] = False
-    #Handle Vote/Unvote Requests
-    if request.POST.get('unvote'):
-        #If there is no existing vote by this user, then you cannot unvote. 
-        is_current_vote = ActionIdeaVote.objects.filter(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
-        if is_current_vote:
-            messages.add_message(request, messages.SUCCESS, 'Idea Unvoted.')
-            ActionIdeaVote.objects.get(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user).delete()
-        else: 
-            messages.add_message(request, messages.ERROR, 'You cannot unvote an idea you have not voted for!')
-    if request.POST.get('vote'):
-        #If there is a current vote by this user, the user cannot vote again.
-        is_current_vote = ActionIdeaVote.objects.filter(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
-        if not is_current_vote:
-            v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
-            messages.add_message(request, messages.SUCCESS, 'Thank you for voting!')
-            v.save()
-        else:
-            messages.add_message(request, messages.ERROR, 'You already voted for this idea!')
-    return 
-"""
+##Voting Logic for all index and search results pages
+##To implement vote on index pages, call vote(request, context) on each index page and search page. 
+#def vote(request, context):
+#    #Populate Vote History
+#    try:
+#        context['userVotes'] = ActionIdeaVote.objects.filter(user=request.user).values_list('action_idea', flat=True)
+#    except:
+#        context['userVote'] = False
+#    #Handle Vote/Unvote Requests
+#    if request.POST.get('unvote'):
+#        #If there is no existing vote by this user, then you cannot unvote. 
+#        is_current_vote = ActionIdeaVote.objects.filter(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
+#        if is_current_vote:
+#            messages.add_message(request, messages.SUCCESS, 'Idea Unvoted.')
+#            ActionIdeaVote.objects.get(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user).delete()
+#        else: 
+#            messages.add_message(request, messages.ERROR, 'You cannot unvote an idea you have not voted for!')
+#    if request.POST.get('vote'):
+#        #If there is a current vote by this user, the user cannot vote again.
+#        is_current_vote = ActionIdeaVote.objects.filter(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
+#        if not is_current_vote:
+#            v = ActionIdeaVote(action_idea = ActionIdea.objects.get(pk=request.POST.get('action_idea')), user = request.user)
+#            messages.add_message(request, messages.SUCCESS, 'Thank you for voting!')
+#            v.save()
+#        else:
+#           messages.add_message(request, messages.ERROR, 'You already voted for this idea!')
+#    return
