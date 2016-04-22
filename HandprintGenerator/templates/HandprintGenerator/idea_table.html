@@ -12,17 +12,17 @@
 <table>
     {% if idea_list_active %}
         <tr>
-            <th data-toggle="tooltip" title="The title of the action idea.">Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-            <th data-toggle="tooltip" title="Context this idea is applicable in.">Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
-            <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
-            <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+            <th data-toggle="tooltip" title="The title of the action idea.">Name</th>
+            <th data-toggle="tooltip" title="Context this idea is applicable in.">Category</th>
+            <th>Votes</th>
+            <th>Date Created </th>
         <tr>
         {% for ai in idea_list_active %}
-            <td data-toggle="tooltip" title="Click on an idea to learn more about it and comment!">
-                <a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }} </a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>                 
-            <td> {{ ai.category }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
-            <td> {{ai.numvotes}}&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
-            <td> {{ai.date_created}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+            <td width="30%" data-toggle="tooltip" title="Click on an idea to learn more about it and comment!">
+                <a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }} </a> </td>                 
+            <td width="20%" > {{ ai.category }} </td>
+            <td width="10%" > {{ai.numvotes}}</td>
+            <td width="30%" > {{ai.date_created}} </td>
         </tr>
         {% endfor %}
     {% else %}

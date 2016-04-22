@@ -9,7 +9,7 @@
 <div class="user_profile">
     <div class="container">
         <div class="row ">
-            <div class="col-xs-12 col-md-10 col-md-offset-1 user-details">
+            <div class="col-xs-12 col-md-10 user-details">
                
 
                 <!-- Profile Image -->
@@ -130,8 +130,8 @@
                                     </tr>
                                     {% for comment in mycomments %}
                                         <tr>
-                                            <td><a href="{% url 'HandprintGenerator:detail' comment.action_idea.id %}">{{ comment.action_idea.name }}</a></td> 
-                                            <td> {{comment.text}} </td>
+                                            <td width="30%" valign="top"><a href="{% url 'HandprintGenerator:detail' comment.action_idea.id %}">{{ comment.action_idea.name }}</a></td> 
+                                            <td width="70%" > {{comment.text}} </td>
                                         </tr>
                                     {% endfor %}
                                 </table>  
