@@ -36,7 +36,7 @@
 <br>
 
 <!-- Displays any messages -->
-{% include "HandprintGenerator/message_template.html" %}
+<div class= "text-center">{% include "HandprintGenerator/message_template.html" %}</div>
 
 
 <!-- Page Heading/Breadcrumbs -->
@@ -46,7 +46,7 @@
   <ul class="list-inline text-center">
   <form action="/searchresults" method="get">
       {% csrf_token %}
-      <label for="search">Search Ideas: </label>
+      <label for="search">Search for Ideas by Tag: </label>
       <input id="search" type="text" name="searchTerm" value="{{ searchTerm }}">
       <input type="submit" value="Search" class="btn btn-success">
   </form>
