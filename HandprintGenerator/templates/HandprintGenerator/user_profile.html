@@ -104,7 +104,7 @@
                             <br> <br>
                             <form action="/profile" method="post">
                                 <h4 class="text-center">Change Location: <input type="text" name="change_location"> </h4> <br>
-                                <input class="btn btn-primary btn-lg center-block" type="submit" name="chnage_location" value="Change Location">
+                                <input class="btn btn-primary btn-lg center-block" type="submit" name="change_location" value="Change Location">
                                 {% csrf_token %}
                             </form>
                         </table>
@@ -163,10 +163,15 @@
 
                     <!-- Superusers (admin) tab to send mass email -->
                     <div id="control" class="tab-pane">
-                        <h4 class="text-center">Superuser Controls</h4>
-                            <i>This tab is only visible to administrators</i>
-                            <br>
-                            <p>There will be an option to send a message to every user registered. Coming soon!</p>
+                        <h3 class="text-center">Send Email Message to All Users</h3>
+                            <p class="text-center"><i>This tab is only visible to administrators</i></p>
+                            <br> <br>
+                            <form action="/profile" method="post">
+                                <h4 class="text-center">Enter Subject:<br><br> <input type="text" name="email_subject"> </h4> <br>
+                                <h4 class="text-center">Enter Message:<br><br> <textarea rows="8" cols="50" name="email_message">Enter your message here. </textarea></h4> <br>
+                                <input class="btn btn-primary btn-lg center-block" type="submit" name="Send Message" value="Send Message">
+                                {% csrf_token %}
+                            </form>
                     </div>
 
 
