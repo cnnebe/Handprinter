@@ -51,7 +51,7 @@ def user_profile(request):
                 u.email = request.POST.get('change_email')
                 u.save()
                 messages.add_message(request, messages.SUCCESS, 'Email changed!')
-                return HttpResponseRedirect('/logout')
+                return HttpResponseRedirect('/profile')
         if request.method == "POST":
             if request.POST.get('change_password') and request.POST.get('change_password') != '':
                 if request.POST.get('change_password') != request.POST.get('change_password_confirmation'):
@@ -182,7 +182,7 @@ def index_other(request):
 
 def paginate(context, index, request):
     #Displays 5 ideas at a time per page.
-    paginator = Paginator(context[index], 5)
+    paginator = Paginator(context[index], 10)
     page = request.GET.get('page')
     try:
         context[index] = paginator.page(page)
@@ -368,8 +368,7 @@ def new_action_idea(request):
                 new_action_idea.image = new_image['url']
             new_action_idea.save()
             form.save_m2m()
-            messages.add_message(request, messages.SUCCESS, 'Action Idea Created! Click it to view details, comment, vote, or make changes.')
-            return HttpResponseRedirect('/index')
+            messages.add_message(request, messages.SUCCESS, 'Your idea has been submitted. Our experts will model the impact of your idea and other users may provide feedback on your idea.')
     else:
         form = NewActionIdeaForm()
         context['NewActionIdeaForm'] = form
