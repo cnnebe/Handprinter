@@ -61,6 +61,24 @@
           </div>
 
         <div class="row">
+
+          {% if user.is_authenticated %}
+            <div class="col-xs-12 col-md-6">
+                <div class="panel panel-default text-center">
+                    <div class="panel-heading">
+                        <span class="fa-stack fa-5x">
+                              <i class="fa fa-circle fa-stack-2x text-black"></i>
+                              <i class="fa fa-users fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <h4>Not Subscribed to Newsletter?</h4>
+                        <a href="http://eepurl.com/jG5y1" class="btn btn-primary">Subscribe Now!</a>
+                    </div>
+                </div>
+            </div>
+
+            {% else %}
             <div class="col-xs-12 col-md-6">
                 <div class="panel panel-default text-center">
                     <div class="panel-heading">
@@ -75,6 +93,10 @@
                     </div>
                 </div>
             </div>
+
+            {% endif %}
+
+
             <div class="col-xs-12 col-md-6">
                 <div class="panel panel-default text-center">
                     <div class="panel-heading">

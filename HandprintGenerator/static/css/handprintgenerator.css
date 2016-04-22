@@ -49,7 +49,7 @@ h2 {
 }
 
 .footer li a{
-  color: grey;
+  color: gray;
 }
 
 
@@ -112,9 +112,6 @@ h2 {
     border-color: black;
     color: white;
     font-size: 20px;
-}
-.panel{
-  border-color: black;
 }
 
 .home .panel-body {
@@ -570,4 +567,10 @@ p.copyright {
 #details{
   background: rgb(232, 245, 211);
   width: 100%
+}
+
+/* terms of conditions */
+
+.panel-default{
+background-color: #CFF294;
 }
