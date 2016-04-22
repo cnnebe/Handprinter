@@ -335,7 +335,6 @@ p.copyright {
 
 
 .bg {
-  background: url(../img/handprint_image.png) center center;
   position: fixed;
   width: 100%;
   height: 100%; 
@@ -464,6 +463,10 @@ p.copyright {
   outline: none;
 }
 
+input[type="submit"]:focus {
+  outline: none !important;
+}
+
 #tagForm {
   display:inline;
   font-size: 0;
@@ -574,3 +577,14 @@ p.copyright {
 .panel-default{
 background-color: #CFF294;
 }
+
+/*left and right align*/
+
+.leftalign {
+  float: left;
+}
+.rightalign {
+  float: right;
+  text-align: right;
+}
+

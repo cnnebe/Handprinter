@@ -9,7 +9,7 @@
 <div class="user_profile">
     <div class="container">
         <div class="row ">
-            <div class="col-xs-12 col-md-10 col-md-offset-1 user-details">
+            <div class="col-xs-12 col-md-12 user-details">
                
 
                 <!-- Profile Image -->
@@ -25,7 +25,7 @@
                 <div class="user-heading">
                     <h3>{{ user.username }}'s profile</h3>
                     {% if user.profile.location %} <!-- Display Location if recorded  -->
-                        <span class="help-block">{{ user.profile.location }}</span>
+                        <span class="help-block">IP-Based Location Upon Account Creation:<br>{{ user.profile.location }}</span>
                     {% endif %}
                 </div>
 
@@ -45,18 +45,18 @@
                     </li>
                     <li>
                         <a data-toggle="tab" href="#myactionitems">
-                        <span class="glyphicon glyphicon-leaf" ></span>
+                        <span class="glyphicon glyphicon-star" ></span>
                         </a>
                     </li>
                     <li>
                         <a data-toggle="tab" href="#myhistory">
-                        <span class="glyphicon glyphicon-tree-deciduous"></span>
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
                         </a>
                     </li>
                     {% if user.is_superuser %} 
                         <li>
                             <a data-toggle="tab" href="#control">
-                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-envelope"></span>
                             </a>
                         </li>
                     {% endif %} 
@@ -114,7 +114,7 @@
                     <!-- Active Action Idea History-->
                     <div id="myactionitems" class="tab-pane">
                         <h3 class="text-center">My Action Ideas</h3> <br>
-                        {% include "HandprintGenerator/idea_table.html" with idea_list_active=myideas idea_list_inactive=myideasinactive %} 
+                        {% include "HandprintGenerator/idea_table_profile.html" with idea_list_active=myideas idea_list_inactive=myideasinactive %} 
                     </div>
 
                     <!-- Collaboration History (Comments and Votes) -->
@@ -130,8 +130,8 @@
                                     </tr>
                                     {% for comment in mycomments %}
                                         <tr>
-                                            <td><a href="{% url 'HandprintGenerator:detail' comment.action_idea.id %}">{{ comment.action_idea.name }}</a></td> 
-                                            <td> {{comment.text}} </td>
+                                            <td width="30%" valign="top"><a href="{% url 'HandprintGenerator:detail' comment.action_idea.id %}">{{ comment.action_idea.name }}</a></td> 
+                                            <td width="70%" > {{comment.text}} </td>
                                         </tr>
                                     {% endfor %}
                                 </table>  
