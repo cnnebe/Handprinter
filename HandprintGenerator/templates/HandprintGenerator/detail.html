@@ -4,7 +4,6 @@
 {% block content %}
 
  <div class="container" style="background: white;">
-        <div class="bg"></div>
 
         <div class="row">
         {% if user.profile.role == "Moderator" or user.is_staff or ai.active %}
@@ -53,8 +52,8 @@
                 <div class="leftalign">
                 {% if ai.creator == request.user or user.is_staff or user.profile.role == "Moderator" %}
                     {% if ai.active %}
-                    <a href="{% url 'HandprintGenerator:edit_action_idea' ai.id %}" class="btn btn-link ">Edit Action Idea</a>
-                    <a href="{% url 'HandprintGenerator:delete_action_idea' ai.id%}" class="btn btn-link">Delete Action Idea</a> 
+                    <a href="{% url 'HandprintGenerator:edit_action_idea' ai.id %}" class="btn btn-success btn-link" style="color: white;">Edit Action Idea</a>
+                    <a href="{% url 'HandprintGenerator:delete_action_idea' ai.id%}" class="btn btn-warning btn-link" style="color: white;">Delete Action Idea</a> 
 
                      <!-- Report Idea. Display if idea is active and user is not owner. -->
 
@@ -84,7 +83,7 @@
             </div>
             
             </div>
-
+            <hr>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
                 <!-- Preview Image -->
                 {% if ai.image != "" %} 
