@@ -3,7 +3,7 @@
 {% load cloudinary %}
 {% block content %}
 
- <div class="container" style="background: white;">
+ <div class="container" id="second">
 
         <div class="row">
         {% if user.profile.role == "Moderator" or user.is_staff or ai.active %}

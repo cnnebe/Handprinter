@@ -17,12 +17,20 @@ h2 {
   text-align: center;
 }
 
-#main{
+/* container css */
+#base{
   width: 100%;
   padding-left: 0px;
   padding-right: 0px;
   padding-bottom: 0px;
 }
+#second{
+  width: 90%;
+  background-color: rgb(256,256,256);
+}
+
+/**/
+
 #indicates { /* For required fields text on forms */
   color: red;
 }
