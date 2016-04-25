@@ -17,12 +17,20 @@ h2 {
   text-align: center;
 }
 
-#main{
+/* container css */
+#base{
   width: 100%;
   padding-left: 0px;
   padding-right: 0px;
   padding-bottom: 0px;
 }
+#second{
+  width: 90%;
+  background-color: rgb(256,256,256);
+}
+
+/**/
+
 #indicates { /* For required fields text on forms */
   color: red;
 }
@@ -50,6 +58,7 @@ h2 {
 
 .footer li a{
   color: black;
+
 }
 
 
@@ -89,6 +98,9 @@ h2 {
 /* Since positioning the image, we need to help out the caption */
 .carousel-caption {
   z-index: 10;
+  color: white;
+  text-shadow: black 0.4em 0.4em 0.4em;
+  font-size: 1.5em;
 }
 
 /* Declare heights because of positioning of img element */
@@ -105,17 +117,6 @@ h2 {
 }
 
 /* Home css */
-
-.home .well {
-    /* background: #98C748; */
-    background: rgb(47, 167, 142);
-    border-color: black;
-    color: white;
-    font-size: 20px;
-}
-.panel{
-  border-color: black;
-}
 
 .home .panel-body {
   /* background: #98C748; */
@@ -335,16 +336,6 @@ p.copyright {
 
 /* css for the index of action ideas page */
 
-
-
-.bg {
-  position: fixed;
-  width: 100%;
-  height: 100%; 
-  top:0;
-  left:0;
-  z-index: -1;
-}
 
 .jumbotron {
   background: url(../img/banner-bg.jpg) center center;
@@ -575,6 +566,11 @@ input[type="submit"]:focus {
   width: 100%
 }
 
+/* terms of conditions */
+
+.panel-default{
+background-color: #CFF294;
+}
 
 /*left and right align*/
 
@@ -586,3 +582,25 @@ input[type="submit"]:focus {
   text-align: right;
 }
 
+/* text wrapping so text does not going outside of box */
+
+h4 {
+  word-wrap: break-word;
+}
+
+p {
+  word-wrap: break-word;
+}
+
+td {
+  white-space: -o-pre-wrap; 
+  word-wrap: break-word;
+  white-space: -moz-pre-wrap; 
+  white-space: -pre-wrap; 
+
+}
+
+table { 
+  table-layout: fixed;
+  width: 100%
+}

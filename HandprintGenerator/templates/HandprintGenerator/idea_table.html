@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 <div class="container"> 
-            <div class="col-xs-12 col-sm-6 col-md-6 col-sm-offset-1 col-md-offset-1">
+            <div class="col-xs-12 col-sm-8 col-md-8 col-sm-offset-1 col-md-offset-1">
 <!-- Differentiate Active and Inactive Ideas for Staff -->
 {% if user.profile.role == "mod" or user.is_staff %}
     <h2> Active </h2>
@@ -12,17 +12,17 @@
 <table>
     {% if idea_list_active %}
         <tr>
-            <th data-toggle="tooltip" title="The title of the action idea.">Name</th>
-            <th data-toggle="tooltip" title="Context this idea is applicable in.">Category</th>
-            <th>Votes</th>
-            <th>Date Created </th>
+            <th style="width:33%" data-toggle="tooltip" title="The title of the action idea.">Name</th>
+            <th style="width:17%" data-toggle="tooltip" title="Context this idea is applicable in.">Category</th>
+            <th style="width:10%">Votes</th>
+            <th style="width:40%">Date Created </th>
         <tr>
         {% for ai in idea_list_active %}
-            <td width="30%" data-toggle="tooltip" title="Click on an idea to learn more about it and comment!">
+            <td data-toggle="tooltip" title="Click on an idea to learn more about it and comment!">
                 <a href="{% url 'HandprintGenerator:detail' ai.id %}">{{ ai.name }} </a> </td>                 
-            <td width="20%" > {{ ai.category }} </td>
-            <td width="15%" > {{ai.numvotes}}</td>
-            <td width="30%" > {{ai.date_created}} </td>
+            <td > {{ ai.category }} </td>
+            <td > {{ai.numvotes}}</td>
+            <td > {{ai.date_created}} </td>
         </tr>
         {% endfor %}
     {% else %}
@@ -61,10 +61,10 @@
     <table>
         {% if idea_list_inactive %}
             <tr>
-                <th>Action Idea &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                <th>Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
-                <th>Votes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th> <!-- Can't vote on inactive ideas. -->
-                <th>Date Created &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+                <th style="width:33%" data-toggle="tooltip" title="The title of the action idea.">Name</th>
+                <th style="width:17%" data-toggle="tooltip" title="Context this idea is applicable in.">Category</th>
+                <th style="width:10%">Votes</th>
+                <th style="width:40%">Date Created </th>
             </tr>
             {% for ai in idea_list_inactive %}
                 <tr>

@@ -43,8 +43,11 @@
                 <div class="leftalign">
                 {% if ai.creator == request.user or user.is_staff or user.profile.role == "mod" %}
                     {% if ai.active %}
+
                     <a href="{% url 'HandprintGenerator:edit_action_idea' ai.id %}" class="btn btn-info ">Edit Action Idea</a>
-                    <a href="{% url 'HandprintGenerator:delete_action_idea' ai.id%}" class="btn btn-danger">Delete Action Idea</a> 
+                    <a href="{% url 'HandprintGenerator:delete_action_idea' ai.id%}" class="btn btn-danger">Delete Action Idea</a>  
+
+                     <!-- Report Idea. Display if idea is active and user is not owner. -->
 
                     {% elif not ai.active %} <!-- Restore deleted idea to active -->
                         {% if user.is_staff or user.profile.role == "mod" %}
@@ -56,21 +59,24 @@
                     {% endif %}
                     <br>
                 {% endif %}
-            </div>
+                </div>
 
                 <!-- Report Idea. Display if idea is active and user is not owner. -->
                 {% if ai.creator != request.user and user.is_authenticated and ai.active  %}
                 <div class="rightalign">
                     <form action="" method="post">
                         <input type="hidden" name="action_idea" value="{{ ai.id }}">
+
                         <input type="submit" name="report" data-toggle="tooltip" title="You can report this entry to moderators if you believe that it is offensive, inappropriate, irrelevant and/or violates the terms of service." value="Report Idea" class="btn btn-warning">
                         {% csrf_token %}
                     </form>
                     <br>
                 {% endif %}
                 </div>
-            </div> <!-- Offset -->
-        </div> <!-- Row -->
+                </div>
+            
+            </div>
+            <hr>
 
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
         <!-- Preview Image -->
