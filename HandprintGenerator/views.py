@@ -533,9 +533,7 @@ P.S. We also love hearing from you and assisting you with any concerns you may h
             message.set_from("actions@handprinter.org")
             status, msg = sg.send(message)
             
-            messages.add_message(request, messages.SUCCESS,'An email has been sent to the address given. Please follow the instructions in the email.')
-            # Redirect to login and displays success message.
-            return render(request, 'registration/login.html', context)
+            messages.add_message(request, messages.SUCCESS,'An email has been sent to the address given. Please follow the instructions in the email.')    
         except:
             # Email not found in system. Allow user to try again and give error.
             messages.add_message(request, messages.ERROR,'The email given is not associated with an account or your account is banned. Please try again or create a new account.')
