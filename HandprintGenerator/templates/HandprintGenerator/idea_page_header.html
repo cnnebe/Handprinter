@@ -48,7 +48,7 @@
           <form action="/searchresults" method="get">
             {% csrf_token %}
             <label for="search">Search Ideas by Tag: </label>
-            <input id="search" type="text" name="searchTerm" value="{{ searchTerm }}">
+            <input style="max-width:100%" id="search" type="text" name="searchTerm" value="{{ searchTerm }}">
             <input type="submit" value="Search" class="btn btn-success">
           </form>
         </ul>
