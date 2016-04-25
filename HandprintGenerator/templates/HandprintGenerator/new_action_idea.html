@@ -11,7 +11,7 @@
                 <div class="card card-container">
                     <h2> Create a New Handprint Action Idea 
                           <button id="ibutton" type="submit" class="btn btn-primary" data-toggle="modal" data-target="#myModal"> 
-                          <i class="fa fa-question"></i>
+                            <i class="fa fa-question"></i>
                           </button>
                     </h2>
 
@@ -59,7 +59,7 @@
         </div>
     </div>
  <!-- If there is an ID and the user is a mod, staff, or existing idea owner, an ACTIVE idea can be edited-->
-{% elif creator == request.user.id or user.is_staff or user.profile.role == "Moderator" %} 
+{% elif creator == request.user.id or user.is_staff or user.profile.role == "mod" %} 
     <div class="container"> 
         <div class="row centered-form">
             <div class="col-xs-12 col-sm-12 col-md-12">

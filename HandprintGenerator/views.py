@@ -100,7 +100,7 @@ def index(request):
         paginate(context, ideas, request)   
     return render(request, 'HandprintGenerator/index.html', context)
 
-#The main action idea index (most recent)
+#Filters by oldest (oldest displayed first)
 def index_oldest(request):
     context = {}
     context['action_ideas_inactive'] = ActionIdea.objects.filter(active=False).order_by('date_created')

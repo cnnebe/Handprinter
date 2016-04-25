@@ -2,34 +2,24 @@
 {% load staticfiles %}
 {% block content %}
 
-
-
 {% if user.is_authenticated %}
 <br><br>
 <div class="user_profile">
     <div class="container">
         <div class="row ">
             <div class="col-xs-12 col-md-12 user-details">
-               
-
                 <!-- Profile Image -->
                 <div class="user-image"><img id="profile-img" class="profile-img-card" src={% static 'img/Pear_Leaf.jpg' %} /></div> 
 
-
-
-
-            <div class="user-info-block">
-
-
-                <!-- Header (username and location)  -->
-                <div class="user-heading">
-                    <h3>{{ user.username }}'s profile</h3>
-                    {% if user.profile.location %} <!-- Display Location if recorded  -->
-                        <span class="help-block">IP-Based Location Upon Account Creation:<br>{{ user.profile.location }}</span>
-                    {% endif %}
-                </div>
-
-
+                <div class="user-info-block">
+                    <!-- Header (username and location)  -->
+                    <div class="user-heading">
+                        <h3>{{ user.username }}'s profile</h3>
+                            {% if user.profile.location %} <!-- Display Location if recorded  -->
+                                <span class="help-block">Location (based on IP at time of account creation):
+                                <br>{{ user.profile.location }}</span>
+                            {% endif %}
+                    </div>
 
                 <!--Profile Options  -->
                 <ul class="navigation">
@@ -62,131 +52,121 @@
                     {% endif %} 
                 </ul>
     
-
-            <div class="user-body">
-                <div class="tab-content">
-
-
-                    <!-- information tab for user-->
-                    <div id="information" class="tab-pane active">
-                        <div class="text-center">
-                        <!-- Displays any messages -->
-                        {% include "HandprintGenerator/message_template.html" %}
-                        <h4> Your profile lets you view your account information, change your email and password, all of the existing ideas you've submitted, and a list of comments and votes you've made. </h4>
-                        <h3 >Account Information</h3>
-                        <table>
-                            <tr><h4><b>Username:</b> {{ user.username }}</h4></tr>
-                            <tr><h4><b>Email:</b> {{ user.email }}</h4></tr> 
-                            <tr><h4><b>Date Joined:</b> {{ user.date_joined}}</h4></tr> 
-                            <tr><h4><b>Last Login Was:</b> {{ user.last_login }}</h4></tr>
-                            <br>
-                        </table>
+                <div class="user-body">
+                    <div class="tab-content">
+                        <!-- information tab for user-->
+                        <div id="information" class="tab-pane active">
+                            <div class="text-center">
+                                <!-- Displays any messages -->
+                                {% include "HandprintGenerator/message_template.html" %}
+                                <h4> Your profile lets you view your account information, change your email and password, all of the existing ideas you've submitted, and a list of comments and votes you've made. You can also change your location (or change it to "None" if you don't want it recorded). </h4>
+                            
+                                <h3 >Account Information</h3>
+                                    <table>
+                                        <tr><h4><b>Username:</b> {{ user.username }}</h4></tr>
+                                        <tr><h4><b>Email:</b> {{ user.email }}</h4></tr> 
+                                        <tr><h4><b>Date Joined:</b> {{ user.date_joined}}</h4></tr> 
+                                        <tr><h4><b>Last Login Was:</b> {{ user.last_login }}</h4></tr>
+                                        <br>
+                                    </table>
+                            </div>
                         </div>
-                    </div>
 
 
-                    <!-- settings tab for user-->
-                    <div id="settings" class="tab-pane">
-                        <h3 class="text-center">Settings</h3> <br>
-                        <table class='table'>
-                            <form action="/profile" method="post">
-                                <h4 class="text-center">Enter New Email: <input type="text" name="change_email"> </h4> <br>
-                                <input class="btn btn-primary btn-lg center-block" type="submit" name="Change Email" value="Permanently Change Email on File">
-                                {% csrf_token %}
-                            </form>
-                            <br> <br>
-                            <form action="/profile" method="post">
-                                <h4 class="text-center">Enter New Password: <input type="password" name="change_password"> </h4>
-                                <h4 class="text-center">Confirm New Password: <input type="password" name="change_password_confirmation"></h4> <br>
-                                <input class="btn btn-primary btn-lg center-block" type="submit" name="Change Password" value="Permanently Change Account Password">
-                                {% csrf_token %}
-                            </form>
-                            <br> <br>
-                            <form action="/profile" method="post">
-                                <h4 class="text-center">Change Location: <input type="text" name="change_location"> </h4> <br>
-                                <input class="btn btn-primary btn-lg center-block" type="submit" name="change_location" value="Change Location">
-                                {% csrf_token %}
-                            </form>
-                        </table>
-                    </div>
+                        <!-- settings tab for user-->
+                        <div id="settings" class="tab-pane">
+                            <h3 class="text-center">Settings</h3> <br>
+                            <table class='table'>
+                                <form action="/profile" method="post">
+                                    <h4 class="text-center">Enter New Email: <input type="text" name="change_email"> </h4> <br>
+                                    <input class="btn btn-primary btn-lg center-block" type="submit" name="Change Email" value="Permanently Change Email on File">
+                                    {% csrf_token %}
+                                </form>
+                                <br> <br>
+                                <form action="/profile" method="post">
+                                    <h4 class="text-center">Enter New Password: <input type="password" name="change_password"> </h4>
+                                    <h4 class="text-center">Confirm New Password: <input type="password" name="change_password_confirmation"></h4> <br>
+                                    <input class="btn btn-primary btn-lg center-block" type="submit" name="Change Password" value="Permanently Change Account Password">
+                                    {% csrf_token %}
+                                </form>
+                                <br> <br>
+                                <form action="/profile" method="post">
+                                    <h4 class="text-center">Change Location: <input type="text" name="change_location"> </h4> <br>
+                                    <input class="btn btn-primary btn-lg center-block" type="submit" name="change_location" value="Change Location">
+                                    {% csrf_token %}
+                                </form>
+                            </table>
+                        </div>
 
 
-                    <!-- Active Action Idea History-->
-                    <div id="myactionitems" class="tab-pane">
-                        <h3 class="text-center">My Action Ideas</h3> <br>
-                        {% include "HandprintGenerator/idea_table_profile.html" with idea_list_active=myideas idea_list_inactive=myideasinactive %} 
-                    </div>
+                        <!-- Active Action Idea History-->
+                        <div id="myactionitems" class="tab-pane">
+                            <h3 class="text-center">My Action Ideas</h3> <br>
+                            {% include "HandprintGenerator/idea_table_profile.html" with idea_list_active=myideas idea_list_inactive=myideasinactive %} 
+                        </div>
 
-                    <!-- Collaboration History (Comments and Votes) -->
-                    <div id="myhistory" class="tab-pane">
-                        <!-- Comment History -->
-                        <h4 class="text-center">My Comment History</h4>
-                        <table>
-                            {% if mycomments %}
-                                <table>
-                                    <tr>
-                                        <th class="text-center">Idea Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                                        <th class="text-center">Comment &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
-                                    </tr>
-                                    {% for comment in mycomments %}
+                        <!-- Collaboration History (Comments and Votes) -->
+                        <div id="myhistory" class="tab-pane">
+                            <!-- Comment History -->
+                            <h4 class="text-center">My Comment History</h4>
+                            <table>
+                                {% if mycomments %}
+                                    <table>
                                         <tr>
-                                            <td width="30%" valign="top"><a href="{% url 'HandprintGenerator:detail' comment.action_idea.id %}">{{ comment.action_idea.name }}</a></td> 
-                                            <td width="70%" > {{comment.text}} </td>
+                                            <th class="text-center">Idea Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                            <th class="text-center">Comment &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
                                         </tr>
-                                    {% endfor %}
-                                </table>  
-                            {% else %}
-                                <p class="text-center">You have no comments.</p>
-                            {% endif %}
-                        </table>
-                        <!-- Voting History-->
-                        <h4 class="text-center">My Voting History</h4>
-                        <table>
-                            {% if myvotes %}
-                                <table>
-                                    <tr>
-                                        <th>Idea Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                                    </tr>
-                                    {% for vote in myvotes %}
+                                        {% for comment in mycomments %}
+                                            <tr>
+                                                <td width="30%" valign="top"><a href="{% url 'HandprintGenerator:detail' comment.action_idea.id %}">{{ comment.action_idea.name }}</a></td> 
+                                                <td width="70%" > {{comment.text}} </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>  
+                                {% else %}
+                                    <p class="text-center">You have no comments.</p>
+                                {% endif %}
+                            </table>
+
+                            <!-- Voting History-->
+                            <h4 class="text-center">My Voting History</h4>
+                            <table>
+                                {% if myvotes %}
+                                    <table>
                                         <tr>
-                                            <td><a href="{% url 'HandprintGenerator:detail' vote.action_idea.id %}">{{ vote.action_idea.name }}</a></td> 
+                                            <th>Idea Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                                         </tr>
-                                    {% endfor %}
-                                </table>  
-                            {% else %}
-                                <p class="text-center">You have not voted on anything.</p>
-                            {% endif %}
-                        </table>
-                    </div>
+                                        {% for vote in myvotes %}
+                                            <tr>
+                                                <td><a href="{% url 'HandprintGenerator:detail' vote.action_idea.id %}">{{ vote.action_idea.name }}</a></td> 
+                                            </tr>
+                                        {% endfor %}
+                                    </table>  
+                                {% else %}
+                                    <p class="text-center">You have not voted on anything.</p>
+                                {% endif %}
+                            </table>
+                        </div> <!-- my history div-->
 
-
-
-                    <!-- Superusers (admin) tab to send mass email -->
-                    <div id="control" class="tab-pane">
-                        <h3 class="text-center">Send Email Message to All Users</h3>
-                            <p class="text-center"><i>This tab is only visible to administrators</i></p>
-                            <br> <br>
-                            <form action="/profile" method="post">
-                                <h4 class="text-center">Enter Subject:<br><br> <input type="text" name="email_subject"> </h4> <br>
-                                <h4 class="text-center">Enter Message:<br><br> <textarea rows="8" cols="50" name="email_message">Enter your message here. </textarea></h4> <br>
-                                <input class="btn btn-primary btn-lg center-block" type="submit" name="Send Message" value="Send Message">
-                                {% csrf_token %}
-                            </form>
-                    </div>
-
-
-                </div>  <!-- tab content div-->
-            </div>  <!-- user body div-->
-            </div>  <!-- user block div-->
-            <!-- end of content for user tab content-->
-            </div>
-        </div>
-    </div>
-</div>
-
+                        <!-- Superusers (admin) tab to send mass email -->
+                        <div id="control" class="tab-pane">
+                            <h3 class="text-center">Email All Users</h3>
+                                <p class="text-center"><i>This tab is only visible to administrators. Please use to message all users on major updates and terms of service or privacy policy changes.</i></p>
+                                <br> <br>
+                                <form action="/profile" method="post">
+                                    <h4 class="text-center">Enter Subject:<br><br> <input type="text" name="email_subject"> </h4> <br>
+                                    <h4 class="text-center">Enter Message:<br><br> <textarea rows="8" cols="50" name="email_message">Enter your message here. </textarea></h4> <br>
+                                    <input class="btn btn-primary btn-lg center-block" type="submit" name="Send Email" value="Send Message">
+                                    {% csrf_token %}
+                                </form>
+                        </div>
+                    </div>  <!-- tab content div-->
+                </div>  <!-- user body div-->
+            </div>  <!-- offset-->
+        </div>  <!-- row-->
+    </div> <!-- container -->
+</div> <!-- user profile-->
 {% else %}
 <h3 class="text-center">Please <a href=/login>login</a> or create a <a href=/create_user>new account</a> to view your profile.</h3>
 {% endif %}
-
-
 {% endblock %}
