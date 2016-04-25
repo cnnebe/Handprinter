@@ -52,8 +52,8 @@
                 <div class="leftalign">
                 {% if ai.creator == request.user or user.is_staff or user.profile.role == "Moderator" %}
                     {% if ai.active %}
-                    <a href="{% url 'HandprintGenerator:edit_action_idea' ai.id %}" class="btn btn-success btn-link" style="color: white;">Edit Action Idea</a>
-                    <a href="{% url 'HandprintGenerator:delete_action_idea' ai.id%}" class="btn btn-warning btn-link" style="color: white;">Delete Action Idea</a> 
+                    <a href="{% url 'HandprintGenerator:edit_action_idea' ai.id %}" class="btn btn-success" style="color: white;">Edit Action Idea</a>
+                    <a href="{% url 'HandprintGenerator:delete_action_idea' ai.id%}" class="btn btn-warning" style="color: white;">Delete Action Idea</a> 
 
                      <!-- Report Idea. Display if idea is active and user is not owner. -->
 
@@ -66,7 +66,6 @@
                         {% endif %}
                     {% endif %}
 
-                    <br>
                 {% endif %}
             </div>
 
@@ -74,7 +73,7 @@
                 <div class="rightalign">
                     <form action="" method="post">
                         <input type="hidden" name="action_idea" value="{{ ai.id }}">
-                        <input type="submit" name="report" data-toggle="tooltip" title="You can report this entry to moderators if you believe that it is offensive, inappropriate, irrelevant and/or violates the terms of service." value="Report Idea" class="btn btn-secondary btn-link">
+                        <input type="submit" name="report" data-toggle="tooltip" title="You can report this entry to moderators if you believe that it is offensive, inappropriate, irrelevant and/or violates the terms of service." value="Report Action Idea" class="btn btn-danger">
                         {% csrf_token %}
                     </form>
                     <br>

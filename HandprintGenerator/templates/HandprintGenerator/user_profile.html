@@ -7,13 +7,13 @@
 {% if user.is_authenticated %}
 <br><br>
 <div class="user_profile">
-    <div class="container" id="second">
+    <div class="container">
         <div class="row ">
             <div class="col-xs-12 col-md-12 user-details">
                
 
                 <!-- Profile Image -->
-                <div class="user-image"><img id="profile-img" class="profile-img-card" src={% static 'img/Pear_Leaf.jpg'%} alt="profile"/></div> 
+                <div class="user-image"><img id="profile-img" class="profile-img-card" src={% static 'img/Pear_Leaf.jpg' %} /></div> 
 
 
 
@@ -66,7 +66,6 @@
             <div class="user-body">
                 <div class="tab-content">
 
-
                     <!-- information tab for user-->
                     <div id="information" class="tab-pane active">
                         <div class="text-center">
@@ -113,7 +112,7 @@
 
                     <!-- Active Action Idea History-->
                     <div id="myactionitems" class="tab-pane">
-                        <h3 class="text-center">My Action Ideas</h3> <br>
+                        <h3 class="text-center">My Action Ideas</h3>
                         {% include "HandprintGenerator/idea_table_profile.html" with idea_list_active=myideas idea_list_inactive=myideasinactive %} 
                     </div>
 
@@ -125,8 +124,8 @@
                             {% if mycomments %}
                                 <table>
                                     <tr>
-                                        <th class="text-center">Idea Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                                        <th class="text-center">Comment &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</th>
+                                        <th style="width:30%" class="text-center">Idea Name </th>
+                                        <th tyle="width:70%" class="text-center">Comment </th>
                                     </tr>
                                     {% for comment in mycomments %}
                                         <tr>
@@ -140,7 +139,7 @@
                             {% endif %}
                         </table>
                         <!-- Voting History-->
-                        <h4 class="text-center">My Voting History</h4>
+                        <h4 class="text-center">Ideas I've Voted Up</h4>
                         <table>
                             {% if myvotes %}
                                 <table>

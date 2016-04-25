@@ -581,3 +581,25 @@ background-color: #CFF294;
   text-align: right;
 }
 
+/* text wrapping so text does not going outside of box */
+
+h4 {
+  word-wrap: break-word;
+}
+
+p {
+  word-wrap: break-word;
+}
+
+td {
+  white-space: -o-pre-wrap; 
+  word-wrap: break-word;
+  white-space: -moz-pre-wrap; 
+  white-space: -pre-wrap; 
+
+}
+
+table { 
+  table-layout: fixed;
+  width: 100%
+}
