@@ -87,6 +87,7 @@ def user_profile(request):
         pass
     return render(request, 'HandprintGenerator/user_profile.html', context)
 
+
 ##################################### Action Idea Index and Search Views ###########################################
 
 #The main action idea index (most recent)
@@ -94,6 +95,16 @@ def index(request):
     context = {}
     context['action_ideas_inactive'] = ActionIdea.objects.filter(active=False).order_by('-date_created')
     context['action_ideas_active'] = ActionIdea.objects.filter(active=True).order_by('-date_created')
+    #Pagination
+    for ideas in context:
+        paginate(context, ideas, request)   
+    return render(request, 'HandprintGenerator/index.html', context)
+
+#The main action idea index (most recent)
+def index_oldest(request):
+    context = {}
+    context['action_ideas_inactive'] = ActionIdea.objects.filter(active=False).order_by('date_created')
+    context['action_ideas_active'] = ActionIdea.objects.filter(active=True).order_by('date_created')
     #Pagination
     for ideas in context:
         paginate(context, ideas, request)   
@@ -383,6 +394,7 @@ def new_action_idea(request):
             new_action_idea.save()
             form.save_m2m()
             messages.add_message(request, messages.SUCCESS, 'Your idea has been submitted. Our experts will model the impact of your idea and other users may provide feedback on your idea.')
+            return HttpResponseRedirect('/index')
     else:
         form = NewActionIdeaForm()
         context['NewActionIdeaForm'] = form

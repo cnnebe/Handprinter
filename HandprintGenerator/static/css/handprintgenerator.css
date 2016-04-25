@@ -49,7 +49,7 @@ h2 {
 }
 
 .footer li a{
-  color: grey;
+  color: black;
 }
 
 
@@ -361,10 +361,10 @@ p.copyright {
 }
 
 .well{
-    background: #259788;
-    border-color: black;
+    background: #DBCA69;
+    border-color: gray;
     color: black;
-    font-size: 20px;
+    font-size: 18px;
 }
 .form{
   float: center;

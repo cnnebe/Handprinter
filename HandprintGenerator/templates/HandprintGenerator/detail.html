@@ -34,10 +34,9 @@
                     {% if user.is_authenticated and ai.active %}                
                         {% if userVote %}
                             <form action="/handprintgenerator/{{ ai.id }}/" method="post">
-                                <input type="submit" name="unvote" value="Unvote" class="btn btn-warning btn-lg center-block">
+                                <input type="submit" name="unvote" value="Unvote" class="btn btn-primary btn-lg center-block">
                                 {% csrf_token %}
                             </form>
->>>>>>> upstream/master
                         {% else %}
                             <form action="/handprintgenerator/{{ ai.id }}/" method="post">
                                 <input type="submit" name="vote" data-toggle="tooltip" title="The more votes an ideas has, the greater likelihood it will be selected for enviornmental impact modeling by researchers!" value="Vote" class="btn btn-primary btn-lg center-block">
@@ -53,10 +52,8 @@
                 <div class="leftalign">
                 {% if ai.creator == request.user or user.is_staff or user.profile.role == "Moderator" %}
                     {% if ai.active %}
-                    <a href="{% url 'HandprintGenerator:edit_action_idea' ai.id %}" class="btn btn-link ">Edit Action Idea</a>
-                    <a href="{% url 'HandprintGenerator:delete_action_idea' ai.id%}" class="btn btn-link">Delete Action Idea</a> 
-
-                     <!-- Report Idea. Display if idea is active and user is not owner. -->
+                    <a href="{% url 'HandprintGenerator:edit_action_idea' ai.id %}" class="btn btn-info ">Edit Action Idea</a>
+                    <a href="{% url 'HandprintGenerator:delete_action_idea' ai.id%}" class="btn btn-danger">Delete Action Idea</a> 
 
                     {% elif not ai.active %} <!-- Restore deleted idea to active -->
                         {% if user.is_staff or user.profile.role == "Moderator" %}
@@ -70,12 +67,12 @@
                     <br>
                 {% endif %}
             </div>
-
+                 <!-- Report Idea. Display if idea is active and user is not owner. -->
                 {% if ai.creator != request.user and user.is_authenticated and ai.active  %}
                 <div class="rightalign">
                     <form action="" method="post">
                         <input type="hidden" name="action_idea" value="{{ ai.id }}">
-                        <input type="submit" name="report" data-toggle="tooltip" title="You can report this entry to moderators if you believe that it is offensive, inappropriate, irrelevant and/or violates the terms of service." value="Report Idea" class="btn btn-link">
+                        <input type="submit" name="report" data-toggle="tooltip" title="You can report this entry to moderators if you believe that it is offensive, inappropriate, irrelevant and/or violates the terms of service." value="Report Idea" class="btn btn-warning">
                         {% csrf_token %}
                     </form>
                     <br>
@@ -147,11 +144,10 @@
                                 {% endif %}
                         {% endif %}
                         <br>
-
                 </div>
             </div>
 
-                        <!-- Blog Comments -->
+                 <!-- Blog Comments -->
                 <!-- Comments Form -->
             <div class="col-xs-12 col-sm-12 col-md-12">
             <hr>
@@ -177,7 +173,7 @@
                                 </form>
                             </div>
                         {% else %}
-                        <h4 class="text-center"> You must be logged in to comment. </h4>
+                        <h4 class="text-center"> You must be <a href=/login>logged in</a> to comment. If you don't have an account, <a href=/create_user>register</a> to help develop ideas to save the planet.</h4>
                         {% endif %}
                     <br>
                     </div>
@@ -200,24 +196,23 @@
 
                                 <div class="col-sm-3 col-md-2">
                                     <!-- Report Comment  -->
-                                    <p><form action="" method="post">
+                                    {% if user.is_authenticated and c.user != request.user or user.profile.role == "Moderator" or user.is_staff %}
+                                        <form action="" method="post">
                                         <input type="hidden" name="comment_reported" value="{{ c.id }}">
-<<<<<<< HEAD
+
                                         <input type="submit" name="report_comment" data-toggle="tooltip" title="You can report this entry to moderators if you believe that it is offensive, inappropriate, irrelevant and/or violates the terms of service." value="Report Comment" class="btn btn-link">
-=======
-                                        <input type="submit" name="report_comment" data-toggle="tooltip" title="You can report this entry to moderators if you believe that it is offensive, inappropriate, irrelevant and/or violates the terms of service." value="Report Comment" class="btn btn-warning btn-sm">
->>>>>>> upstream/master
                                         {% csrf_token %}
-                                    </form></p>
+                                    </form>
+                                    {% endif %}
 
                                     <!-- Delete Comment  -->
                                     {% if c.user == request.user or user.profile.role == "Moderator" or user.is_staff %}
 
-                                    <p><form action="/handprintgenerator/{{ ai.id }}/" method="post">
+                                        <form action="/handprintgenerator/{{ ai.id }}/" method="post">
                                         <input type="hidden" name="comment" value="{{ c.id }}">
                                         <input type="submit" name="delete" value="Delete Comment" class="btn btn-link">
                                         {% csrf_token %}
-                                    </form></p>
+                                    </form>
                                     <br>
                                     {% endif %}
                                 </div>
