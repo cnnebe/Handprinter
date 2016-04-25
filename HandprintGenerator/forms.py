@@ -76,7 +76,7 @@ class UserCreateForm(UserCreationForm):
 
         }
         help_texts = { #Use text instead of tooltips or help icon to make it easier for mobile users.
-            'username': ('To login and will be displayed when you submit new ideas and comments.'),
+            'username': ('To login and will be displayed when you submit new ideas and comments. 30 characters or fewer.'),
             'email': ( 'To validate your account, send important updates (not ads or news), and reset your password.'),
         }
 
