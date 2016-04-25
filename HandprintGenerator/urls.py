@@ -30,6 +30,7 @@ urlpatterns = [
 
     # Index and Search Pages
     url(r'^index$', views.index, name='index'),
+    url(r'^index_oldest$', views.index_oldest, name='index_oldest'),
     url(r'^searchresults$', views.search_results),
     url(r'^index_popular$', views.index_popular, name='index_popular'),
     url(r'^index_home$', views.index_home, name='index_home'),

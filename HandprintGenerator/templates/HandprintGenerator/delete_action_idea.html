@@ -7,7 +7,7 @@
             <div class="card card-container">
                 {% if ActionIdea.active %}
                     <!-- If the requestor is an admin, mod, or the idea creator, then the requestor can delete the idea by making it inactive -->
-                    {% if ActionIdea.creator_id == request.user.id or user.is_staff or user.profile.role == "Moderator" %}
+                    {% if ActionIdea.creator_id == request.user.id or user.is_staff or user.profile.role == "mod" %}
                     <div class="text-center">
                         <h2> Why are you deleting this idea?</h2>
                         <form action="#" method="post">

@@ -1,12 +1,36 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-<!-- Webpage nesting. Displays about section from Handprinter.org. Will not work in HTTPS. -->
 {% block content %}
-<br><br><br>
-<iframe src="http://www.handprinter.org/about/"
-    width="100%" height="600" frameborder="0"
-    allowfullscreen sandbox>
-    <p> <a href="http://www.handprinter.org/about/">
-    Fallback link for browsers that don't support iframes</a> </p>
-</iframe>
+<br><br>
+    <!-- Page Content -->
+    <div class="container" id="second">
+
+
+        <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">About Handprinter 
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/">Home</a>
+                    </li>
+                    <li class="active">About Us</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+				<h2> Our Mission: Information. Collaboration. Positive global change.</h2> 
+					<p> Nearly everyone wants to heal the planet – not hurt it. But we also know that it’s going to take more than the frugality of a few eco-conscious people to make the changes that are needed. It will take engagement of nearly everyone, globally, locally, recurrently innovating in our homes and workplaces and schools and communities.<br><br>The Handprinter website and a growing family of apps are designed to empower all people to inform and encourage one another to make these changes, to be the groundswell we wish to see in the world. </p>
+				<h3> What is Handprinter? </h3>
+
+					<p> We often hear about our negative impact on the planet – our environmental footprint. But footprints are only half the picture. The other half is just coming into view. <br><br> It’s called a handprint, and it measures the positive impacts we can make, simply by changing the way we do things, at home, and at work. </p>
+
+				<h3> The Handprint Generate Helps you Create Ideas </h3>
+					<p> First, it lets submit ideas to improve one's handprint. You enter in some simple data about your idea and then submit it for researchers and other users to analyze it. <br><br> Second, allows you to view and contribute to other ideas for simple actions you can take to lower your impact on the planet – things like installing a low-flow showerhead, or carpooling to work or school. <br><br> And best of all, Handprinter lets you spread your ideas and actions around the world, see their progress, and measure them. When you refer your friends to Handprinter, and when their friends sign on, their handprints become part of yours. Inspire enough people, and your handprint eventually outweighs your footprint. <br><br> And with enough handprints, we can heal the planet.</p> 
+
+				<h3> More Information </h3>
+					<p> View our main website <a href=http://www.handprinter.org>here</a> for more information and ways to get involved.</p> 
+				<br><br>
+	</div>
+
 {% endblock %}

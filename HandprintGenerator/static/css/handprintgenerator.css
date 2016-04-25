@@ -36,7 +36,7 @@ h2 {
 }
 
 #messages { /* For dynamic messages across all pages */
-  color: red;
+  color: blue;
 
 }
 
@@ -57,7 +57,8 @@ h2 {
 }
 
 .footer li a{
-  color: gray;
+  color: black;
+
 }
 
 
@@ -352,9 +353,9 @@ p.copyright {
 
 .well{
     background: #259788;
-    border-color: black;
+    border-color: gray;
     color: black;
-    font-size: 20px;
+    font-size: 18px;
 }
 .form{
   float: center;
