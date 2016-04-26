@@ -92,18 +92,21 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
             <!-- category  Well -->
             <div class="well" id="details">
+
                 <h4 data-toggle="tooltip" title="What the idea is and how to adopt it."> 
                     <u>Description:</u> <br> {{ ai.description }}
                 </h4>
- 
-                <h4 data-toggle="tooltip" title="Context this idea is applicable in."> <u>Category:</u> {{ ai.get_category_display }} 
+            <hr>
+                <h4 data-toggle="tooltip" title="Context this idea is applicable in."> 
+                    <u>Category:</u>{{ ai.get_category_display }} 
                     <br>
                 </h4>
-                
-                {% if ai.references %} <!-- Display if any references -->
+            <hr>
+             {% if ai.references %} <!-- Display if any references -->
                     <h4 data-toggle="tooltip" title="Sources of inspiration or further reading."> <u>References</u> <br>{{ ai.references }}
                     </h4>
                 {% endif %}
+            <hr>
             <!-- /.input-group -->
 
 
@@ -119,7 +122,6 @@
                     {% endfor %} 
                     </h4> 
                 {% endif %}
-
             <!-- Number of votes the idea has -->                
             <h4> <u>Votes:</u> {{ai.numvotes}} </h4>
 
