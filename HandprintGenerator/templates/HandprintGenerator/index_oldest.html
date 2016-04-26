@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block content %}
+<div class="container">
+	<div class="bg"></div>
+	<!-- Load Header, Filter Options, and Search Bar. Header var allows for custom header-->
+    {% include "HandprintGenerator/idea_page_header.html" with header="Oldest Action Ideas" %}
+    <!-- Page Content. Renders template using idea_table.html based on the index function in views.py-->
+    {% include "HandprintGenerator/idea_table.html" with idea_list_active=action_ideas_active idea_list_inactive=action_ideas_inactive %}   
+</div>
+{% endblock %}

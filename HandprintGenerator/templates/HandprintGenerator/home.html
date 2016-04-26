@@ -11,17 +11,21 @@
         <li data-target="#myCarousel" data-slide-to="2"></li>
       </ol>
       <div class="carousel-inner" role="listbox">
-        <div class="item active">
-          <img class="img-responsive" src="static/img/windmills.jpg" alt="First slide">
-          <div class="container">
-            <div class="carousel-caption">
-              <p>Handprinting is about trying to ensure that the world is better off with us than without us.</p>
-             <!-- <p><a class="btn btn-lg btn-primary" href="#" role="button">Sign up today</a></p> -->
-            </div>
+          <div class="item active">
+            <img class="img-responsive" src={% static 'img/windmills.jpg'%} alt="First slide">
+
+                      
+
+            <div class="container">
+              <div class="carousel-caption">
+                <p>Handprinting is about trying to ensure that the world is better off with us than without us.</p>
+              </div>
           </div>
         </div>
         <div class="item">
-          <img class="img-responsive" src="static/img/sunset.jpg"alt="Second slide">
+          <img class="img-responsive" src={% static 'img/sunset.jpg'%} alt="Second slide">
+
+
           <div class="container">
             <div class="carousel-caption">
               <p>Did you know? If just 25% of U.S. families used 10 fewer plastic bags a month, we would save over 2.5 BILLION bags a year!</p>
@@ -29,11 +33,11 @@
           </div>
         </div>
         <div class="item">
-          <img class="img-responsive" src="static/img/mountain.jpg"alt="Third slide">
+          <img class="img-responsive" src={% static 'img/mountain.jpg'%} alt="Third slide">
           <div class="container">
-            <div class="carousel-caption">
-              <p>The Handprinter website is designed to empower people to inform and encourage one another to make changes, to be the groundswell we wish to see in the world.</p>
-            </div>
+              <div class="carousel-caption">
+                <p>The Handprinter website is designed to empower people to inform and encourage one another to make changes, to be the groundswell we wish to see in the world.</p>
+              </div>
           </div>
         </div>
       </div>
@@ -47,18 +51,16 @@
       </a>
     </div><!-- /.carousel -->
 
-
     <!-- Marketing messaging and featurettes -->
-
     <div class="home">
       <div class="container">
-
         <div class="row">
-
           {% if user.is_authenticated %}
 
 
-            <div class="col-xs-12">
+          <div class="col-xs-12">
+
+            <div class="col-xs-12 col-md-6">
                 <div class="panel panel-default text-center">
                     <div class="panel-heading">
                         <span class="fa-stack fa-5x">
@@ -68,7 +70,7 @@
                     </div>
                     <div class="panel-body">
                         <h4> Thank you for being part of our community!</h4>
-                        <a href=/about class="btn btn-primary">Submit an Action Idea</a>
+                        <a href=/new class="btn btn-primary">Submit an Action Idea</a>
                     </div>
                 </div>
             </div>
@@ -88,8 +90,7 @@
                 </div>
             </div>
 
-
-            {% else %}
+          {% else %}
 
             <div class="col-xs-12 col-md-6">
                 <div class="panel panel-default text-center">
@@ -100,13 +101,8 @@
                         </span>
                     </div>
                     <div class="panel-body">
-                        {% if not user.is_authenticated %}
                         <h4>Submit an Action Idea</h4>
                         <a href="{% url 'HandprintGenerator:new_user' %}" class="btn btn-primary">Create an Account</a>
-                        {% else %}
-                        <h4>Thank you for being a part of our Community</h4>
-                        <a href="{% url 'HandprintGenerator:new_action_idea' %}" class="btn btn-primary">Submit an Action Idea</a>
-                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -155,14 +151,9 @@
                 </div>
             </div>
 
-        </div>
-        <!-- /.container -->
+        </div> <!-- /row -->
+      </div> <!-- /container -->
+    </div> <!-- /home -->
 
   </br>
-   
-
-
-
-
-
 {% endblock %}

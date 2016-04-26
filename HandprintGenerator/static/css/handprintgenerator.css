@@ -11,6 +11,9 @@ body {
   padding-top: 50px;
   padding-bottom: 0px;
   background: rgb(250, 250, 250);
+  max-width: 1500px;
+  margin: auto;
+
 }
 
 h2 {
@@ -24,6 +27,7 @@ h2 {
   padding-right: 0px;
   padding-bottom: 0px;
 }
+
 #second{
   width: 90%;
   background-color: rgb(256,256,256);
@@ -36,8 +40,7 @@ h2 {
 }
 
 #messages { /* For dynamic messages across all pages */
-  color: black;
-
+  color: blue;
 }
 
 #registrationHead { /* Color for title on new user page. It's lame, so remove if needed.*/
@@ -57,7 +60,8 @@ h2 {
 }
 
 .footer li a{
-  color: gray;
+  color: black;
+
 }
 
 
@@ -69,6 +73,9 @@ h2 {
 .navbar-inverse {
   border: none;
   background: rgb(255, 255, 255);
+  max-width: 1500px;
+  margin: auto;
+
 }
 
 .nav.navbar-nav li a {
@@ -352,9 +359,9 @@ p.copyright {
 
 .well{
     background: #259788;
-    border-color: black;
+    border-color: gray;
     color: black;
-    font-size: 20px;
+    font-size: 18px;
 }
 .form{
   float: center;
@@ -602,4 +609,10 @@ td {
 table { 
   table-layout: fixed;
   width: 100%
+}
+
+/** search bar width for ideas **/
+input #search {
+  width:200px;
+  max-width: 100%;
 }

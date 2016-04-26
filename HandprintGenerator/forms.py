@@ -76,16 +76,14 @@ class UserCreateForm(UserCreationForm):
 
         }
         help_texts = { #Use text instead of tooltips or help icon to make it easier for mobile users.
-            'username': ('To login and will be displayed when you submit new ideas and comments.'),
-            'email': ( 'To validate your account and reset your password.'),
+            'username': ('To login and will be displayed when you submit new ideas and comments. 30 characters or fewer.'),
+            'email': ( 'To validate your account, send important updates (not ads or news), and reset your password.'),
         }
 
 
     def save(self, commit=True):
         user = super(UserCreateForm, self).save(commit=False)
         user.email = self.cleaned_data["email"]
-        #user.first_name = self.cleaned_data["first_name"] Not asking for name.
-        #user.last_name = self.cleaned_data["last_name"]
         if commit:
             user.save()
         return user

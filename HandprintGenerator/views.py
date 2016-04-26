@@ -87,6 +87,7 @@ def user_profile(request):
         pass
     return render(request, 'HandprintGenerator/user_profile.html', context)
 
+
 ##################################### Action Idea Index and Search Views ###########################################
 
 #The main action idea index (most recent)
@@ -94,6 +95,16 @@ def index(request):
     context = {}
     context['action_ideas_inactive'] = ActionIdea.objects.filter(active=False).order_by('-date_created')
     context['action_ideas_active'] = ActionIdea.objects.filter(active=True).order_by('-date_created')
+    #Pagination
+    for ideas in context:
+        paginate(context, ideas, request)   
+    return render(request, 'HandprintGenerator/index.html', context)
+
+#Filters by oldest (oldest displayed first)
+def index_oldest(request):
+    context = {}
+    context['action_ideas_inactive'] = ActionIdea.objects.filter(active=False).order_by('date_created')
+    context['action_ideas_active'] = ActionIdea.objects.filter(active=True).order_by('date_created')
     #Pagination
     for ideas in context:
         paginate(context, ideas, request)   
@@ -383,6 +394,7 @@ def new_action_idea(request):
             new_action_idea.save()
             form.save_m2m()
             messages.add_message(request, messages.SUCCESS, 'Your idea has been submitted. Our experts will model the impact of your idea and other users may provide feedback on your idea.')
+            return HttpResponseRedirect('/index')
     else:
         form = NewActionIdeaForm()
         context['NewActionIdeaForm'] = form
@@ -521,9 +533,7 @@ P.S. We also love hearing from you and assisting you with any concerns you may h
             message.set_from("actions@handprinter.org")
             status, msg = sg.send(message)
             
-            messages.add_message(request, messages.SUCCESS,'An email has been sent to the address given. Please follow the instructions in the email.')
-            # Redirect to login and displays success message.
-            return render(request, 'registration/login.html', context)
+            messages.add_message(request, messages.SUCCESS,'An email has been sent to the address given. Please follow the instructions in the email.')    
         except:
             # Email not found in system. Allow user to try again and give error.
             messages.add_message(request, messages.ERROR,'The email given is not associated with an account or your account is banned. Please try again or create a new account.')
